@@ -43,14 +43,11 @@ export function StoryTeaser() {
             <span className="text-brand-ink">décevante</span>.
           </h2>
           <p className="text-ink-soft mt-6 leading-relaxed">
-            {TODO} — texte de marque à valider. L&apos;idée de départ : rendre le
-            bowl aussi désirable qu&apos;un burger, sans rien lâcher sur la
-            fraîcheur. Une base généreuse, une protéine bien cuisinée, une sauce
-            qui a du caractère, et surtout : quelque chose qui craque.
+            {TODO} — texte de marque à valider. L&apos;idée : un bowl aussi
+            désirable qu&apos;un burger. Et qui craque.
           </p>
           <p className="text-ink-soft mt-4 leading-relaxed">
-            {TODO} — récit de la création, parcours des fondateurs, ouverture du
-            premier restaurant.
+            {TODO} — création, fondateurs, premier restaurant.
           </p>
 
           <Button asChild variant="outline" className="mt-9">

@@ -21,8 +21,7 @@ export function LocationsTeaser() {
             Trouve ton <span className="text-brand-ink">Bowly&apos;s</span>.
           </h2>
           <p className="text-ink-soft mt-5 leading-relaxed">
-            Le premier comptoir arrive bientôt. Adresse, date et horaires dès
-            qu&apos;ils sont confirmés.
+            Le premier comptoir arrive bientôt.
           </p>
 
           <dl className="mt-9 flex flex-col gap-5 text-sm">

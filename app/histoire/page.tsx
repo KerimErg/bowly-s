@@ -70,7 +70,7 @@ export default function HistoirePage() {
             <span className="text-brand"> un pis-aller</span>.
           </>
         }
-        description="Le récit complet de la marque est en cours d'écriture. Les blocs ci-dessous montrent la mise en page définitive."
+        description="Le récit est en cours d'écriture. Les blocs montrent la mise en page."
         photo={photos.kitchen}
       />
 
@@ -83,8 +83,7 @@ export default function HistoirePage() {
           </h2>
           <p className="text-ink-soft mt-6 text-lg leading-relaxed">
             {TODO} — texte de marque à valider. Ce paragraphe porte la promesse
-            principale : ce que Bowly&apos;s refuse, ce qu&apos;elle revendique, et
-            pourquoi le bowl est le bon format pour le dire.
+            principale.
           </p>
         </Reveal>
 
