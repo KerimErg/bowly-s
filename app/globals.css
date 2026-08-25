@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Bowly's — design tokens
+   Direction artistique : fond sombre premium + orange de marque en accent.
+   Toutes les couleurs sont exposées en variables CSS ET en utilitaires
+   Tailwind (bg-ink, text-brand, border-brand/30, ...) via @theme inline.
+--------------------------------------------------------------------------- */
+:root {
+  /* Fonds sombres */
+  --ink: #0c0a09;
+  --ink-900: #100d0c;
+  --ink-800: #16120f;
+  --ink-700: #1f1a16;
+  --ink-600: #2b2320;
+
+  /* Orange de marque */
+  --brand: #ff5a1f;
+  --brand-600: #e8440c;
+  --brand-400: #ff7a45;
+  --brand-300: #ff9a6e;
+
+  /* Neutres chauds */
+  --cream: #fff6ef;
+  --sand: #e9ddd2;
+  --muted: #a29489;
+
+  /* Rayons & ombres */
+  --radius: 1rem;
+  --shadow-glow: 0 20px 60px -20px rgb(255 90 31 / 0.45);
+
+  /* Aliases shadcn/ui (thème sombre unique, la marque est dark by design) */
+  --background: var(--ink);
+  --foreground: var(--cream);
+  --card: var(--ink-800);
+  --card-foreground: var(--cream);
+  --popover: var(--ink-800);
+  --popover-foreground: var(--cream);
+  --primary: var(--brand);
+  --primary-foreground: #ffffff;
+  --secondary: var(--ink-700);
+  --secondary-foreground: var(--cream);
+  --muted-bg: var(--ink-700);
+  --muted-foreground: var(--muted);
+  --accent: var(--ink-700);
+  --accent-foreground: var(--cream);
+  --destructive: #ef4444;
+  --border: rgb(255 246 239 / 0.12);
+  --input: rgb(255 246 239 / 0.16);
+  --ring: var(--brand);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+
+  --color-brand: var(--brand);
+  --color-brand-600: var(--brand-600);
+  --color-brand-400: var(--brand-400);
+  --color-brand-300: var(--brand-300);
+
+  --color-cream: var(--cream);
+  --color-sand: var(--sand);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted-bg);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-poppins), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+
+  --ease-bowly: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Accessibilité : focus clavier toujours visible et contrasté. */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--brand);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer utilities {
+  /* Titres display : très bold, letter-spacing serré (cf. DA fast-casual US). */
+  .text-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+
+  /* Petite étiquette en capitales utilisée au-dessus des titres de section. */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+
+  .bowly-container {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .bowly-container { padding-inline: 2rem; }
+  }
+
+  /* Voile sombre standard posé sur les photos plein cadre. */
+  .photo-scrim {
+    background:
+      /* voile bas : lisibilité du titre et des CTA */
+      linear-gradient(to top, rgb(12 10 9 / 0.92) 0%, rgb(12 10 9 / 0.45) 45%, rgb(12 10 9 / 0.15) 100%),
+      /* voile haut : le header est transparent en haut de page, il doit
+         rester lisible même sur une photo très claire */
+      linear-gradient(to bottom, rgb(12 10 9 / 0.8) 0%, rgb(12 10 9 / 0.35) 12%, rgb(12 10 9 / 0) 26%);
+  }
+
+  .noise-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Respect strict de prefers-reduced-motion sur tout le site. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
