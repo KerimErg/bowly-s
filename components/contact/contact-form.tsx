@@ -15,12 +15,18 @@ import { Textarea } from "@/components/ui/textarea";
  * de confirmation local.
  *
  * TODO(back-end) — à faire avant mise en production :
- *   1. créer une Route Handler `app/api/contact/route.ts` (ou une Server
- *      Action) qui valide les champs côté serveur ;
+ *   1. appeler un endpoint d'envoi depuis le navigateur — service de
+ *      formulaires, fonction serverless ou backend dédié — puis valider les
+ *      champs côté serveur ;
  *   2. brancher l'envoi réel (Resend, SendGrid, SMTP, CRM...) ;
  *   3. ajouter une protection anti-spam (honeypot + rate limiting, ou captcha) ;
  *   4. journaliser les erreurs et afficher un vrai message d'échec ;
  *   5. RGPD : mention d'information, base légale, durée de conservation.
+ *
+ * ⚠️ Le projet est en export statique (`output: "export"`) : il n'y a pas de
+ * serveur Next.js à l'exécution, donc ni Route Handler `app/api/...` ni Server
+ * Action. Pour en utiliser une, il faudrait abandonner l'export statique et
+ * déployer sur un hébergeur avec serveur.
  * ------------------------------------------------------------------------- */
 
 type Statut = "idle" | "envoi" | "envoye";

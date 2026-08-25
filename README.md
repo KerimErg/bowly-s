@@ -20,11 +20,14 @@ npm run dev          # http://localhost:3000
 Autres commandes :
 
 ```bash
-npm run build        # build de production
-npm run start        # sert le build de production
+npm run build        # export statique -> dossier out/
 npm run lint         # ESLint
 npx tsc --noEmit     # vérification des types
 ```
+
+> `npm run start` n'est pas utilisable : le projet est configuré en export
+> statique (`output: "export"`), il n'y a donc pas de serveur Next.js à lancer.
+> Pour prévisualiser le build : `npx serve out`.
 
 Prérequis : **Node.js 20.9+** (contrainte Next.js 16).
 
@@ -164,8 +167,10 @@ comptes de réseaux sociaux (les `href` sont à `#`), horaires des sept jours,
 et les cinq pages légales (mentions, confidentialité, CGV, cookies, allergènes)
 qui restent à créer.
 
-Pensez aussi à `siteConfig.url` : `https://www.bowlys.example` sert de base aux
-métadonnées Open Graph et doit être remplacé par le vrai domaine.
+Pensez aussi à l'URL du site : `siteConfig.url` lit `NEXT_PUBLIC_SITE_URL` et
+retombe sur `https://www.bowlys.example`. Elle sert de base aux métadonnées
+Open Graph — renseignez le vrai domaine (le workflow GitHub Pages le fait
+automatiquement, voir [Déploiement](#déploiement)).
 
 ### 2. La carte et les prix — `lib/menu-data.ts`
 
@@ -196,11 +201,18 @@ tiers.
 
 | Fichier | Ce qu'il manque |
 | --- | --- |
-| `components/contact/contact-form.tsx` | Route Handler `app/api/contact/route.ts` ou Server Action, envoi réel (Resend / SendGrid / SMTP), anti-spam, mention RGPD |
+| `components/contact/contact-form.tsx` | Endpoint d'envoi externe (Formspree, Resend via une fonction serverless, SMTP…), anti-spam, mention RGPD |
 | `components/home/newsletter-cta.tsx` | Service d'e-mailing, double opt-in, stockage du consentement |
 
 Les deux affichent une confirmation locale et indiquent clairement à
 l'utilisateur qu'il s'agit d'une démonstration.
+
+> ⚠️ **L'export statique interdit les Route Handlers et les Server Actions** :
+> il n'y a pas de serveur Next.js à l'exécution. Ces formulaires devront donc
+> appeler une **API externe** depuis le navigateur (service de formulaires,
+> fonction serverless, backend dédié) — et non une route `app/api/...`. Si vous
+> préférez une route interne, il faut abandonner `output: "export"` et déployer
+> sur un hébergeur avec serveur (Vercel, Netlify Functions, Node…).
 
 ### 7. Bouton « Commander »
 
@@ -208,6 +220,75 @@ Il pointe aujourd'hui vers `/menu` et `/restaurants`. À rediriger vers la vraie
 plateforme de commande en ligne (voir `TODO(commande)`).
 
 ---
+
+## Déploiement
+
+Le projet est configuré en **export statique** : `npm run build` produit un
+dossier `out/` (HTML/CSS/JS uniquement), hébergeable sur n'importe quel serveur
+de fichiers.
+
+### GitHub Pages (automatique)
+
+Le workflow `.github/workflows/deploy-github-pages.yml` construit et publie le
+site à chaque `push` sur `main`, ainsi qu'à la demande (« Run workflow »).
+
+**À faire une seule fois** : `Settings` → `Pages` → *Build and deployment* →
+*Source* : **GitHub Actions**. Le site est ensuite servi sur
+`https://<utilisateur>.github.io/<dépôt>/`.
+
+Le workflow enchaîne : `npm ci` → `tsc --noEmit` → `npm run lint` →
+`npm run build` → `upload-pages-artifact` → `deploy-pages`. L'URL publiée
+apparaît dans le résumé du job `Déploiement`.
+
+> Le déclencheur manuel n'apparaît dans l'onglet *Actions* qu'une fois le
+> fichier de workflow présent sur la branche par défaut. Tant que la PR n'est
+> pas fusionnée, le workflow ne peut donc pas être lancé.
+
+### `basePath` et URL du site
+
+GitHub Pages sert un dépôt « projet » depuis un sous-répertoire
+(`/bowly-s`), pas depuis la racine. Plutôt que de coder ce préfixe en dur — ce
+qui casserait `npm run dev` et un futur déploiement sur domaine propre — il est
+piloté par deux variables d'environnement, renseignées automatiquement par le
+workflow depuis les sorties de `actions/configure-pages` :
+
+| Variable | Rôle | Valeur en local |
+| --- | --- | --- |
+| `NEXT_PUBLIC_BASE_PATH` | Préfixe d'URL (`basePath` + `assetPrefix`) | vide → site à la racine |
+| `NEXT_PUBLIC_SITE_URL` | Base des métadonnées Open Graph (`metadataBase`) | `https://www.bowlys.example` |
+
+Pour reproduire un build « Pages » en local :
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/bowly-s \
+NEXT_PUBLIC_SITE_URL=https://<utilisateur>.github.io/bowly-s \
+npm run build
+```
+
+### Autres hébergeurs
+
+Vercel, Netlify, Cloudflare Pages ou un simple serveur de fichiers servent
+`out/` tel quel, **sans variable d'environnement** : le site se déploie alors à
+la racine du domaine. Pensez à renseigner `NEXT_PUBLIC_SITE_URL` avec le vrai
+domaine pour que les métadonnées Open Graph soient correctes.
+
+### Conséquences de l'export statique
+
+- **`trailingSlash: true`** est activé : sans slash final, GitHub Pages
+  renverrait une 404 sur `/menu`. Next.js émet donc `out/menu/index.html`.
+- **`images.unoptimized: true`** : l'API d'optimisation d'images de Next.js
+  exige un serveur Node.js. `next/image` retombe sur une balise `<img>`, en
+  conservant le lazy loading natif, les `sizes` et les dimensions — donc aucun
+  décalage de mise en page. Pour retrouver une optimisation réelle, branchez un
+  loader personnalisé (Cloudinary, imgix…), voir les commentaires de
+  `next.config.ts`.
+- **Un `.nojekyll`** est déposé dans `out/` par le workflow : sans lui, un
+  hébergement passant par Jekyll ignorerait le dossier `_next/` (préfixé par un
+  underscore) et le site s'afficherait sans CSS ni JavaScript.
+- Les fonctionnalités nécessitant un serveur (Route Handlers, Server Actions,
+  ISR, `cookies()`, redirections/en-têtes via `next.config`) ne sont pas
+  disponibles. Le site n'en utilise aucune — c'est aussi pourquoi les
+  formulaires devront viser une API externe plutôt qu'une route interne.
 
 ## Photos
 

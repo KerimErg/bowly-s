@@ -1,0 +1,85 @@
+# Construit l'export statique Next.js et le publie sur GitHub Pages.
+#
+# Prérequis, à faire une seule fois dans le dépôt :
+#   Settings → Pages → Build and deployment → Source : « GitHub Actions »
+#
+# Le déclencheur manuel (« Run workflow ») n'apparaît dans l'onglet Actions
+# qu'une fois ce fichier présent sur la branche par défaut.
+name: Déploiement GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permissions minimales nécessaires au déploiement Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois ; on ne coupe pas un déploiement en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Next.js 16 exige Node.js 20.9 minimum.
+          node-version: 22
+          cache: npm
+
+      - name: Configurer GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Vérifier les types
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Construire l'export statique
+        env:
+          # Pour un site « projet », base_path vaut « /bowly-s » ; il est
+          # normalisé dans next.config.ts. Pour un site utilisateur, il est
+          # vide et le site est servi à la racine.
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # URL complète du site, utilisée par `metadataBase` (Open Graph).
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
+        run: npm run build
+
+      - name: Désactiver Jekyll
+        # Sans ce fichier, un hébergement Pages passant par Jekyll ignorerait
+        # le dossier `_next/` (préfixé par un underscore) et le site
+        # s'afficherait sans CSS ni JavaScript.
+        run: touch out/.nojekyll
+
+      - name: Téléverser l'artefact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    name: Déploiement
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publier sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
