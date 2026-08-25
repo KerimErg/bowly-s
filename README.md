@@ -99,25 +99,46 @@ Les trois fichiers marqués ⭐ concentrent **la totalité** du contenu à rempl
 
 ## Identité visuelle
 
+Base claire crème, orange de marque en accent fort. Le sombre est réservé aux
+zones où il est justifié : voile sur les photos et pied de page.
+
 | Rôle | Valeur | Variable |
 | --- | --- | --- |
-| Fond premium | `#0c0a09` | `--ink` / `bg-ink` |
-| Surfaces | `#16120f`, `#1f1a16` | `--ink-800`, `--ink-700` |
-| Orange de marque | `#ff5a1f` | `--brand` / `text-brand` |
-| Texte principal | `#fff6ef` | `--cream` / `text-cream` |
-| Texte secondaire | `#a29489` | `text-muted-foreground` |
+| Fond de page | `#fff8f3` | `--cream` / `bg-cream` |
+| Surface alternée | `#f7ede4` | `--sand` / `bg-sand` |
+| Cartes | `#ffffff` | `bg-white` |
+| Bordures | `#e6d5c6` | `--line` / `border-line` |
+| Texte principal | `#1c1310` | `--ink` / `text-ink` |
+| Texte secondaire | `#6e5a4e` | `--ink-soft` / `text-ink-soft` |
+| Orange — aplats | `#ff5a1f` | `--brand` / `bg-brand` |
+| Orange — texte sur clair | `#bf360c` | `--brand-ink` / `text-brand-ink` |
+| Zones sombres | `#140f0d` | `--night` / `bg-night` |
+| Texte sur sombre | `#b5a49a` | `--ink-dim` / `text-ink-dim` |
 
-**Contraste :** les boutons orange utilisent un texte **encre sombre** et non
-blanc — le blanc sur `#ff5a1f` ne plafonne qu'à 3,1:1, sous le seuil WCAG AA de
-4,5:1, alors que l'encre atteint 6,4:1. Le carousel calcule cette couleur
-automatiquement (`readableOn()`), pour rester correct si l'on change l'accent.
+### ⚠️ Deux oranges, non interchangeables
+
+C'est le seul piège de la palette :
+
+- **`--brand` (`#ff5a1f`) sert aux aplats** — boutons, badges, pastilles. En
+  *texte* sur crème il ne fait que **2,97:1**, sous le seuil WCAG AA de 4,5:1.
+- **`--brand-ink` (`#bf360c`) sert au texte orange sur fond clair** (5,33:1 sur
+  crème, 4,85:1 sur sable).
+- Sur fond sombre, `--brand` redevient utilisable en texte (6,10:1) : c'est le
+  cas dans le hero, les cartes du carousel et le pied de page. L'utilitaire
+  `.eyebrow` prend l'orange profond, `.eyebrow-invert` l'orange vif.
+
+Les boutons orange portent un **texte encre** et non blanc : le blanc sur
+`#ff5a1f` plafonne à 3,1:1, l'encre atteint 5,9:1 — et le rendu est plus franc.
+
+Le carousel, lui, calcule cette couleur depuis sa prop `accentColor`
+(`readableOn()`), il reste donc correct si l'on change l'accent.
 
 **Logo** — `components/brand/logo.tsx`. Le « B » est dessiné en tracés SVG (pas
 en texte) : rendu identique quel que soit le chargement de la police, net à
-toutes les tailles, et réutilisable tel quel pour le favicon. Trois variantes :
+toutes les tailles, et réutilisable tel quel pour le favicon. Variantes :
 `<Logo />` (monogramme + mot-clé), `<Logo variant="mark" />`, `<LogoGlyph />`.
-
----
+La prop `tone` (`dark` par défaut, `light` sur une photo) pilote la couleur du
+mot-clé ; la pastille orange, elle, ne change jamais.
 
 ## Le carousel 3D coverflow
 
@@ -183,6 +204,13 @@ toucher à l'interface.
 Manifeste, frise chronologique (4 chapitres) et 3 convictions : chaque bloc est
 balisé `[À COMPLÉTER] — texte de marque à valider`. **Aucune date, aucun nom de
 dirigeant, aucun chiffre n'a été inventé.**
+
+### 3 bis. Ton éditorial
+
+La section « Pourquoi Bowly's » (`components/home/why-bowlys.tsx`) est écrite
+dans un registre street-food : tutoiement, phrases courtes, envie plutôt
+qu'argumentaire. Le reste du site est encore dans un registre plus posé — à
+harmoniser si ce ton est validé.
 
 ### 4. Avis clients — `components/home/testimonials.tsx`
 

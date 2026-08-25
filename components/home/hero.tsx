@@ -40,6 +40,7 @@ export function Hero() {
       >
         <SmartImage
           photo={photos.heroBowl}
+          fallbackTone="dark"
           fill
           priority
           sizes="100vw"
@@ -50,7 +51,7 @@ export function Hero() {
         <div aria-hidden="true" className="photo-scrim absolute inset-0" />
         <div
           aria-hidden="true"
-          className="from-ink/85 absolute inset-0 bg-gradient-to-r via-transparent to-transparent"
+          className="from-night/85 absolute inset-0 bg-gradient-to-r via-transparent to-transparent"
         />
       </motion.div>
 
@@ -62,7 +63,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow"
+          className="eyebrow-invert"
         >
           Fast-food premium · Bowls composés
         </motion.p>
@@ -103,7 +104,7 @@ export function Hero() {
             </Link>
           </Button>
           {/* TODO(commande) : brancher sur la plateforme de commande en ligne. */}
-          <Button asChild size="lg" variant="outline">
+          <Button asChild size="lg" variant="invert">
             <Link href="/restaurants">Commander</Link>
           </Button>
         </motion.div>

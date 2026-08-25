@@ -6,22 +6,27 @@ import { cn } from "@/lib/utils";
 
 /**
  * Bouton de base (convention shadcn/ui).
- * Les variantes reprennent la DA Bowly's : orange plein pour l'action
- * principale, contour crème pour l'action secondaire sur photo.
+ *
+ * `default` : aplat orange vif + texte encre. Le texte blanc sur #ff5a1f ne
+ * ferait que 3,1:1 ; l'encre atteint 5,9:1 — et le rendu est plus « street
+ * food » qu'un orange délavé.
+ * `invert` : version pour les zones sombres (voile photo du hero).
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-display font-bold tracking-tight transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-display font-bold tracking-tight transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-3",
   {
     variants: {
       variant: {
         default:
-          "bg-brand text-ink shadow-[0_12px_40px_-12px_rgba(255,90,31,0.7)] hover:bg-brand-600 hover:shadow-[0_18px_50px_-12px_rgba(255,90,31,0.85)] hover:-translate-y-0.5 active:translate-y-0",
+          "bg-brand text-ink shadow-[0_10px_28px_-12px_rgba(255,90,31,0.75)] hover:bg-brand-600 hover:text-cream hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
         outline:
-          "border border-cream/30 bg-cream/5 text-cream backdrop-blur-sm hover:border-brand hover:bg-brand hover:text-ink hover:-translate-y-0.5 active:translate-y-0",
+          "border-2 border-ink/15 bg-transparent text-ink hover:border-brand hover:bg-brand hover:text-ink hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
+        invert:
+          "border-2 border-cream/40 bg-cream/10 text-cream backdrop-blur-sm hover:border-cream hover:bg-cream hover:text-ink hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-cream",
         secondary:
-          "bg-cream text-ink hover:bg-sand hover:-translate-y-0.5 active:translate-y-0",
-        ghost: "text-cream hover:bg-cream/10",
-        link: "text-brand underline-offset-4 hover:underline rounded-none",
+          "bg-ink text-cream hover:bg-night-700 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
+        ghost: "text-ink hover:bg-sand focus-visible:outline-brand-ink",
+        link: "text-brand-ink underline-offset-4 hover:underline rounded-none focus-visible:outline-brand-ink",
       },
       size: {
         default: "h-12 px-7 text-sm",

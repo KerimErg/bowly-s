@@ -77,11 +77,11 @@ export default function HistoirePage() {
       <section aria-labelledby="manifeste-titre" className="bowly-container py-24 lg:py-32">
         <Reveal className="max-w-3xl">
           <p className="eyebrow mb-4">Le manifeste</p>
-          <h2 id="manifeste-titre" className="text-display text-cream text-4xl sm:text-5xl">
+          <h2 id="manifeste-titre" className="text-display text-ink text-4xl sm:text-5xl">
             Manger vite, manger bien,
-            <br /> manger <span className="text-brand">avec plaisir</span>.
+            <br /> manger <span className="text-brand-ink">avec plaisir</span>.
           </h2>
-          <p className="text-muted-foreground mt-6 text-lg leading-relaxed">
+          <p className="text-ink-soft mt-6 text-lg leading-relaxed">
             {TODO} — texte de marque à valider. Ce paragraphe porte la promesse
             principale : ce que Bowly&apos;s refuse, ce qu&apos;elle revendique, et
             pourquoi le bowl est le bon format pour le dire.
@@ -89,21 +89,21 @@ export default function HistoirePage() {
         </Reveal>
 
         {/* Frise chronologique */}
-        <ol className="border-cream/10 mt-20 grid gap-px overflow-hidden rounded-3xl border bg-cream/10 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="border-line bg-line mt-20 grid gap-px overflow-hidden rounded-3xl border sm:grid-cols-2 lg:grid-cols-4">
           {chapters.map((chapter, index) => (
             <Reveal
               as="li"
               key={chapter.title}
               delay={index * 0.08}
-              className="bg-ink-800 flex flex-col gap-3 p-8 lg:p-10"
+              className="flex flex-col gap-3 bg-white p-8 lg:p-10"
             >
-              <span className="text-brand font-display text-xs font-bold tracking-[0.2em] uppercase">
+              <span className="text-brand-ink font-display text-xs font-bold tracking-[0.2em] uppercase">
                 {chapter.year}
               </span>
-              <h3 className="font-display text-cream text-lg font-extrabold tracking-tight">
+              <h3 className="font-display text-ink text-lg font-extrabold tracking-tight">
                 {chapter.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-ink-soft text-sm leading-relaxed">
                 {chapter.body}
               </p>
             </Reveal>
@@ -111,7 +111,7 @@ export default function HistoirePage() {
         </ol>
       </section>
 
-      <section aria-labelledby="valeurs-titre" className="border-cream/10 bg-ink-900 border-y py-24 lg:py-32">
+      <section aria-labelledby="valeurs-titre" className="bg-sand py-24 lg:py-32">
         <div className="bowly-container grid gap-14 lg:grid-cols-2 lg:gap-20">
           <Reveal from="left" className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl">
@@ -121,25 +121,25 @@ export default function HistoirePage() {
                 sizes="(max-width: 1024px) 100vw, 46vw"
                 className="object-cover"
               />
-              <div aria-hidden="true" className="from-ink/60 absolute inset-0 bg-gradient-to-t to-transparent" />
+              <div aria-hidden="true" className="from-night/40 absolute inset-0 bg-gradient-to-t to-transparent" />
             </div>
           </Reveal>
 
           <div>
             <p className="eyebrow mb-4">Ce à quoi on tient</p>
-            <h2 id="valeurs-titre" className="text-display text-cream text-4xl sm:text-5xl">
+            <h2 id="valeurs-titre" className="text-display text-ink text-4xl sm:text-5xl">
               Trois convictions,
-              <br /> zéro <span className="text-brand">concession</span>.
+              <br /> zéro <span className="text-brand-ink">concession</span>.
             </h2>
 
             <ul className="mt-10 flex flex-col gap-8">
               {values.map((value, index) => (
                 <Reveal as="li" key={value.title} delay={index * 0.08}>
-                  <h3 className="font-display text-cream text-lg font-extrabold tracking-tight">
-                    <span className="text-brand mr-3">0{index + 1}</span>
+                  <h3 className="font-display text-ink text-lg font-extrabold tracking-tight">
+                    <span className="text-brand-ink mr-3">0{index + 1}</span>
                     {value.title}
                   </h3>
-                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                  <p className="text-ink-soft mt-2 text-sm leading-relaxed">
                     {value.body}
                   </p>
                 </Reveal>
@@ -151,8 +151,8 @@ export default function HistoirePage() {
 
       <section className="bowly-container py-24 text-center lg:py-32">
         <Reveal>
-          <h2 className="text-display text-cream text-4xl sm:text-5xl">
-            La suite se passe <span className="text-brand">au comptoir</span>.
+          <h2 className="text-display text-ink text-4xl sm:text-5xl">
+            La suite se passe <span className="text-brand-ink">au comptoir</span>.
           </h2>
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild size="lg">

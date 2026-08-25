@@ -82,6 +82,13 @@ type LogoProps = {
   markClassName?: string;
   /** Masque le mot-clé sur petit écran tout en le gardant pour les lecteurs d'écran. */
   compactOnMobile?: boolean;
+  /**
+   * Couleur du mot-clé « Bowly's ».
+   * `dark` sur fond clair (cas courant), `light` sur une photo ou un fond
+   * sombre — le header et le pied de page basculent entre les deux.
+   * La pastille orange du monogramme, elle, ne change jamais.
+   */
+  tone?: "dark" | "light";
 };
 
 export function Logo({
@@ -89,6 +96,7 @@ export function Logo({
   className,
   markClassName,
   compactOnMobile = false,
+  tone = "dark",
 }: LogoProps) {
   if (variant === "mark") {
     return (
@@ -104,12 +112,15 @@ export function Logo({
       <LogoMark className={cn("size-10 shrink-0", markClassName)} />
       <span
         className={cn(
-          "font-display text-cream text-2xl leading-none font-extrabold tracking-[-0.045em]",
+          "font-display text-2xl leading-none font-extrabold tracking-[-0.045em]",
+          tone === "light" ? "text-cream" : "text-ink",
           compactOnMobile && "sr-only sm:not-sr-only",
         )}
       >
         Bowly
-        <span className="text-brand">&apos;s</span>
+        <span className={tone === "light" ? "text-brand" : "text-brand-ink"}>
+          &apos;s
+        </span>
       </span>
     </span>
   );

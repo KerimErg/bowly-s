@@ -54,8 +54,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0c0a09",
-  colorScheme: "dark",
+  themeColor: "#fff8f3",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -63,11 +63,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr" className={`${poppins.variable} ${inter.variable}`}>
-      <body className="bg-ink text-cream min-h-dvh antialiased">
+      <body className="bg-cream text-ink min-h-dvh antialiased">
         {/* Accessibilité : lien d'évitement, premier élément focusable de la page. */}
         <a
           href="#contenu"
-          className="bg-brand focus:ring-cream sr-only rounded-full px-5 py-3 text-sm font-bold text-ink focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:ring-2"
+          className="bg-brand focus:ring-ink sr-only rounded-full px-5 py-3 text-sm font-bold text-ink focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:ring-2"
         >
           Aller au contenu principal
         </a>

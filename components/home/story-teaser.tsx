@@ -23,13 +23,13 @@ export function StoryTeaser() {
               sizes="(max-width: 1024px) 100vw, 46vw"
               className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105"
             />
-            <div aria-hidden="true" className="from-ink/70 absolute inset-0 bg-gradient-to-t to-transparent" />
+            <div aria-hidden="true" className="from-night/55 absolute inset-0 bg-gradient-to-t to-transparent" />
           </div>
 
           {/* Encart chiffré : valeurs de marque, à confirmer avant publication. */}
-          <div className="border-cream/10 bg-ink-800/95 absolute -right-2 -bottom-6 rounded-2xl border p-6 backdrop-blur-md sm:right-6 lg:-right-8">
-            <p className="text-display text-brand text-4xl">+40</p>
-            <p className="text-muted-foreground mt-1 max-w-[9rem] text-xs leading-relaxed">
+          <div className="border-line absolute -right-2 -bottom-6 rounded-2xl border bg-white p-6 shadow-[0_24px_50px_-30px_rgba(28,19,16,0.5)] sm:right-6 lg:-right-8">
+            <p className="text-display text-brand-ink text-4xl">+40</p>
+            <p className="text-ink-soft mt-1 max-w-[9rem] text-xs leading-relaxed">
               ingrédients préparés chaque matin en cuisine
             </p>
           </div>
@@ -37,18 +37,18 @@ export function StoryTeaser() {
 
         <Reveal from="right">
           <p className="eyebrow mb-4">Notre histoire</p>
-          <h2 id="histoire-titre" className="text-display text-cream text-4xl sm:text-5xl lg:text-6xl">
+          <h2 id="histoire-titre" className="text-display text-ink text-4xl sm:text-5xl lg:text-6xl">
             Née d&apos;une pause déjeuner
             <br className="hidden sm:block" /> un peu trop{" "}
-            <span className="text-brand">décevante</span>.
+            <span className="text-brand-ink">décevante</span>.
           </h2>
-          <p className="text-muted-foreground mt-6 leading-relaxed">
+          <p className="text-ink-soft mt-6 leading-relaxed">
             {TODO} — texte de marque à valider. L&apos;idée de départ : rendre le
             bowl aussi désirable qu&apos;un burger, sans rien lâcher sur la
             fraîcheur. Une base généreuse, une protéine bien cuisinée, une sauce
             qui a du caractère, et surtout : quelque chose qui craque.
           </p>
-          <p className="text-muted-foreground mt-4 leading-relaxed">
+          <p className="text-ink-soft mt-4 leading-relaxed">
             {TODO} — récit de la création, parcours des fondateurs, ouverture du
             premier restaurant.
           </p>

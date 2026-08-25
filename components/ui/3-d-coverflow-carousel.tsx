@@ -9,8 +9,9 @@ import Link from "next/link";
  *
  * Contraintes respectées :
  *  - aucune dépendance d'icônes : les chevrons sont des SVG inline ;
- *  - palette pilotée par deux props (`backgroundColor`, `accentColor`) —
- *    ici l'orange Bowly's remplace le doré d'origine, sur fond sombre premium ;
+ *  - palette pilotée par deux props (`backgroundColor`, `accentColor`) : le
+ *    composant se pose sur la section claire, seules les cartes gardent un
+ *    voile sombre, indispensable au texte en réserve sur la photo ;
  *  - navigation clavier (← →, Début/Fin), pointeur (drag/swipe) et pastilles ;
  *  - défilement automatique désactivé au survol, au focus, pendant un drag,
  *    quand l'onglet est masqué, ou si l'utilisateur a demandé moins d'animations.
@@ -196,7 +197,7 @@ function readableOn(color: string): string {
           .map((c) => c + c)
           .join("")
       : hex;
-  if (full.length !== 6) return "#0c0a09";
+  if (full.length !== 6) return "#1c1310";
 
   const channel = (value: number) => {
     const srgb = value / 255;
@@ -211,7 +212,7 @@ function readableOn(color: string): string {
   const contrastWithWhite = 1.05 / (luminance + 0.05);
   const contrastWithInk = (luminance + 0.05) / 0.0526;
 
-  return contrastWithInk >= contrastWithWhite ? "#0c0a09" : "#ffffff";
+  return contrastWithInk >= contrastWithWhite ? "#1c1310" : "#ffffff";
 }
 
 /** Ramène un décalage d'index au chemin le plus court sur l'anneau. */
@@ -227,7 +228,7 @@ function wrapOffset(offset: number, total: number): number {
 export function Coverflow3DCarousel({
   dishes = defaultDishes,
   accentColor = "#ff5a1f",
-  backgroundColor = "#0c0a09",
+  backgroundColor = "transparent",
   autoPlay = true,
   autoPlayInterval = 5200,
   ariaLabel = "Nos bowls best-sellers",
@@ -360,7 +361,7 @@ export function Coverflow3DCarousel({
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-1/2 left-1/2 h-[460px] w-[860px] max-w-none -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ backgroundColor: accentColor, opacity: 0.13 }}
+        style={{ backgroundColor: accentColor, opacity: 0.16 }}
       />
 
       <div
@@ -390,7 +391,10 @@ export function Coverflow3DCarousel({
           const rotateY = offset === 0 ? 0 : -Math.sign(offset) * 38;
           const scale = 1 - distance * 0.13;
           const translateZ = -distance * 170;
-          const opacity = isActive ? 1 : distance === 1 ? 0.62 : 0.28;
+          /* Sur fond clair, une faible opacité rend les cartes fantomatiques :
+             la profondeur vient de l'échelle, de l'ombre et d'un léger
+             assombrissement, pas de la transparence. */
+          const opacity = isActive ? 1 : distance === 1 ? 0.92 : 0.7;
 
           return (
             <article
@@ -399,7 +403,7 @@ export function Coverflow3DCarousel({
               aria-label={`${dish.titleLine1} ${dish.titleLine2} — ${index + 1} sur ${total}`}
               aria-hidden={!isActive}
               onClick={isActive ? undefined : () => goTo(index)}
-              className="absolute top-1/2 left-1/2 overflow-hidden rounded-[28px] border shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]"
+              className="absolute top-1/2 left-1/2 overflow-hidden rounded-[28px] border shadow-[0_30px_70px_-25px_rgba(20,15,13,0.55)]"
               style={{
                 width: cardWidth,
                 height: cardWidth * 1.42,
@@ -410,8 +414,8 @@ export function Coverflow3DCarousel({
                 transition: isDragging ? "none" : transition,
                 opacity,
                 zIndex: 100 - distance,
-                filter: isActive ? "none" : "saturate(0.75) brightness(0.72)",
-                borderColor: isActive ? `${accentColor}66` : "rgba(255,255,255,0.08)",
+                filter: isActive ? "none" : "saturate(0.8) brightness(0.82)",
+                borderColor: isActive ? accentColor : "rgba(20,15,13,0.12)",
                 cursor: isActive ? "default" : "pointer",
               }}
             >
@@ -431,7 +435,7 @@ export function Coverflow3DCarousel({
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(to top, rgba(12,10,9,0.96) 6%, rgba(12,10,9,0.72) 38%, rgba(12,10,9,0.12) 78%)",
+                    "linear-gradient(to top, rgba(20,15,13,0.96) 6%, rgba(20,15,13,0.72) 38%, rgba(20,15,13,0.12) 78%)",
                 }}
               />
 
@@ -490,7 +494,7 @@ export function Coverflow3DCarousel({
           type="button"
           onClick={prev}
           aria-label="Bowl précédent"
-          className="flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition-colors duration-300 hover:border-white/40 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-3"
+          className="border-ink/15 text-ink hover:border-brand hover:bg-brand flex size-11 items-center justify-center rounded-full border-2 bg-transparent transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3"
           style={{ outlineColor: accentColor }}
         >
           <ChevronLeftIcon />
@@ -510,7 +514,7 @@ export function Coverflow3DCarousel({
                 className="h-2 rounded-full transition-all duration-500 focus-visible:outline-2 focus-visible:outline-offset-3"
                 style={{
                   width: isActive ? 34 : 8,
-                  backgroundColor: isActive ? accentColor : "rgba(255,255,255,0.28)",
+                  backgroundColor: isActive ? accentColor : "rgba(28,19,16,0.2)",
                   outlineColor: accentColor,
                 }}
               />
@@ -522,7 +526,7 @@ export function Coverflow3DCarousel({
           type="button"
           onClick={next}
           aria-label="Bowl suivant"
-          className="flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition-colors duration-300 hover:border-white/40 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-3"
+          className="border-ink/15 text-ink hover:border-brand hover:bg-brand flex size-11 items-center justify-center rounded-full border-2 bg-transparent transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3"
           style={{ outlineColor: accentColor }}
         >
           <ChevronRightIcon />

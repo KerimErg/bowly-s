@@ -31,11 +31,11 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? <p className="eyebrow mb-4">{eyebrow}</p> : null}
-      <Tag className="text-display text-cream text-4xl sm:text-5xl lg:text-6xl">
+      <Tag className="text-display text-ink text-4xl sm:text-5xl lg:text-6xl">
         {title}
       </Tag>
       {description ? (
-        <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
+        <p className="text-ink-soft mt-5 text-base leading-relaxed sm:text-lg">
           {description}
         </p>
       ) : null}

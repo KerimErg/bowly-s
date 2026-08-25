@@ -10,6 +10,12 @@ type SmartImageProps = Omit<ImageProps, "src" | "alt"> & {
   photo: Photo;
   /** Largeur demandée au CDN Unsplash (par défaut 1200 px). */
   cdnWidth?: number;
+  /**
+   * Teinte du dégradé de secours si la photo est indisponible.
+   * `dark` est indispensable partout où du texte clair est posé sur la photo
+   * (hero, en-têtes de page) : un secours clair rendrait le titre illisible.
+   */
+  fallbackTone?: "light" | "dark";
 };
 
 /**
@@ -20,12 +26,13 @@ type SmartImageProps = Omit<ImageProps, "src" | "alt"> & {
  *  2. si une URL Unsplash devient indisponible, on retombe sur un dégradé de
  *     marque plutôt que sur une icône d'image cassée.
  *
- * Le `lazy loading` natif de `next/image` reste actif : passez `priority`
- * uniquement sur la photo du hero (LCP).
+ * Le `lazy loading` natif reste actif : passez `priority` uniquement sur la
+ * photo du hero (LCP).
  */
 export function SmartImage({
   photo,
   cdnWidth = 1200,
+  fallbackTone = "light",
   className,
   ...props
 }: SmartImageProps) {
@@ -37,7 +44,10 @@ export function SmartImage({
         role="img"
         aria-label={photo.alt}
         className={cn(
-          "bg-gradient-to-br from-brand/40 via-ink-700 to-ink absolute inset-0 h-full w-full",
+          "absolute inset-0 h-full w-full bg-gradient-to-br",
+          fallbackTone === "dark"
+            ? "from-brand/45 via-night-700 to-night"
+            : "from-brand/35 via-sand to-sand-deep",
           className,
         )}
       />
