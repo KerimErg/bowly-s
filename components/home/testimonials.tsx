@@ -37,9 +37,9 @@ export function Testimonials() {
   return (
     <section
       aria-labelledby="avis-titre"
-      className="border-cream/10 bg-ink-900 border-y py-24 lg:py-32"
+      className="bowly-container py-24 lg:py-32"
     >
-      <div className="bowly-container">
+      <div>
         <SectionHeading
           align="center"
           eyebrow="Ils en parlent"
@@ -53,7 +53,7 @@ export function Testimonials() {
               as="li"
               key={review.author}
               delay={index * 0.1}
-              className="border-cream/10 bg-ink-800 hover:border-brand/40 flex flex-col gap-5 rounded-3xl border p-8 transition-colors duration-500"
+              className="border-line hover:border-brand flex flex-col gap-5 rounded-3xl border bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_50px_-30px_rgba(28,19,16,0.4)]"
             >
               <div
                 className="flex gap-1"
@@ -68,25 +68,25 @@ export function Testimonials() {
                     className={
                       starIndex < review.rating
                         ? "fill-brand text-brand"
-                        : "text-cream/20"
+                        : "text-line"
                     }
                   />
                 ))}
               </div>
 
-              <blockquote className="text-cream/90 leading-relaxed">
+              <blockquote className="text-ink leading-relaxed">
                 « {review.quote} »
               </blockquote>
 
               <footer className="mt-auto flex items-center gap-3">
-                <span className="bg-brand/15 text-brand font-display flex size-10 items-center justify-center rounded-full text-sm font-bold">
+                <span className="bg-brand-wash text-brand-ink font-display flex size-10 items-center justify-center rounded-full text-sm font-bold">
                   {review.author.charAt(0)}
                 </span>
                 <span>
-                  <span className="font-display text-cream block text-sm font-bold">
+                  <span className="font-display text-ink block text-sm font-bold">
                     {review.author}
                   </span>
-                  <span className="text-muted-foreground text-xs">
+                  <span className="text-ink-soft text-xs">
                     {review.context}
                   </span>
                 </span>

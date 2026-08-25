@@ -50,7 +50,7 @@ export default function RestaurantsPage() {
             <div
               role="img"
               aria-label="Emplacement réservé pour la carte Google Maps, non connectée"
-              className="border-cream/12 bg-ink-800 relative flex min-h-[380px] items-center justify-center overflow-hidden rounded-3xl border lg:min-h-[520px]"
+              className="border-line bg-sand relative flex min-h-[380px] items-center justify-center overflow-hidden rounded-3xl border lg:min-h-[520px]"
             >
               {/* Fond « plan » stylisé, purement décoratif. */}
               <div
@@ -58,26 +58,26 @@ export default function RestaurantsPage() {
                 className="absolute inset-0 opacity-[0.16]"
                 style={{
                   backgroundImage:
-                    "linear-gradient(rgba(255,246,239,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(255,246,239,0.35) 1px, transparent 1px)",
+                    "linear-gradient(rgba(28,19,16,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(28,19,16,0.3) 1px, transparent 1px)",
                   backgroundSize: "48px 48px",
                 }}
               />
               <div
                 aria-hidden="true"
-                className="bg-brand/20 absolute top-1/2 left-1/2 size-56 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+                className="bg-brand/25 absolute top-1/2 left-1/2 size-56 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
               />
 
               <div className="relative flex flex-col items-center gap-4 px-8 text-center">
-                <span className="bg-brand flex size-14 items-center justify-center rounded-full text-white shadow-[0_18px_50px_-12px_rgba(255,90,31,0.9)]">
+                <span className="bg-brand text-ink flex size-14 items-center justify-center rounded-full shadow-[0_18px_50px_-12px_rgba(255,90,31,0.9)]">
                   <MapPin size={26} aria-hidden="true" />
                 </span>
-                <p className="font-display text-cream text-lg font-extrabold tracking-tight">
+                <p className="font-display text-ink text-lg font-extrabold tracking-tight">
                   Zone d&apos;intégration Google&nbsp;Maps
                 </p>
-                <p className="text-muted-foreground max-w-sm text-sm leading-relaxed">
+                <p className="text-ink-soft max-w-sm text-sm leading-relaxed">
                   La carte interactive sera branchée ici dès que l&apos;adresse du
                   restaurant sera confirmée. Voir le commentaire{" "}
-                  <code className="text-brand">TODO(intégration)</code> dans{" "}
+                  <code className="text-brand-ink">TODO(intégration)</code> dans{" "}
                   <code>app/restaurants/page.tsx</code>.
                 </p>
               </div>
@@ -86,16 +86,16 @@ export default function RestaurantsPage() {
 
           {/* Fiche pratique */}
           <Reveal from="right" className="flex flex-col gap-6">
-            <div className="border-cream/10 bg-ink-800 rounded-3xl border p-8">
-              <h2 className="font-display text-cream text-2xl font-extrabold tracking-tight">
+            <div className="border-line rounded-3xl border bg-white p-8">
+              <h2 className="font-display text-ink text-2xl font-extrabold tracking-tight">
                 Bowly&apos;s — restaurant n°1
               </h2>
 
               <dl className="mt-7 flex flex-col gap-5 text-sm">
                 <div className="flex items-start gap-3">
                   <dt className="sr-only">Adresse</dt>
-                  <MapPin size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-                  <dd className="text-cream/85">
+                  <MapPin size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+                  <dd className="text-ink">
                     {contactInfo.address}
                     <br />
                     {contactInfo.postalCode} {contactInfo.city}
@@ -103,25 +103,25 @@ export default function RestaurantsPage() {
                 </div>
                 <div className="flex items-start gap-3">
                   <dt className="sr-only">Téléphone</dt>
-                  <Phone size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-                  <dd className="text-cream/85">{contactInfo.phone}</dd>
+                  <Phone size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+                  <dd className="text-ink">{contactInfo.phone}</dd>
                 </div>
                 <div className="flex items-start gap-3">
                   <dt className="sr-only">E-mail</dt>
-                  <Mail size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-                  <dd className="text-cream/85">{contactInfo.email}</dd>
+                  <Mail size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+                  <dd className="text-ink">{contactInfo.email}</dd>
                 </div>
                 <div className="flex items-start gap-3">
                   <dt className="sr-only">Accès en transports</dt>
-                  <Train size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-                  <dd className="text-cream/85">Accès en transports {TODO}</dd>
+                  <Train size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+                  <dd className="text-ink">Accès en transports {TODO}</dd>
                 </div>
               </dl>
             </div>
 
-            <div className="border-cream/10 bg-ink-800 rounded-3xl border p-8">
-              <h2 className="font-display text-cream flex items-center gap-2 text-lg font-extrabold tracking-tight">
-                <Clock size={18} className="text-brand" aria-hidden="true" />
+            <div className="border-line rounded-3xl border bg-white p-8">
+              <h2 className="font-display text-ink flex items-center gap-2 text-lg font-extrabold tracking-tight">
+                <Clock size={18} className="text-brand-ink" aria-hidden="true" />
                 Horaires d&apos;ouverture
               </h2>
 
@@ -132,11 +132,11 @@ export default function RestaurantsPage() {
                 </caption>
                 <tbody>
                   {openingHours.map((slot) => (
-                    <tr key={slot.day} className="border-cream/8 border-b last:border-0">
-                      <th scope="row" className="text-cream/85 py-3 text-left font-medium">
+                    <tr key={slot.day} className="border-line border-b last:border-0">
+                      <th scope="row" className="text-ink py-3 text-left font-medium">
                         {slot.day}
                       </th>
-                      <td className="text-muted-foreground py-3 text-right">
+                      <td className="text-ink-soft py-3 text-right">
                         {slot.hours}
                       </td>
                     </tr>
@@ -145,11 +145,11 @@ export default function RestaurantsPage() {
               </table>
             </div>
 
-            <div className="border-brand/30 bg-brand/8 rounded-3xl border p-8">
-              <h2 className="font-display text-cream text-lg font-extrabold tracking-tight">
+            <div className="border-brand bg-brand-wash rounded-3xl border-2 p-8">
+              <h2 className="font-display text-ink text-lg font-extrabold tracking-tight">
                 Vous cherchez à ouvrir un Bowly&apos;s ?
               </h2>
-              <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
+              <p className="text-ink-soft mt-3 text-sm leading-relaxed">
                 Le programme de franchise n&apos;est pas encore ouvert. Contact
                 dédié : {contactInfo.franchiseEmail}.
               </p>

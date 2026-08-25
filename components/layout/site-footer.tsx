@@ -7,18 +7,23 @@ import { contactInfo, legalNav, mainNav, siteConfig, socialLinks } from "@/lib/s
 
 /**
  * Pied de page.
- * Toutes les coordonnées viennent de `lib/site.ts` et affichent `[À COMPLÉTER]`
- * tant que les vraies informations n'ont pas été fournies.
+ *
+ * Seule zone sombre du site en dehors des voiles photo : elle ferme la page
+ * et fait ressortir l'orange. Pour la repasser en clair, remplacer `bg-night`
+ * par `bg-sand` et les couleurs de texte par `text-ink` / `text-ink-soft`.
+ *
+ * Toutes les coordonnées viennent de `lib/site.ts` et affichent
+ * `[À COMPLÉTER]` tant que les vraies informations n'ont pas été fournies.
  */
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-cream/10 bg-ink-900 border-t">
+    <footer className="bg-night text-cream">
       <div className="bowly-container grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4 lg:py-20">
         <div className="lg:col-span-1">
-          <Logo />
-          <p className="text-muted-foreground mt-5 max-w-xs text-sm leading-relaxed">
+          <Logo tone="light" />
+          <p className="text-ink-dim mt-5 max-w-xs text-sm leading-relaxed">
             {siteConfig.description}
           </p>
 
@@ -29,7 +34,7 @@ export function SiteFooter() {
                 <a
                   href={social.href}
                   aria-label={`${social.label} — ${social.handle}`}
-                  className="border-cream/15 text-sand hover:border-brand hover:text-brand flex size-10 items-center justify-center rounded-full border transition-colors duration-300"
+                  className="border-cream/25 text-cream hover:border-brand hover:bg-brand hover:text-ink flex size-10 items-center justify-center rounded-full border transition-colors duration-300"
                 >
                   <SocialIcon name={social.icon} />
                 </a>
@@ -39,14 +44,14 @@ export function SiteFooter() {
         </div>
 
         <nav aria-label="Navigation du pied de page">
-          <h2 className="font-display text-cream text-xs font-bold tracking-[0.2em] uppercase">
+          <h2 className="font-display text-brand text-xs font-bold tracking-[0.2em] uppercase">
             Le site
           </h2>
           <ul className="mt-5 flex flex-col gap-3">
             <li>
               <Link
                 href="/"
-                className="text-muted-foreground hover:text-brand text-sm transition-colors duration-300"
+                className="text-ink-dim hover:text-cream text-sm transition-colors duration-300"
               >
                 Accueil
               </Link>
@@ -55,7 +60,7 @@ export function SiteFooter() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-muted-foreground hover:text-brand text-sm transition-colors duration-300"
+                  className="text-ink-dim hover:text-cream text-sm transition-colors duration-300"
                 >
                   {item.label}
                 </Link>
@@ -65,10 +70,10 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="font-display text-cream text-xs font-bold tracking-[0.2em] uppercase">
+          <h2 className="font-display text-brand text-xs font-bold tracking-[0.2em] uppercase">
             Nous trouver
           </h2>
-          <ul className="text-muted-foreground mt-5 flex flex-col gap-4 text-sm">
+          <ul className="text-ink-dim mt-5 flex flex-col gap-4 text-sm">
             <li className="flex items-start gap-3">
               <MapPin size={16} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
               <span>
@@ -89,7 +94,7 @@ export function SiteFooter() {
         </div>
 
         <nav aria-label="Informations légales">
-          <h2 className="font-display text-cream text-xs font-bold tracking-[0.2em] uppercase">
+          <h2 className="font-display text-brand text-xs font-bold tracking-[0.2em] uppercase">
             Informations légales
           </h2>
           <ul className="mt-5 flex flex-col gap-3">
@@ -98,21 +103,21 @@ export function SiteFooter() {
                 {/* TODO(juridique) : créer la page et remplacer `#` par sa route. */}
                 <a
                   href={item.href}
-                  className="text-muted-foreground hover:text-brand text-sm transition-colors duration-300"
+                  className="text-ink-dim hover:text-cream text-sm transition-colors duration-300"
                 >
                   {item.label}
                 </a>
               </li>
             ))}
           </ul>
-          <p className="text-muted-foreground mt-5 text-xs leading-relaxed">
+          <p className="text-ink-dim mt-5 text-xs leading-relaxed">
             Pages à rédiger avant mise en ligne : {legalNav[0].note}
           </p>
         </nav>
       </div>
 
-      <div className="border-cream/10 border-t">
-        <div className="bowly-container text-muted-foreground flex flex-col gap-2 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="border-cream/15 border-t">
+        <div className="bowly-container text-ink-dim flex flex-col gap-2 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Bowly&apos;s. Tous droits réservés.</p>
           <p>
             Site de démonstration — visuels Unsplash, contenus et tarifs non

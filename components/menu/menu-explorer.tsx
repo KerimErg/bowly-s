@@ -36,13 +36,13 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
   return (
     <div>
       {/* Barre de filtres */}
-      <div className="border-cream/10 bg-ink/90 sticky top-20 z-30 -mx-5 border-b px-5 py-4 backdrop-blur-xl md:-mx-8 md:px-8">
+      <div className="border-line bg-cream/92 sticky top-20 z-30 -mx-5 border-b px-5 py-4 backdrop-blur-xl md:-mx-8 md:px-8">
         <div
           role="group"
           aria-label="Filtrer la carte par catégorie"
           className="flex items-center gap-2 overflow-x-auto pb-1"
         >
-          <span className="text-muted-foreground mr-1 hidden shrink-0 items-center gap-2 text-xs font-semibold tracking-widest uppercase sm:flex">
+          <span className="text-ink-soft mr-1 hidden shrink-0 items-center gap-2 text-xs font-semibold tracking-widest uppercase sm:flex">
             <Filter size={14} aria-hidden="true" />
             Filtrer
           </span>
@@ -68,7 +68,7 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
         </div>
       </div>
 
-      <p aria-live="polite" className="text-muted-foreground mt-8 text-sm">
+      <p aria-live="polite" className="text-ink-soft mt-8 text-sm">
         {currentBlurb} — {filtered.length}{" "}
         {filtered.length > 1 ? "recettes affichées" : "recette affichée"}.
       </p>
@@ -79,7 +79,7 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
             as="li"
             key={item.id}
             delay={Math.min(index, 5) * 0.06}
-            className="group border-cream/10 bg-ink-800 hover:border-brand/50 flex flex-col overflow-hidden rounded-3xl border transition-colors duration-500"
+            className="group border-line hover:border-brand flex flex-col overflow-hidden rounded-3xl border bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_28px_55px_-32px_rgba(28,19,16,0.5)]"
           >
             <div className="relative aspect-[4/3] overflow-hidden">
               <SmartImage
@@ -91,7 +91,7 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
               />
               <div
                 aria-hidden="true"
-                className="from-ink-800 absolute inset-0 bg-gradient-to-t via-transparent to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent"
               />
               {item.featured ? (
                 <Badge className="absolute top-4 left-4">Signature</Badge>
@@ -100,16 +100,16 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
 
             <div className="flex flex-1 flex-col gap-3 p-6">
               <div className="flex items-start justify-between gap-4">
-                <h3 className="font-display text-cream text-xl font-extrabold tracking-tight">
+                <h3 className="font-display text-ink text-xl font-extrabold tracking-tight">
                   {item.name}
                 </h3>
                 {/* Prix placeholder : voir `lib/menu-data.ts`. */}
-                <span className="text-brand font-display shrink-0 text-lg font-extrabold">
+                <span className="text-brand-ink font-display shrink-0 text-lg font-extrabold">
                   {item.price}
                 </span>
               </div>
 
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-ink-soft text-sm leading-relaxed">
                 {item.description}
               </p>
 
@@ -126,7 +126,7 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
       </ul>
 
       {filtered.length === 0 ? (
-        <p className="text-muted-foreground py-16 text-center">
+        <p className="text-ink-soft py-16 text-center">
           Aucune recette dans cette catégorie pour le moment.
         </p>
       ) : null}
@@ -151,14 +151,14 @@ function FiltreButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "font-display shrink-0 rounded-full border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "font-display shrink-0 rounded-full border-2 px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
         active
           ? "border-brand bg-brand text-ink"
-          : "border-cream/15 text-cream/75 hover:border-cream/40 hover:text-cream",
+          : "border-ink/15 text-ink/75 hover:border-ink/40 hover:text-ink",
       )}
     >
       {children}
-      <span className={cn("ml-2 text-xs", active ? "text-ink" : "text-muted-foreground")}>
+      <span className={cn("ml-2 text-xs", active ? "text-ink" : "text-ink-soft")}>
         {count}
       </span>
     </button>

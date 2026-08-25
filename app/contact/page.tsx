@@ -58,25 +58,25 @@ export default function ContactPage() {
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <Reveal from="left">
             <p className="eyebrow mb-4">Nos canaux</p>
-            <h3 className="text-display text-cream text-3xl sm:text-4xl">
+            <h3 className="text-display text-ink text-3xl sm:text-4xl">
               Choisissez le bon
               <br /> interlocuteur.
             </h3>
-            <p className="text-muted-foreground mt-5 text-sm leading-relaxed">
+            <p className="text-ink-soft mt-5 text-sm leading-relaxed">
               Les coordonnées ci-dessous seront renseignées avant l&apos;ouverture.
             </p>
 
             <ul className="mt-10 flex flex-col gap-6">
               {contactChannels.map((channel) => (
                 <li key={channel.label} className="flex items-start gap-4">
-                  <span className="bg-brand/12 text-brand ring-brand/25 flex size-11 shrink-0 items-center justify-center rounded-2xl ring-1">
+                  <span className="bg-brand-wash text-brand-ink flex size-11 shrink-0 items-center justify-center rounded-2xl">
                     <channel.icon size={18} aria-hidden="true" />
                   </span>
                   <span>
-                    <span className="font-display text-cream block text-sm font-bold">
+                    <span className="font-display text-ink block text-sm font-bold">
                       {channel.label}
                     </span>
-                    <span className="text-muted-foreground text-sm">
+                    <span className="text-ink-soft text-sm">
                       {channel.value}
                     </span>
                   </span>

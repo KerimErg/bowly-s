@@ -12,37 +12,36 @@ export function LocationsTeaser() {
   return (
     <section
       aria-labelledby="localisation-titre"
-      className="bowly-container py-24 lg:py-32"
+      className="bg-sand py-24 lg:py-32"
     >
-      <div className="border-cream/10 bg-ink-800 grid overflow-hidden rounded-3xl border lg:grid-cols-2">
+      <div className="bowly-container"><div className="border-line grid overflow-hidden rounded-3xl border bg-white lg:grid-cols-2">
         <Reveal className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
           <p className="eyebrow mb-4">Nous trouver</p>
-          <h2 id="localisation-titre" className="text-display text-cream text-4xl sm:text-5xl">
-            Le premier Bowly&apos;s
-            <br /> ouvre <span className="text-brand">bientôt</span>.
+          <h2 id="localisation-titre" className="text-display text-ink text-4xl sm:text-5xl">
+            Trouve ton <span className="text-brand-ink">Bowly&apos;s</span>.
           </h2>
-          <p className="text-muted-foreground mt-5 leading-relaxed">
-            L&apos;emplacement, la date d&apos;ouverture et les horaires seront
-            annoncés dès qu&apos;ils seront confirmés.
+          <p className="text-ink-soft mt-5 leading-relaxed">
+            Le premier comptoir arrive bientôt. Adresse, date et horaires dès
+            qu&apos;ils sont confirmés.
           </p>
 
           <dl className="mt-9 flex flex-col gap-5 text-sm">
             <div className="flex items-start gap-3">
               <dt className="sr-only">Adresse</dt>
-              <MapPin size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-              <dd className="text-cream/85">
+              <MapPin size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+              <dd className="text-ink">
                 {contactInfo.address}, {contactInfo.postalCode} {contactInfo.city}
               </dd>
             </div>
             <div className="flex items-start gap-3">
               <dt className="sr-only">Horaires</dt>
-              <Clock size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-              <dd className="text-cream/85">Horaires d&apos;ouverture {TODO}</dd>
+              <Clock size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+              <dd className="text-ink">Horaires d&apos;ouverture {TODO}</dd>
             </div>
             <div className="flex items-start gap-3">
               <dt className="sr-only">Téléphone</dt>
-              <Phone size={17} className="text-brand mt-0.5 shrink-0" aria-hidden="true" />
-              <dd className="text-cream/85">{contactInfo.phone}</dd>
+              <Phone size={17} className="text-brand-ink mt-0.5 shrink-0" aria-hidden="true" />
+              <dd className="text-ink">{contactInfo.phone}</dd>
             </div>
           </dl>
 
@@ -61,9 +60,9 @@ export function LocationsTeaser() {
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"
           />
-          <div aria-hidden="true" className="from-ink-800 absolute inset-0 bg-gradient-to-r via-transparent to-transparent lg:block" />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-white/70 via-transparent to-transparent lg:block" />
         </Reveal>
-      </div>
+      </div></div>
     </section>
   );
 }

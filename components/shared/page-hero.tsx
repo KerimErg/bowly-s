@@ -20,6 +20,7 @@ export function PageHero({
       <div className="absolute inset-0 -z-10">
         <SmartImage
           photo={photo}
+          fallbackTone="dark"
           fill
           priority
           sizes="100vw"
@@ -30,7 +31,7 @@ export function PageHero({
       </div>
 
       <div className="bowly-container pt-36 pb-16 lg:pb-20">
-        <p className="eyebrow mb-4">{eyebrow}</p>
+        <p className="eyebrow-invert mb-4">{eyebrow}</p>
         <h1 className="text-display max-w-3xl text-5xl text-white sm:text-6xl lg:text-7xl">
           {title}
         </h1>

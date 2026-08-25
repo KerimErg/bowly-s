@@ -12,8 +12,11 @@ import { mainNav } from "@/lib/site";
 
 /**
  * En-tête du site.
- * Transparent en haut de page (le hero passe dessous), puis fond opaque
- * flouté dès que l'on scrolle — même logique que les sites fast-casual US.
+ *
+ * Deux états, parce que le haut de page est une photo sombre alors que le
+ * reste du site est crème :
+ *  - en haut d'une page à hero photo : fond transparent, texte clair ;
+ *  - dès qu'on scrolle (ou menu mobile ouvert) : fond crème, texte encre.
  */
 export function SiteHeader() {
   const pathname = usePathname();
@@ -27,39 +30,33 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* Le menu mobile se referme à chaque navigation.
-     Ajustement pendant le rendu (et non dans un effet) : c'est le motif
-     recommandé par React pour réagir au changement d'une valeur externe. */
+  /* Le menu mobile se referme à chaque navigation. Ajustement pendant le
+     rendu (et non dans un effet) : motif recommandé par React. */
   const [lastPathname, setLastPathname] = React.useState(pathname);
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
     setMenuOpen(false);
   }
 
-  /* Empêche le scroll de l'arrière-plan quand le menu mobile est ouvert. */
-  React.useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
+  /* `solid` = le header a un fond opaque, donc du texte encre. */
+  const solid = scrolled || menuOpen;
 
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        scrolled || menuOpen
-          ? "border-b border-cream/10 bg-ink/85 backdrop-blur-xl"
+        solid
+          ? "border-line bg-cream/92 border-b backdrop-blur-xl"
           : "border-b border-transparent bg-transparent",
       )}
     >
       <div className="bowly-container flex h-20 items-center justify-between gap-6">
         <Link
           href="/"
-          aria-label="Bowly's — retour à l'accueil"
+          aria-label="Bowly&apos;s — retour à l&apos;accueil"
           className="rounded-lg transition-opacity duration-300 hover:opacity-85"
         >
-          <Logo />
+          <Logo tone={solid ? "dark" : "light"} />
         </Link>
 
         <nav aria-label="Navigation principale" className="hidden lg:block">
@@ -73,16 +70,21 @@ export function SiteHeader() {
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
                       "font-display relative rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-300",
-                      isActive
-                        ? "text-brand"
-                        : "text-cream/80 hover:text-cream",
+                      solid
+                        ? isActive
+                          ? "text-brand-ink"
+                          : "text-ink/75 hover:text-ink"
+                        : isActive
+                          ? "text-brand"
+                          : "text-cream/85 hover:text-cream",
                     )}
                   >
                     {item.label}
                     <span
                       aria-hidden="true"
                       className={cn(
-                        "bg-brand absolute inset-x-4 -bottom-0.5 h-0.5 origin-left rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                        "absolute inset-x-4 -bottom-0.5 h-0.5 origin-left rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                        solid ? "bg-brand-ink" : "bg-brand",
                         isActive ? "scale-x-100" : "scale-x-0",
                       )}
                     />
@@ -94,9 +96,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          {/* TODO(commande) : brancher sur la vraie plateforme de commande en ligne. */}
+          {/* TODO(commande) : brancher sur la vraie plateforme de commande. */}
           <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link href="/menu">Commander</Link>
+            <Link href="/menu">Je commande</Link>
           </Button>
 
           <button
@@ -105,7 +107,12 @@ export function SiteHeader() {
             aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={menuOpen}
             aria-controls="menu-mobile"
-            className="text-cream border-cream/20 hover:border-brand hover:text-brand flex size-11 items-center justify-center rounded-full border transition-colors duration-300 lg:hidden"
+            className={cn(
+              "flex size-11 items-center justify-center rounded-full border-2 transition-colors duration-300 lg:hidden",
+              solid
+                ? "border-ink/15 text-ink hover:border-brand hover:text-brand-ink"
+                : "border-cream/40 text-cream hover:border-cream",
+            )}
           >
             {menuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
           </button>
@@ -116,7 +123,7 @@ export function SiteHeader() {
       <div
         id="menu-mobile"
         hidden={!menuOpen}
-        className="bg-ink border-cream/10 border-t lg:hidden"
+        className="border-line bg-cream min-h-[calc(100dvh-5rem)] border-t lg:hidden"
       >
         <nav aria-label="Navigation mobile" className="bowly-container py-6">
           <ul className="flex flex-col gap-1">
@@ -128,8 +135,8 @@ export function SiteHeader() {
                   className={cn(
                     "font-display block rounded-xl px-4 py-4 text-2xl font-extrabold tracking-tight transition-colors duration-300",
                     pathname === item.href
-                      ? "text-brand"
-                      : "text-cream hover:text-brand",
+                      ? "text-brand-ink"
+                      : "text-ink hover:text-brand-ink",
                   )}
                 >
                   {item.label}
@@ -138,7 +145,7 @@ export function SiteHeader() {
             ))}
           </ul>
           <Button asChild size="lg" className="mt-6 w-full">
-            <Link href="/menu">Commander</Link>
+            <Link href="/menu">Je commande</Link>
           </Button>
         </nav>
       </div>
