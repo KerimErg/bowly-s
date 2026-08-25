@@ -16,8 +16,12 @@ export const siteConfig = {
   tagline: "Le bowl, version croustillante.",
   description:
     "Bowly's compose des bowls généreux : protéines marinées, légumes de saison, féculents complets, sauces maison et toppings croustillants. Fast-food premium, healthy et gourmand.",
-  /** URL de production — sert de base aux métadonnées SEO / Open Graph. */
-  url: "https://www.bowlys.example",
+  /**
+   * URL de production — sert de base aux métadonnées SEO / Open Graph.
+   * Alimentée par le workflow de déploiement (`NEXT_PUBLIC_SITE_URL`) ; la
+   * valeur de repli n'est qu'un placeholder, à remplacer par le vrai domaine.
+   */
+  url: process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://www.bowlys.example",
   locale: "fr_FR",
 } as const;
 

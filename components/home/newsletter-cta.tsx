@@ -14,9 +14,12 @@ import { photos } from "@/lib/images";
  * CTA final + inscription newsletter.
  *
  * ⚠️ INTERFACE UNIQUEMENT — aucune donnée n'est envoyée.
- * TODO(back-end) : brancher un vrai service (Brevo, Mailchimp, route API
- * `POST /api/newsletter`, ...), gérer le double opt-in RGPD et le stockage
- * du consentement avant toute mise en production.
+ * TODO(back-end) : brancher un vrai service (Brevo, Mailchimp, fonction
+ * serverless...), gérer le double opt-in RGPD et le stockage du consentement
+ * avant toute mise en production.
+ *
+ * ⚠️ Export statique : pas de route API interne possible, l'appel doit viser
+ * un service externe depuis le navigateur (voir README, section Déploiement).
  */
 export function NewsletterCta() {
   const [submitted, setSubmitted] = React.useState(false);
