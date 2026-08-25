@@ -140,6 +140,35 @@ toutes les tailles, et réutilisable tel quel pour le favicon. Variantes :
 La prop `tone` (`dark` par défaut, `light` sur une photo) pilote la couleur du
 mot-clé ; la pastille orange, elle, ne change jamais.
 
+## Les composants 3D
+
+Deux mécaniques distinctes, une seule perspective (`--perspective`, 1600 px) et
+une seule courbe (`--ease-float`), pour que tout semble filmé par le même
+objectif.
+
+| Composant | Rôle | Où |
+| --- | --- | --- |
+| `components/ui/3d-card.tsx` | Carte à profondeur : chaque élément se détache à sa propre hauteur au survol | Cartes de la carte (`/menu`) |
+| `components/shared/tilt-card.tsx` | Inclinaison simple de toute la carte | Hero, piliers « Pourquoi » |
+| `components/ui/3-d-coverflow-carousel.tsx` | Carousel coverflow | Best-sellers de l'accueil |
+
+### `3d-card.tsx` — d'après Aceternity UI
+
+Composant copier-coller (licence permissive), API conservée telle quelle :
+`CardContainer`, `CardBody`, `CardItem`, `useMouseEnter`. Quatre adaptations :
+
+1. perspective prise sur le jeton partagé (1600 px au lieu de 1000 px) ;
+2. `prefers-reduced-motion` neutralise rotation et profondeur ;
+3. props typées sans `any` ;
+4. `py-8` et `h-96 w-96` figés retirés, pour que la carte remplisse sa cellule.
+
+> ⚠️ Ne posez jamais `overflow-hidden` sur `CardBody` : la propriété force
+> `transform-style: flat` et aplatirait toute la profondeur. Arrondissez
+> l'image dans son propre conteneur, qui est une feuille de l'arbre.
+
+Profondeurs utilisées sur les cartes de la carte : photo `translateZ 100`,
+prix `60`, nom `50`, description `30`, étiquettes `40`.
+
 ## Le carousel 3D coverflow
 
 `components/ui/3-d-coverflow-carousel.tsx` — utilisé dans la section
@@ -320,21 +349,31 @@ domaine pour que les métadonnées Open Graph soient correctes.
 
 ## Photos
 
+Direction photo : **street-food en barquette** — plats servis en barquette ou
+en boîte à emporter, poulet croustillant, frites chargées, cadrage serré et
+lumière chaude. Pas d'assiette de restaurant.
+
 Toutes les images distantes passent par `lib/images.ts`, qui associe à chaque
-photo son identifiant Unsplash **et** son texte alternatif en français — il
-devient donc impossible d'oublier un `alt`. L'hôte `images.unsplash.com` est le
-seul autorisé dans `next.config.ts` ; ajoutez-y votre CDN le jour où la marque
-disposera de sa propre production photo.
+photo son identifiant Unsplash, son texte alternatif en français **et le lien
+de recherche Unsplash correspondant** — il devient donc impossible d'oublier
+un `alt`, et remplacer une photo prend quelques secondes. L'hôte
+`images.unsplash.com` est le seul autorisé dans `next.config.ts`.
 
-> ⚠️ **À vérifier au premier lancement.** Les identifiants Unsplash n'ont pas pu
-> être testés depuis l'environnement de développement, dont la politique réseau
-> bloque `images.unsplash.com`. Ouvrez le site une fois en local : si une photo
-> manque, remplacez son `id` dans `lib/images.ts` (et dans `defaultDishes` pour
-> le carousel) par celui d'une autre photo Unsplash. Le composant
-> `<SmartImage />` affiche un dégradé de marque en secours, donc une photo
-> indisponible ne casse jamais la mise en page.
+> ⚠️ **À vérifier au premier lancement.** Les identifiants Unsplash n'ont pas
+> pu être testés depuis l'environnement de développement, dont la politique
+> réseau bloque `images.unsplash.com`. Ouvrez le site une fois en local : si
+> une photo manque, suivez le lien `recherche` de son entrée dans
+> `lib/images.ts`, choisissez-en une autre et collez son segment `photo-...`
+> dans `id`. Le composant `<SmartImage />` affiche un dégradé de marque en
+> secours, donc une photo indisponible ne casse jamais la mise en page.
+>
+> Les cinq bowls du carousel ont leurs URLs en dur dans `defaultDishes`
+> (`components/ui/3-d-coverflow-carousel.tsx`) — même manipulation.
 
----
+**N'utilisez pas les photos d'une enseigne existante** (Crousty One, Tasty
+Crousty ou autre) : elles sont protégées par le droit d'auteur, et présenter
+leurs plats comme ceux de Bowly's serait trompeur. Unsplash, une banque
+d'images sous licence, ou la production photo de la marque.
 
 ## Performance, SEO, accessibilité
 

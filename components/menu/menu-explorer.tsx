@@ -5,7 +5,11 @@ import { Filter } from "lucide-react";
 
 import { Reveal } from "@/components/shared/reveal";
 import { SmartImage } from "@/components/shared/smart-image";
-import { TiltCard } from "@/components/shared/tilt-card";
+import {
+  CardBody,
+  CardContainer,
+  CardItem,
+} from "@/components/ui/3d-card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
@@ -74,55 +78,66 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
         {filtered.length > 1 ? "recettes affichées" : "recette affichée"}.
       </p>
 
-      <ul className="stage-3d mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((item, index) => (
           <Reveal as="li" key={item.id} delay={Math.min(index, 5) * 0.06}>
-            <TiltCard
-              maxTilt={6}
-              lift={10}
-              className="group border-line hover:border-brand flex h-full flex-col overflow-hidden rounded-3xl border bg-white shadow-[var(--shadow-float-sm)] transition-[box-shadow,border-color] duration-500 hover:shadow-[var(--shadow-float-lg)]"
-            >
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <SmartImage
-                photo={item.photo}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                cdnWidth={800}
-                className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent"
-              />
-              {item.featured ? (
-                <Badge className="absolute top-4 left-4">Signature</Badge>
-              ) : null}
-            </div>
+            {/* Carte 3D : la photo se détache du plan de la carte au survol,
+                le nom et le prix suivent à une profondeur moindre. */}
+            <CardContainer containerClassName="h-full" className="h-full w-full">
+              <CardBody className="group border-line hover:border-brand flex h-full w-full flex-col rounded-3xl border bg-white p-3 shadow-[var(--shadow-float-sm)] transition-[box-shadow,border-color] duration-500 hover:shadow-[var(--shadow-float-lg)]">
+                <CardItem translateZ="100" className="w-full">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+                    <SmartImage
+                      photo={item.photo}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      cdnWidth={800}
+                      className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                    />
+                    {item.featured ? (
+                      <Badge className="absolute top-3 left-3">Signature</Badge>
+                    ) : null}
+                  </div>
+                </CardItem>
 
-            <div className="flex flex-1 flex-col gap-3 p-6">
-              <div className="flex items-start justify-between gap-4">
-                <h3 className="font-display text-ink text-xl font-extrabold tracking-tight">
-                  {item.name}
-                </h3>
-                {/* Prix placeholder : voir `lib/menu-data.ts`. */}
-                <span className="text-brand-ink font-display shrink-0 text-lg font-extrabold">
-                  {item.price}
-                </span>
-              </div>
+                <div className="flex flex-1 flex-col gap-3 p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <CardItem
+                      as="h3"
+                      translateZ="50"
+                      className="font-display text-ink text-xl font-extrabold tracking-tight"
+                    >
+                      {item.name}
+                    </CardItem>
+                    {/* Prix placeholder : voir `lib/menu-data.ts`. */}
+                    <CardItem
+                      translateZ="60"
+                      className="text-brand-ink font-display shrink-0 text-lg font-extrabold"
+                    >
+                      {item.price}
+                    </CardItem>
+                  </div>
 
-              <p className="text-ink-soft text-sm leading-relaxed">
-                {item.description}
-              </p>
+                  <CardItem
+                    as="p"
+                    translateZ="30"
+                    className="text-ink-soft text-sm leading-relaxed"
+                  >
+                    {item.description}
+                  </CardItem>
 
-              <ul className="mt-auto flex flex-wrap gap-2 pt-2">
-                {item.tags.map((tag) => (
-                  <li key={tag}>
-                    <Badge variant="muted">{tag}</Badge>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            </TiltCard>
+                  <CardItem translateZ="40" className="mt-auto pt-2">
+                    <ul className="flex flex-wrap gap-2">
+                      {item.tags.map((tag) => (
+                        <li key={tag}>
+                          <Badge variant="muted">{tag}</Badge>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardItem>
+                </div>
+              </CardBody>
+            </CardContainer>
           </Reveal>
         ))}
       </ul>
