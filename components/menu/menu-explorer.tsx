@@ -5,6 +5,7 @@ import { Filter } from "lucide-react";
 
 import { Reveal } from "@/components/shared/reveal";
 import { SmartImage } from "@/components/shared/smart-image";
+import { TiltCard } from "@/components/shared/tilt-card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
@@ -73,14 +74,14 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
         {filtered.length > 1 ? "recettes affichées" : "recette affichée"}.
       </p>
 
-      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="stage-3d mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((item, index) => (
-          <Reveal
-            as="li"
-            key={item.id}
-            delay={Math.min(index, 5) * 0.06}
-            className="group border-line hover:border-brand flex flex-col overflow-hidden rounded-3xl border bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_28px_55px_-32px_rgba(28,19,16,0.5)]"
-          >
+          <Reveal as="li" key={item.id} delay={Math.min(index, 5) * 0.06}>
+            <TiltCard
+              maxTilt={6}
+              lift={10}
+              className="group border-line hover:border-brand flex h-full flex-col overflow-hidden rounded-3xl border bg-white shadow-[var(--shadow-float-sm)] transition-[box-shadow,border-color] duration-500 hover:shadow-[var(--shadow-float-lg)]"
+            >
             <div className="relative aspect-[4/3] overflow-hidden">
               <SmartImage
                 photo={item.photo}
@@ -121,6 +122,7 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
                 ))}
               </ul>
             </div>
+            </TiltCard>
           </Reveal>
         ))}
       </ul>

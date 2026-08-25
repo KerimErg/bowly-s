@@ -44,7 +44,7 @@ export function Testimonials() {
           align="center"
           eyebrow="Ils en parlent"
           title={<span id="avis-titre">Ce qu&apos;on aimerait lire sur nos murs.</span>}
-          description="Bowly's n'a pas encore ouvert : les avis ci-dessous sont des exemples de mise en page, rédigés avec des prénoms fictifs."
+          description="Bowly's n'a pas encore ouvert. Ces avis sont des exemples, avec des prénoms fictifs."
         />
 
         <ul className="mt-16 grid gap-6 lg:grid-cols-3">

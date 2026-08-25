@@ -38,8 +38,17 @@ export function SiteHeader() {
     setMenuOpen(false);
   }
 
-  /* `solid` = le header a un fond opaque, donc du texte encre. */
+  /* Le header est transparent en haut de page. Le texte doit donc s'adapter
+     à ce qu'il surplombe :
+       - accueil : hero clair (photos flottantes sur crème) → texte encre ;
+       - autres pages : `PageHero`, photo assombrie plein cadre → texte clair.
+     À revoir si l'une de ces pages change de type d'en-tête. */
+  const darkHeroBehind = pathname !== "/";
+
+  /* `onLight` = le texte du header doit être en encre (fond crème opaque,
+     ou hero clair de l'accueil). */
   const solid = scrolled || menuOpen;
+  const onLight = solid || !darkHeroBehind;
 
   return (
     <header
@@ -56,7 +65,7 @@ export function SiteHeader() {
           aria-label="Bowly&apos;s — retour à l&apos;accueil"
           className="rounded-lg transition-opacity duration-300 hover:opacity-85"
         >
-          <Logo tone={solid ? "dark" : "light"} />
+          <Logo tone={onLight ? "dark" : "light"} />
         </Link>
 
         <nav aria-label="Navigation principale" className="hidden lg:block">
@@ -70,7 +79,7 @@ export function SiteHeader() {
                     aria-current={isActive ? "page" : undefined}
                     className={cn(
                       "font-display relative rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-300",
-                      solid
+                      onLight
                         ? isActive
                           ? "text-brand-ink"
                           : "text-ink/75 hover:text-ink"
@@ -84,7 +93,7 @@ export function SiteHeader() {
                       aria-hidden="true"
                       className={cn(
                         "absolute inset-x-4 -bottom-0.5 h-0.5 origin-left rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                        solid ? "bg-brand-ink" : "bg-brand",
+                        onLight ? "bg-brand-ink" : "bg-brand",
                         isActive ? "scale-x-100" : "scale-x-0",
                       )}
                     />
@@ -109,7 +118,7 @@ export function SiteHeader() {
             aria-controls="menu-mobile"
             className={cn(
               "flex size-11 items-center justify-center rounded-full border-2 transition-colors duration-300 lg:hidden",
-              solid
+              onLight
                 ? "border-ink/15 text-ink hover:border-brand hover:text-brand-ink"
                 : "border-cream/40 text-cream hover:border-cream",
             )}

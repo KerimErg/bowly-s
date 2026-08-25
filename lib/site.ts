@@ -14,6 +14,12 @@ export const TODO = "[À COMPLÉTER]" as const;
 export const siteConfig = {
   name: "Bowly's",
   tagline: "Le bowl, version croustillante.",
+  /**
+   * Accroche courte, pour l'interface (pied de page notamment).
+   * Distincte de `description`, qui sert de meta description SEO et a
+   * intérêt à rester détaillée.
+   */
+  shortPitch: "Un bowl, mille combos. Trouve le tien.",
   description:
     "Bowly's compose des bowls généreux : protéines marinées, légumes de saison, féculents complets, sauces maison et toppings croustillants. Fast-food premium, healthy et gourmand.",
   /**

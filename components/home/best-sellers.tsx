@@ -26,10 +26,10 @@ export function BestSellers() {
             <span id="best-sellers-titre">
               Les cinq qu&apos;on nous
               <br className="hidden sm:block" /> redemande{" "}
-              <span className="text-brand-ink">chaque semaine</span>.
+              <span className="text-brand-ink">tout le temps</span>.
             </span>
           }
-          description="Fais défiler, attrape celui du milieu. Les flèches du clavier marchent aussi."
+          description="Fais défiler. Attrape celui du milieu."
         />
       </div>
 

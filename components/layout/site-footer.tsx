@@ -23,8 +23,8 @@ export function SiteFooter() {
       <div className="bowly-container grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4 lg:py-20">
         <div className="lg:col-span-1">
           <Logo tone="light" />
-          <p className="text-ink-dim mt-5 max-w-xs text-sm leading-relaxed">
-            {siteConfig.description}
+          <p className="text-cream font-display mt-5 max-w-xs text-xl font-bold tracking-tight">
+            {siteConfig.shortPitch}
           </p>
 
           <ul className="mt-6 flex items-center gap-3">
