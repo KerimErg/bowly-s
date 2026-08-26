@@ -67,35 +67,43 @@ npx shadcn@latest add dialog
 ```
 app/
 ├── layout.tsx              en-tête, pied de page, polices, métadonnées SEO
-├── globals.css             tokens de marque (couleurs, typo, utilitaires)
+├── globals.css             tokens de marque + langage 3D partagé
 ├── icon.svg                favicon — même monogramme « B » que le logo
-├── page.tsx                accueil
+├── page.tsx                accueil — 5 blocs, dont 3 portés par la photo
 ├── menu/page.tsx           la carte + filtres par catégorie
-├── histoire/page.tsx       récit de marque (texte placeholder)
 ├── restaurants/page.tsx    adresse, horaires, zone d'intégration Maps
 └── contact/page.tsx        formulaire (UI seule)
 
 components/
-├── ui/                     primitives shadcn/ui + le carousel 3D
-│   ├── 3-d-coverflow-carousel.tsx        ← pièce maîtresse de l'accueil
-│   └── 3-d-coverflow-carousel.demo.tsx   ← référence d'usage (non monté)
+├── ui/                     primitives shadcn/ui + composants 3D
+│   ├── 3d-card.tsx                       carte à profondeur (Aceternity)
+│   ├── 3-d-coverflow-carousel.tsx        carousel des best-sellers
+│   └── 3-d-coverflow-carousel.demo.tsx   référence d'usage (non monté)
 ├── brand/logo.tsx          logo « B » vectoriel, réutilisable
 ├── layout/                 en-tête, pied de page, icônes sociales
-├── home/                   les 7 sections de la page d'accueil
+├── home/                   hero, accroche, best-sellers, localisation, CTA
 ├── menu/menu-explorer.tsx  filtres client-side de la carte
 ├── contact/contact-form.tsx
-└── shared/                 Reveal (scroll), SmartImage, PageHero, SectionHeading
+└── shared/                 Reveal, TiltCard, SmartImage, PageHero, SectionHeading
 
 lib/
 ├── site.ts                 ⭐ coordonnées, navigation, liens légaux
 ├── menu-data.ts            ⭐ la carte et les prix
-├── images.ts               ⭐ toutes les photos Unsplash
+├── images.ts               ⭐ toutes les photos + leur statut de vérification
 └── utils.ts                helper cn()
 ```
 
 Les trois fichiers marqués ⭐ concentrent **la totalité** du contenu à remplacer.
 
----
+### Parti pris : la nourriture d'abord
+
+L'accueil tient en cinq blocs — hero, accroche d'une ligne, best-sellers,
+localisation, CTA. Sur la page, **les photos occupent 2,1 fois la surface du
+texte** (mesuré au navigateur).
+
+Retirés lors de la simplification, récupérables dans l'historique git :
+le teaser « Notre histoire » et la page `/histoire` (qui n'était que des
+placeholders), les avis clients d'exemple et le formulaire newsletter.
 
 ## Identité visuelle
 
@@ -386,31 +394,33 @@ domaine pour que les métadonnées Open Graph soient correctes.
 
 ## Photos
 
-Direction photo : **street-food en barquette** — plats servis en barquette ou
-en boîte à emporter, poulet croustillant, frites chargées, cadrage serré et
-lumière chaude. Pas d'assiette de restaurant.
+Direction : **« loaded bowl »** — généreux, sauce qui déborde, couleurs
+saturées, éclairage studio. Pas de photo plate et sage.
 
-Toutes les images distantes passent par `lib/images.ts`, qui associe à chaque
-photo son identifiant Unsplash, son texte alternatif en français **et le lien
-de recherche Unsplash correspondant** — il devient donc impossible d'oublier
-un `alt`, et remplacer une photo prend quelques secondes. L'hôte
-`images.unsplash.com` est le seul autorisé dans `next.config.ts`.
+`lib/images.ts` est le point d'entrée unique, **carousel compris** : un seul
+fichier à corriger quand un visuel ne va pas.
 
-> ⚠️ **À vérifier au premier lancement.** Les identifiants Unsplash n'ont pas
-> pu être testés depuis l'environnement de développement, dont la politique
-> réseau bloque `images.unsplash.com`. Ouvrez le site une fois en local : si
-> une photo manque, suivez le lien `recherche` de son entrée dans
-> `lib/images.ts`, choisissez-en une autre et collez son segment `photo-...`
-> dans `id`. Le composant `<SmartImage />` affiche un dégradé de marque en
-> secours, donc une photo indisponible ne casse jamais la mise en page.
->
-> Les cinq bowls du carousel ont leurs URLs en dur dans `defaultDishes`
-> (`components/ui/3-d-coverflow-carousel.tsx`) — même manipulation.
+### Statut de vérification
+
+Chaque entrée porte un champ `statut` :
+
+| Statut | Sens |
+| --- | --- |
+| `verifie` | URL testée, elle répond |
+| `a-verifier` | choisie pour son sujet, **jamais testée** |
+
+Les URLs `a-verifier` n'ont pas pu l'être depuis l'environnement de
+développement, dont la politique réseau bloque `images.unsplash.com`. Après
+déploiement, il suffit de signaler celles qui ne s'affichent pas : le champ
+`recherche` de chaque entrée ouvre la bonne recherche Unsplash, on copie le
+segment `photo-...` dans `id`, et c'est réglé.
+
+`<SmartImage />` affiche un dégradé de marque en secours : une photo
+indisponible ne casse jamais la mise en page.
 
 **N'utilisez pas les photos d'une enseigne existante** (Crousty One, Tasty
 Crousty ou autre) : elles sont protégées par le droit d'auteur, et présenter
-leurs plats comme ceux de Bowly's serait trompeur. Unsplash, une banque
-d'images sous licence, ou la production photo de la marque.
+leurs plats comme ceux de Bowly's serait trompeur.
 
 ## Performance, SEO, accessibilité
 

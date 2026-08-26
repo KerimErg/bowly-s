@@ -69,7 +69,6 @@ export type SocialIcon = (typeof socialLinks)[number]["icon"];
 /** Navigation principale, partagée entre le header et le footer. */
 export const mainNav = [
   { label: "Menu", href: "/menu" },
-  { label: "Notre histoire", href: "/histoire" },
   { label: "Nos restaurants", href: "/restaurants" },
   { label: "Contact", href: "/contact" },
 ] as const;

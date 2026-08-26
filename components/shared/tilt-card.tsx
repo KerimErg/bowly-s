@@ -72,8 +72,13 @@ export function TiltCard({
   const smoothY = useSpring(pointerY, spring);
   const smoothHover = useSpring(hovered, spring);
 
-  const rotateY = useTransform(smoothX, [0, 1], [-maxTilt, maxTilt]);
-  const rotateX = useTransform(smoothY, [0, 1], [maxTilt, -maxTilt]);
+  /* L'amplitude est centrée sur l'inclinaison de repos, pas sur zéro : sinon
+     `restTilt` n'a d'effet que là où le tilt est désactivé (tactile), et la
+     carte reste désespérément plate sur desktop — l'inverse de l'intention. */
+  const restY = restTilt?.y ?? 0;
+  const restX = restTilt?.x ?? 0;
+  const rotateY = useTransform(smoothX, [0, 1], [restY - maxTilt, restY + maxTilt]);
+  const rotateX = useTransform(smoothY, [0, 1], [restX + maxTilt, restX - maxTilt]);
   const translateY = useTransform(smoothHover, [0, 1], [0, -lift]);
   const translateZ = useTransform(smoothHover, [0, 1], [0, 30]);
 

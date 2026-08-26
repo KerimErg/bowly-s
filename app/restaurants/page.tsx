@@ -24,7 +24,7 @@ export default function RestaurantsPage() {
             Bientôt <span className="text-brand">près de chez vous</span>.
           </>
         }
-        description="Le premier comptoir est en préparation. Adresse et horaires bientôt."
+        description="Le premier comptoir arrive bientôt."
         photo={photos.restaurant}
       />
 
