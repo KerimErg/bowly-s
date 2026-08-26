@@ -169,6 +169,18 @@ Composant copier-coller (licence permissive), API conservée telle quelle :
 Profondeurs utilisées sur les cartes de la carte : photo `translateZ 100`,
 prix `60`, nom `50`, description `30`, étiquettes `40`.
 
+### Animation des photos de la carte
+
+Deux couches, pour que le zoom au survol n'écrase pas l'animation de fond :
+
+- le conteneur porte la transition de survol (`group-hover:scale-[1.06]`) ;
+- l'image porte `.ken-burns`, un zoom-panoramique continu de 16 s, décalé
+  d'une carte à l'autre via un `animationDelay` négatif — sans ce décalage
+  toute la grille respirerait à l'unisson ;
+- un reflet balaie la photo au survol.
+
+Le bloc `prefers-reduced-motion` de `globals.css` neutralise l'ensemble.
+
 ## Le carousel 3D coverflow
 
 `components/ui/3-d-coverflow-carousel.tsx` — utilisé dans la section
@@ -223,6 +235,12 @@ Open Graph — renseignez le vrai domaine (le workflow GitHub Pages le fait
 automatiquement, voir [Déploiement](#déploiement)).
 
 ### 2. La carte et les prix — `lib/menu-data.ts`
+
+Sept recettes réparties en trois catégories (Croustillant, Frais, À côté) —
+carte volontairement courte, à la manière d'une enseigne de street-food. Les
+cinq bowls du carousel de l'accueil existent tous sur cette carte : si vous
+retirez un plat, pensez à vérifier `defaultDishes` dans
+`components/ui/3-d-coverflow-carousel.tsx`.
 
 Tous les prix valent `[X €]`. Les descriptions sont des propositions à valider.
 `getMenu()` est le point d'entrée unique : branchez-y un CMS ou une API sans

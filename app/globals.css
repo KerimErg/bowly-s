@@ -223,6 +223,25 @@
     animation-delay: -3s;
   }
 
+  /* Respiration lente des photos de la carte : un zoom-panoramique très
+     léger, décalé d'une carte à l'autre (`animationDelay` négatif appliqué
+     en ligne) pour éviter que toute la grille bouge à l'unisson.
+     Neutralisé par le bloc `prefers-reduced-motion` en fin de fichier. */
+  @keyframes bowly-ken-burns {
+    0%,
+    100% {
+      transform: scale(1.02) translate3d(0, 0, 0);
+    }
+    50% {
+      transform: scale(1.1) translate3d(-1.5%, -1.2%, 0);
+    }
+  }
+
+  .ken-burns {
+    animation: bowly-ken-burns 16s ease-in-out infinite;
+    will-change: transform;
+  }
+
   .bowly-container {
     width: 100%;
     margin-inline: auto;
