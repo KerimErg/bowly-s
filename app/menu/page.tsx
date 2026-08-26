@@ -26,7 +26,7 @@ export default function MenuPage() {
             Composez votre <span className="text-brand">bowl</span>.
           </>
         }
-        description="Onze recettes. Cinq catégories. Tout s'ajuste au comptoir."
+        description="Sept recettes. Pas une de trop. Tout s'ajuste au comptoir."
         photo={photos.heroSecondary}
       />
 

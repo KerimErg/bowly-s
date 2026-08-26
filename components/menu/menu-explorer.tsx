@@ -87,13 +87,26 @@ export function MenuExplorer({ items }: { items: MenuItem[] }) {
               <CardBody className="group border-line hover:border-brand flex h-full w-full flex-col rounded-3xl border bg-white p-3 shadow-[var(--shadow-float-sm)] transition-[box-shadow,border-color] duration-500 hover:shadow-[var(--shadow-float-lg)]">
                 <CardItem translateZ="100" className="w-full">
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
-                    <SmartImage
-                      photo={item.photo}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      cdnWidth={800}
-                      className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                    {/* Deux niveaux, pour que le zoom au survol n'écrase pas
+                        l'animation de fond : le conteneur porte la transition,
+                        l'image porte le zoom-panoramique continu. */}
+                    <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]">
+                      <SmartImage
+                        photo={item.photo}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        cdnWidth={800}
+                        className="ken-burns object-cover"
+                        style={{ animationDelay: `${-index * 2.3}s` }}
+                      />
+                    </div>
+
+                    {/* Reflet qui balaie la photo au survol. */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-[115%] group-hover:opacity-100"
                     />
+
                     {item.featured ? (
                       <Badge className="absolute top-3 left-3">Signature</Badge>
                     ) : null}
