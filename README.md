@@ -316,8 +316,27 @@ Le workflow enchaîne : `npm ci` → `tsc --noEmit` → `npm run lint` →
 apparaît dans le résumé du job `Déploiement`.
 
 > Le déclencheur manuel n'apparaît dans l'onglet *Actions* qu'une fois le
-> fichier de workflow présent sur la branche par défaut. Tant que la PR n'est
-> pas fusionnée, le workflow ne peut donc pas être lancé.
+> fichier de workflow présent sur la branche par défaut.
+
+### ⚠️ Le piège : deux déploiements en concurrence
+
+Si la source Pages est restée sur **« Deploy from a branch »**, GitHub garde
+actif son propre workflow `pages build and deployment` (build Jekyll
+historique). Il se déclenche à chaque push sur `main`, publie **la racine du
+dépôt** — qui n'a pas d'`index.html`, donc Jekyll rend `README.md` — et écrase
+l'artefact de ce workflow en terminant la course quelques secondes après lui.
+
+Les deux workflows affichent alors « succès », et c'est le README qui est en
+ligne. **Un déploiement vert ne prouve pas que le bon site est servi.**
+
+Correction : `Settings` → `Pages` → *Source* : **GitHub Actions**. Si c'est déjà
+le cas mais que `pages build and deployment` apparaît encore dans l'onglet
+*Actions* à chaque push, basculez sur « Deploy from a branch » puis revenez sur
+« GitHub Actions » pour forcer la désactivation du build Jekyll.
+
+Le job `Vérification du site publié` interroge l'URL réellement servie après
+chaque déploiement et échoue si le bundle Next.js en est absent — c'est le
+garde-fou contre ce scénario.
 
 ### `basePath` et URL du site
 

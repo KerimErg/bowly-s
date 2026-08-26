@@ -79,7 +79,57 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Publier sur GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Un déploiement « réussi » ne prouve pas que le bon site est en ligne : si
+  # la source Pages est restée sur « Deploy from a branch », le build Jekyll
+  # historique (workflow `pages-build-deployment`) tourne en parallèle, publie
+  # la racine du dépôt — donc le README — et écrase cet artefact en gagnant la
+  # course. Ce job interroge l'URL réellement servie.
+  verifier:
+    name: Vérification du site publié
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: L'URL publiée sert-elle bien le site Next.js ?
+        env:
+          URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          set -u
+          if [ -z "${URL}" ]; then
+            echo "::error::URL de publication introuvable."
+            exit 1
+          fi
+
+          echo "Vérification de ${URL}"
+          for tentative in 1 2 3 4; do
+            # Laisse le CDN propager et un éventuel build concurrent finir.
+            sleep 30
+            corps=$(curl -sSL --max-time 30 "${URL}" || true)
+
+            if printf '%s' "${corps}" | grep -q '_next/static'; then
+              echo "✅ Le site Next.js est bien servi sur ${URL}"
+              exit 0
+            fi
+
+            echo "Tentative ${tentative}/4 : le bundle Next.js est absent de la page."
+          done
+
+          echo "::error::${URL} ne sert PAS le site Next.js."
+          echo ""
+          echo "Cause la plus probable : la source GitHub Pages est restée sur"
+          echo "« Deploy from a branch ». Le workflow « pages build and deployment »"
+          echo "publie alors la racine du dépôt (donc README.md) et écrase cet"
+          echo "artefact."
+          echo ""
+          echo "Correction : Settings > Pages > Build and deployment >"
+          echo "Source = « GitHub Actions ». Si c'est déjà le cas, basculer sur"
+          echo "« Deploy from a branch » puis revenir sur « GitHub Actions » pour"
+          echo "forcer la désactivation du build Jekyll, et vérifier dans l'onglet"
+          echo "Actions que « pages build and deployment » ne se déclenche plus."
+          exit 1
