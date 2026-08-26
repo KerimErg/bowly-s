@@ -42,6 +42,10 @@ export type CoverflowDish = {
 /**
  * Les 5 bowls signature Bowly's.
  *
+ * Direction photo : street-food en barquette, cadrage serré, lumière chaude.
+ * Les identifiants Unsplash sont à vérifier au premier lancement local (voir
+ * `lib/images.ts`, qui porte les liens de recherche pour les remplacer).
+ *
  * TODO(contenu) : remplacer les photos Unsplash par la vraie production
  * photo de la marque, et les descriptions par les textes validés.
  */
@@ -51,8 +55,8 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "The Crispy",
     titleLine2: "One",
     desc: "Poulet pané extra-croustillant, riz vinaigré, chou rouge mariné, cheddar fondu et sauce Bowly's fumée. Le bowl qui a lancé la maison.",
-    img: "https://images.unsplash.com/photo-1604909052743-94e838986d24?w=800&auto=format&fit=crop&q=80",
-    alt: "Bowl de poulet croustillant pané avec chou rouge et sauce crémeuse",
+    img: "https://images.unsplash.com/photo-1562967914-608f82629710?w=800&auto=format&fit=crop&q=80",
+    alt: "Barquette de poulet pané croustillant, chou rouge et sauce crémeuse",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",
   },
@@ -91,8 +95,8 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "Hot Honey",
     titleLine2: "Crunch",
     desc: "Poulet croustillant glacé au miel pimenté, patate douce rôtie, pickles d'oignon rouge et oignons frits. Ça pique juste ce qu'il faut.",
-    img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=800&auto=format&fit=crop&q=80",
-    alt: "Bowl relevé au piment garni de graines de sésame et d'oignons frits",
+    img: "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=800&auto=format&fit=crop&q=80",
+    alt: "Barquette de poulet croustillant glacé au piment, sésame et oignons frits",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",
   },
