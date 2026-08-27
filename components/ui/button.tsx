@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 /**
  * Bouton de base (convention shadcn/ui).
  *
- * `default` : aplat orange vif + texte encre. Le texte blanc sur #ff5a1f ne
- * ferait que 3,1:1 ; l'encre atteint 5,9:1 — et le rendu est plus « street
+ * `default` : aplat orange vif + texte encre. Le texte blanc sur #f0452a ne
+ * ferait que 3,76:1 ; l'encre atteint 4,97:1 — et le rendu est plus « street
  * food » qu'un orange délavé.
  * `invert` : version pour les zones sombres (voile photo du hero).
  */
@@ -18,7 +18,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-brand text-ink shadow-[0_10px_28px_-12px_rgba(255,90,31,0.75)] hover:bg-brand-600 hover:text-cream hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
+          "bg-brand text-ink shadow-[0_10px_28px_-12px_rgba(240,69,42,0.75)] hover:bg-brand-600 hover:text-cream hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
         outline:
           "border-2 border-ink/15 bg-transparent text-ink hover:border-brand hover:bg-brand hover:text-ink hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
         invert:

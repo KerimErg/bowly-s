@@ -35,7 +35,7 @@ export function BestSellers() {
 
       <div className="mt-14">
         <Coverflow3DCarousel
-          accentColor="#ff5a1f"
+          accentColor="#f0452a"
           backgroundColor="transparent"
           ariaLabel="Les bowls best-sellers de Bowly's"
         />

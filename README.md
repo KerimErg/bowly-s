@@ -112,31 +112,33 @@ zones où il est justifié : voile sur les photos et pied de page.
 
 | Rôle | Valeur | Variable |
 | --- | --- | --- |
-| Fond de page | `#fff8f3` | `--cream` / `bg-cream` |
-| Surface alternée | `#f7ede4` | `--sand` / `bg-sand` |
+| Fond de page | `#fff6f2` | `--cream` / `bg-cream` |
+| Surface alternée | `#f8eae4` | `--sand` / `bg-sand` |
 | Cartes | `#ffffff` | `bg-white` |
-| Bordures | `#e6d5c6` | `--line` / `border-line` |
-| Texte principal | `#1c1310` | `--ink` / `text-ink` |
-| Texte secondaire | `#6e5a4e` | `--ink-soft` / `text-ink-soft` |
-| Orange — aplats | `#ff5a1f` | `--brand` / `bg-brand` |
-| Orange — texte sur clair | `#bf360c` | `--brand-ink` / `text-brand-ink` |
-| Zones sombres | `#140f0d` | `--night` / `bg-night` |
-| Texte sur sombre | `#b5a49a` | `--ink-dim` / `text-ink-dim` |
+| Bordures | `#e9d3c9` | `--line` / `border-line` |
+| Texte principal | `#1a100e` | `--ink` / `text-ink` |
+| Texte secondaire | `#6d514a` | `--ink-soft` / `text-ink-soft` |
+| Orange — aplats | `#f0452a` | `--brand` / `bg-brand` |
+| Orange — texte sur clair | `#b32a12` | `--brand-ink` / `text-brand-ink` |
+| Zones sombres | `#150f0d` | `--night` / `bg-night` |
+| Texte sur sombre | `#b7a29b` | `--ink-dim` / `text-ink-dim` |
 
 ### ⚠️ Deux oranges, non interchangeables
 
 C'est le seul piège de la palette :
 
-- **`--brand` (`#ff5a1f`) sert aux aplats** — boutons, badges, pastilles. En
-  *texte* sur crème il ne fait que **2,97:1**, sous le seuil WCAG AA de 4,5:1.
-- **`--brand-ink` (`#bf360c`) sert au texte orange sur fond clair** (5,33:1 sur
-  crème, 4,85:1 sur sable).
-- Sur fond sombre, `--brand` redevient utilisable en texte (6,10:1) : c'est le
+- **`--brand` (`#f0452a`) sert aux aplats** — boutons, badges, pastilles. En
+  *texte* sur crème il ne fait que **3,53:1**, sous le seuil WCAG AA de 4,5:1
+  pour du texte courant (il passe en texte large, seuil 3:1).
+- **`--brand-ink` (`#b32a12`) sert au texte orange sur fond clair** (6,05:1 sur
+  crème, 5,49:1 sur sable).
+- Sur fond sombre, `--brand` redevient utilisable en texte (5,05:1) : c'est le
   cas dans le hero, les cartes du carousel et le pied de page. L'utilitaire
   `.eyebrow` prend l'orange profond, `.eyebrow-invert` l'orange vif.
 
 Les boutons orange portent un **texte encre** et non blanc : le blanc sur
-`#ff5a1f` plafonne à 3,1:1, l'encre atteint 5,9:1 — et le rendu est plus franc.
+`#f0452a` plafonne à 3,76:1, l'encre atteint 4,97:1 — et le rendu est plus
+franc.
 
 Le carousel, lui, calcule cette couleur depuis sa prop `accentColor`
 (`readableOn()`), il reste donc correct si l'on change l'accent.
@@ -210,7 +212,7 @@ Le bloc `prefers-reduced-motion` de `globals.css` neutralise l'ensemble.
 import { Coverflow3DCarousel } from "@/components/ui/3-d-coverflow-carousel";
 
 <Coverflow3DCarousel
-  accentColor="#ff5a1f"
+  accentColor="#f0452a"
   backgroundColor="transparent"
   ariaLabel="Les bowls best-sellers de Bowly's"
 />

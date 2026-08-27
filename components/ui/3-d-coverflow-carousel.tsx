@@ -188,8 +188,8 @@ const DRAG_THRESHOLD = 60;
 
 /**
  * Choisit une couleur de texte lisible sur la couleur d'accent.
- * Le blanc sur l'orange de marque ne plafonne qu'à 3,1:1 (sous le seuil AA de
- * 4,5:1) ; l'encre sombre atteint 6,4:1. On calcule donc la luminance relative
+ * Le blanc sur l'orange de marque ne plafonne qu'à 3,76:1 (sous le seuil AA de
+ * 4,5:1) ; l'encre sombre atteint 4,97:1. On calcule donc la luminance relative
  * de l'accent plutôt que de figer une couleur, pour que le composant reste
  * correct quelle que soit la palette qu'on lui passe.
  */
@@ -202,7 +202,7 @@ function readableOn(color: string): string {
           .map((c) => c + c)
           .join("")
       : hex;
-  if (full.length !== 6) return "#1c1310";
+  if (full.length !== 6) return "#1a100e";
 
   const channel = (value: number) => {
     const srgb = value / 255;
@@ -217,7 +217,7 @@ function readableOn(color: string): string {
   const contrastWithWhite = 1.05 / (luminance + 0.05);
   const contrastWithInk = (luminance + 0.05) / 0.0526;
 
-  return contrastWithInk >= contrastWithWhite ? "#1c1310" : "#ffffff";
+  return contrastWithInk >= contrastWithWhite ? "#1a100e" : "#ffffff";
 }
 
 /** Ramène un décalage d'index au chemin le plus court sur l'anneau. */
@@ -232,7 +232,7 @@ function wrapOffset(offset: number, total: number): number {
 
 export function Coverflow3DCarousel({
   dishes = defaultDishes,
-  accentColor = "#ff5a1f",
+  accentColor = "#f0452a",
   backgroundColor = "transparent",
   autoPlay = true,
   autoPlayInterval = 5200,
@@ -408,7 +408,7 @@ export function Coverflow3DCarousel({
               aria-label={`${dish.titleLine1} ${dish.titleLine2} — ${index + 1} sur ${total}`}
               aria-hidden={!isActive}
               onClick={isActive ? undefined : () => goTo(index)}
-              className="absolute top-1/2 left-1/2 overflow-hidden rounded-[28px] border shadow-[0_30px_70px_-25px_rgba(20,15,13,0.55)]"
+              className="absolute top-1/2 left-1/2 overflow-hidden rounded-[28px] border shadow-[0_30px_70px_-25px_rgba(21,15,13,0.55)]"
               style={{
                 width: cardWidth,
                 height: cardWidth * 1.42,
@@ -420,7 +420,7 @@ export function Coverflow3DCarousel({
                 opacity,
                 zIndex: 100 - distance,
                 filter: isActive ? "none" : "saturate(0.8) brightness(0.82)",
-                borderColor: isActive ? accentColor : "rgba(20,15,13,0.12)",
+                borderColor: isActive ? accentColor : "rgba(21,15,13,0.12)",
                 cursor: isActive ? "default" : "pointer",
               }}
             >
@@ -440,7 +440,7 @@ export function Coverflow3DCarousel({
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(to top, rgba(20,15,13,0.96) 6%, rgba(20,15,13,0.72) 38%, rgba(20,15,13,0.12) 78%)",
+                    "linear-gradient(to top, rgba(21,15,13,0.96) 6%, rgba(21,15,13,0.72) 38%, rgba(21,15,13,0.12) 78%)",
                 }}
               />
 
@@ -519,7 +519,7 @@ export function Coverflow3DCarousel({
                 className="h-2 rounded-full transition-all duration-500 focus-visible:outline-2 focus-visible:outline-offset-3"
                 style={{
                   width: isActive ? 34 : 8,
-                  backgroundColor: isActive ? accentColor : "rgba(28,19,16,0.2)",
+                  backgroundColor: isActive ? accentColor : "rgba(26,16,14,0.2)",
                   outlineColor: accentColor,
                 }}
               />

@@ -36,7 +36,7 @@ export function CoverflowDemoCustom() {
   return (
     <Coverflow3DCarousel
       dishes={customDishes}
-      accentColor="#ff5a1f"
+      accentColor="#f0452a"
       backgroundColor="#0c0a09"
       autoPlay
       autoPlayInterval={6000}

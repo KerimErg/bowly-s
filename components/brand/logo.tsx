@@ -41,9 +41,9 @@ export function LogoMark({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ff8a4c" />
-          <stop offset="55%" stopColor="#ff5a1f" />
-          <stop offset="100%" stopColor="#e8440c" />
+          <stop offset="0%" stopColor="#ff7a5e" />
+          <stop offset="55%" stopColor="#f0452a" />
+          <stop offset="100%" stopColor="#d13317" />
         </linearGradient>
       </defs>
       {/* Pastille « squircle » : rayon généreux pour l'aspect arrondi/gourmand. */}

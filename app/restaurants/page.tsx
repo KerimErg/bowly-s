@@ -58,7 +58,7 @@ export default function RestaurantsPage() {
                 className="absolute inset-0 opacity-[0.16]"
                 style={{
                   backgroundImage:
-                    "linear-gradient(rgba(28,19,16,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(28,19,16,0.3) 1px, transparent 1px)",
+                    "linear-gradient(rgba(26,16,14,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(26,16,14,0.3) 1px, transparent 1px)",
                   backgroundSize: "48px 48px",
                 }}
               />
@@ -68,7 +68,7 @@ export default function RestaurantsPage() {
               />
 
               <div className="relative flex flex-col items-center gap-4 px-8 text-center">
-                <span className="bg-brand text-ink flex size-14 items-center justify-center rounded-full shadow-[0_18px_50px_-12px_rgba(255,90,31,0.9)]">
+                <span className="bg-brand text-ink flex size-14 items-center justify-center rounded-full shadow-[0_18px_50px_-12px_rgba(240,69,42,0.9)]">
                   <MapPin size={26} aria-hidden="true" />
                 </span>
                 <p className="font-display text-ink text-lg font-extrabold tracking-tight">

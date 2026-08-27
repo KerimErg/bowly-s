@@ -71,8 +71,9 @@ const PostProcessing = ({
     const uvY = uv().y;
     const scanWidth = float(0.05);
     const scanLine = smoothstep(0, scanWidth, abs(uvY.sub(scanPos)));
-    /* Balayage aux couleurs de la marque plutôt que le rouge d'origine. */
-    const brandOverlay = vec3(1, 0.35, 0.12).mul(oneMinus(scanLine)).mul(0.4);
+    /* Balayage aux couleurs de la marque plutôt que le rouge d'origine.
+       vec3 = --brand #f0452a normalisé (240/255, 69/255, 42/255). */
+    const brandOverlay = vec3(0.94, 0.27, 0.16).mul(oneMinus(scanLine)).mul(0.4);
 
     const withScanEffect = mix(
       scenePassColor,
@@ -125,8 +126,9 @@ const Scene = () => {
     const dot = float(smoothstep(0.5, 0.49, dist)).mul(brightness);
 
     const flow = oneMinus(smoothstep(0, 0.02, abs(tDepthMap.sub(uProgress))));
-    /* Orange de marque pour la trame, au lieu du rouge pur. */
-    const mask = dot.mul(flow).mul(vec3(10, 3.5, 1.2));
+    /* Orange de marque pour la trame, au lieu du rouge pur.
+       Même teinte que le balayage, multipliée par 10 pour alimenter le bloom. */
+    const mask = dot.mul(flow).mul(vec3(9.4, 2.7, 1.6));
 
     const material = new THREE.MeshBasicNodeMaterial({
       colorNode: blendScreen(tMap, mask),
