@@ -140,8 +140,18 @@ export const CardBody = ({
   );
 };
 
+/**
+ * Balises autorisées pour `as`.
+ *
+ * Volontairement restreint plutôt que `React.ElementType` : @react-three/fiber
+ * augmente `JSX.IntrinsicElements` avec les objets Three.js (`mesh`,
+ * `planeGeometry`...), dont les `children` sont typés `never`. Un `as`
+ * totalement ouvert récupère cette union et ne compile plus.
+ */
+type BaliseCardItem = "div" | "span" | "p" | "a" | "h2" | "h3" | "h4";
+
 type CardItemProps = {
-  as?: React.ElementType;
+  as?: BaliseCardItem;
   children: React.ReactNode;
   className?: string;
   translateX?: number | string;
@@ -192,7 +202,11 @@ export const CardItem = ({
 
   return (
     <Tag
-      ref={ref}
+      /* `as` couvre plusieurs balises : TypeScript intersecte leurs types de
+         `ref`, une intersection qu'aucune valeur ne peut satisfaire. Le cast
+         est sûr — toutes ces balises produisent un HTMLElement, et la ref ne
+         sert qu'à poser un `transform`. */
+      ref={ref as React.Ref<never>}
       className={cn("transition duration-200 ease-linear", className)}
       {...rest}
     >

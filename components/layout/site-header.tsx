@@ -50,6 +50,11 @@ export function SiteHeader() {
   const solid = scrolled || menuOpen;
   const onLight = solid || !darkHeroBehind;
 
+  /* Les pages du labo testent des heros plein écran : le chrome du site y
+     masquerait ce qu'on cherche à évaluer, et sa couleur de texte dépendrait
+     d'un hero dont le type change selon le support WebGPU. */
+  if (pathname.startsWith("/labo")) return null;
+
   return (
     <header
       className={cn(
