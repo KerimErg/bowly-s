@@ -46,7 +46,7 @@ export default function ContactPage() {
             Parlons <span className="text-brand">bowls</span>.
           </>
         }
-        description="Une question, une demande presse, une envie de bosser avec nous ? On lit tout."
+        description="Une question ? On lit tout."
         photo={photos.toppings}
       />
 
@@ -62,9 +62,7 @@ export default function ContactPage() {
               Écris au bon
               <br /> interlocuteur.
             </h3>
-            <p className="text-ink-soft mt-5 text-sm">
-              Coordonnées renseignées avant l&apos;ouverture.
-            </p>
+
 
             <ul className="mt-10 flex flex-col gap-6">
               {contactChannels.map((channel) => (

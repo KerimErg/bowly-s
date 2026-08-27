@@ -110,9 +110,7 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
-          <p className="text-ink-dim mt-5 text-xs leading-relaxed">
-            Pages à rédiger avant mise en ligne : {legalNav[0].note}
-          </p>
+
         </nav>
       </div>
 

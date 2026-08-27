@@ -1,24 +1,21 @@
 /**
- * Photothèque Unsplash — point d'entrée UNIQUE de toutes les images distantes.
+ * Photothèque Unsplash — point d'entrée UNIQUE de toutes les images du site,
+ * carousel compris. Un seul fichier à corriger quand une photo ne va pas.
  *
- * Direction photo : de la **street-food en barquette**. Plats servis en
- * barquette ou en boîte à emporter, poulet croustillant, frites chargées,
- * bols garnis — cadrage serré, lumière chaude. Pas d'assiette de restaurant.
+ * Direction photo : « loaded bowl ». Généreux, sauce qui déborde, couleurs
+ * saturées, éclairage studio. Pas de photo plate et sage.
  *
- * ⚠️ IDENTIFIANTS À VÉRIFIER AVANT MISE EN LIGNE
- * Ils n'ont pas pu être testés depuis l'environnement de développement :
- * `images.unsplash.com` y est bloqué par la politique réseau. Ouvrez le site
- * une fois en local et remplacez ce qui manque — c'est une manipulation de
- * quelques secondes, chaque entrée porte le lien de recherche correspondant.
+ * ─────────────────────────────────────────────────────────────────────────
+ *  ⚠️  STATUT DE VÉRIFICATION
+ *  `statut: "verifie"`     → URL testée, elle répond.
+ *  `statut: "a-verifier"`  → choisie pour son sujet, mais JAMAIS testée :
+ *                            l'environnement de développement bloque
+ *                            `images.unsplash.com`.
  *
- * Comment remplacer une photo :
- *   1. ouvrez le lien `recherche` de l'entrée ;
- *   2. choisissez une photo, ouvrez-la, copiez l'URL de l'image
- *      (clic droit → « Copier l'adresse de l'image ») ;
- *   3. gardez uniquement le segment `photo-...` et collez-le dans `id`.
- *
- * `<SmartImage />` affiche un dégradé de marque en secours : une photo
- * manquante ne casse jamais la mise en page.
+ *  Après déploiement, dites simplement lesquelles des `a-verifier` ne
+ *  s'affichent pas — elles se remplacent ici, et nulle part ailleurs.
+ *  Le lien `recherche` de chaque entrée ouvre la bonne recherche Unsplash.
+ * ─────────────────────────────────────────────────────────────────────────
  */
 
 export type Photo = {
@@ -26,6 +23,8 @@ export type Photo = {
   id: string;
   /** Texte alternatif descriptif (SEO + lecteurs d'écran). */
   alt: string;
+  /** L'URL a-t-elle été réellement testée ? */
+  statut: "verifie" | "a-verifier";
   /** Recherche Unsplash correspondante, pour remplacer la photo en un clic. */
   recherche: string;
 };
@@ -38,66 +37,69 @@ export function unsplash(id: string, width = 1200): string {
 const S = "https://unsplash.com/s/photos/";
 
 export const photos = {
+  /** ✅ Vérifiée — photo principale du hero et du bowl signature. */
   heroBowl: {
-    id: "photo-1626082927389-6cd097cee6a6",
-    alt: "Barquette de poulet croustillant garnie de sauce et de sésame",
-    recherche: `${S}korean-fried-chicken`,
+    id: "photo-1781332146307-8cde54158c2c",
+    alt: "Bowl généreux nappé de sauce, ingrédients colorés en gros plan",
+    statut: "verifie",
+    recherche: `${S}loaded-bowl`,
   },
-  heroSecondary: {
-    id: "photo-1585109649139-366815a0d713",
-    alt: "Frites chargées servies dans une barquette en carton",
-    recherche: `${S}loaded-fries`,
-  },
+
+  /** ✅ Vérifiée — « The Crispy One », le best-seller. */
   crispyChicken: {
-    id: "photo-1562967914-608f82629710",
-    alt: "Morceaux de poulet pané croustillant dans une barquette",
-    recherche: `${S}fried-chicken-box`,
+    id: "photo-1757715376249-b2a3e943cdf5",
+    alt: "Bowl de poulet croustillant débordant de sauce et de toppings",
+    statut: "verifie",
+    recherche: `${S}crispy-chicken-bowl`,
   },
-  veggie: {
-    id: "photo-1540189549336-e6e99c3679fe",
-    alt: "Bowl végétarien coloré aux pois chiches rôtis et jeunes pousses",
-    recherche: `${S}veggie-bowl`,
-  },
-  salmon: {
-    id: "photo-1467003909585-2f8a72700288",
-    alt: "Pavé de saumon rosé sur un lit de céréales et d'herbes fraîches",
-    recherche: `${S}salmon-bowl`,
-  },
-  protein: {
-    id: "photo-1490645935967-10de6ba17061",
-    alt: "Bowl protéiné composé de quinoa, œuf et légumes verts",
-    recherche: `${S}protein-bowl`,
+
+  heroSecondary: {
+    id: "photo-1512152272829-e3139592d56f",
+    alt: "Bowl coloré vu de dessus, sauce généreuse et graines torréfiées",
+    statut: "a-verifier",
+    recherche: `${S}saucy-bowl`,
   },
   spicy: {
-    id: "photo-1608039755401-742074f0548d",
-    alt: "Poulet croustillant glacé à la sauce pimentée dans sa barquette",
-    recherche: `${S}spicy-fried-chicken`,
+    id: "photo-1600628421055-4d30de868b8f",
+    alt: "Bowl relevé, glaçage pimenté brillant et oignons frits",
+    statut: "a-verifier",
+    recherche: `${S}spicy-chicken-bowl`,
   },
-  ingredients: {
-    id: "photo-1466637574441-749b8f19452f",
-    alt: "Étal de légumes frais de saison prêts à être découpés",
-    recherche: `${S}fresh-vegetables`,
+  veggie: {
+    id: "photo-1543339308-43e59d6b73a6",
+    alt: "Bowl végétal généreux, légumes vifs et sauce aux herbes",
+    statut: "a-verifier",
+    recherche: `${S}vegan-buddha-bowl`,
   },
-  kitchen: {
-    id: "photo-1556910103-1c02745aae4d",
-    alt: "Plan de travail de cuisine où sont assemblées les barquettes",
-    recherche: `${S}restaurant-kitchen`,
-  },
-  restaurant: {
-    id: "photo-1414235077428-338989a2e8c0",
-    alt: "Salle d'un restaurant fast-casual à l'ambiance chaleureuse",
-    recherche: `${S}fast-casual-restaurant`,
-  },
-  storyTeaser: {
-    id: "photo-1610614819513-58e34989848b",
-    alt: "Plusieurs barquettes de street-food partagées sur une table",
-    recherche: `${S}street-food-tray`,
+  salmon: {
+    id: "photo-1553621042-f6e147245754",
+    alt: "Poké bowl au saumon, mangue et avocat, couleurs saturées",
+    statut: "a-verifier",
+    recherche: `${S}poke-bowl-salmon`,
   },
   toppings: {
-    id: "photo-1512058564366-18510be2db19",
-    alt: "Toppings croustillants : graines torréfiées, oignons frits et herbes",
+    id: "photo-1626700051175-6818013e1d4f",
+    alt: "Toppings croustillants et sauces en gros plan",
+    statut: "a-verifier",
     recherche: `${S}crispy-toppings`,
+  },
+  ingredients: {
+    id: "photo-1608039829572-78524f79c4c7",
+    alt: "Sauces maison présentées en pots, couleurs vives",
+    statut: "a-verifier",
+    recherche: `${S}sauces-condiments`,
+  },
+  restaurant: {
+    id: "photo-1517248135467-4c7edcad34c4",
+    alt: "Salle d'un restaurant fast-casual à l'ambiance chaleureuse",
+    statut: "a-verifier",
+    recherche: `${S}fast-casual-restaurant`,
   },
 } satisfies Record<string, Photo>;
 
 export type PhotoKey = keyof typeof photos;
+
+/** Les photos jamais testées — sert à la note du README et aux revues. */
+export const photosAVerifier = Object.entries(photos)
+  .filter(([, photo]) => photo.statut === "a-verifier")
+  .map(([cle]) => cle);

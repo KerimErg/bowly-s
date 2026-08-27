@@ -4,6 +4,8 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { photos, unsplash } from "@/lib/images";
+
 /* ---------------------------------------------------------------------------
  * 3D Coverflow Carousel — pièce maîtresse de la section « Nos best-sellers ».
  *
@@ -42,9 +44,8 @@ export type CoverflowDish = {
 /**
  * Les 5 bowls signature Bowly's.
  *
- * Direction photo : street-food en barquette, cadrage serré, lumière chaude.
- * Les identifiants Unsplash sont à vérifier au premier lancement local (voir
- * `lib/images.ts`, qui porte les liens de recherche pour les remplacer).
+ * Les photos viennent de `lib/images.ts` : un seul fichier à corriger quand
+ * un visuel ne va pas, au lieu de deux.
  *
  * TODO(contenu) : remplacer les photos Unsplash par la vraie production
  * photo de la marque, et les descriptions par les textes validés.
@@ -55,7 +56,7 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "The Crispy",
     titleLine2: "One",
     desc: "Poulet pané extra-croustillant, riz vinaigré, chou rouge mariné, cheddar fondu et sauce Bowly's fumée. Le bowl qui a lancé la maison.",
-    img: "https://images.unsplash.com/photo-1562967914-608f82629710?w=800&auto=format&fit=crop&q=80",
+    img: unsplash(photos.crispyChicken.id, 800),
     alt: "Barquette de poulet pané croustillant, chou rouge et sauce crémeuse",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",
@@ -65,7 +66,7 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "Green",
     titleLine2: "Garden",
     desc: "Pois chiches rôtis au cumin, boulgour, avocat, courgette grillée et sauce aux herbes fraîches. Végan, généreux, jamais triste.",
-    img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&auto=format&fit=crop&q=80",
+    img: unsplash(photos.veggie.id, 800),
     alt: "Bowl végétarien coloré aux pois chiches rôtis et jeunes pousses",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",
@@ -75,7 +76,7 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "Saumon",
     titleLine2: "Poké",
     desc: "Saumon mariné soja-gingembre, riz vinaigré, mangue, avocat et sésame noir. Fraîcheur nette, sucré-salé maîtrisé.",
-    img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&auto=format&fit=crop&q=80",
+    img: unsplash(photos.salmon.id, 800),
     alt: "Pavé de saumon rosé sur un lit de céréales et d'herbes fraîches",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",
@@ -85,7 +86,7 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "Crispy",
     titleLine2: "Yuzu",
     desc: "Poulet croustillant, semi-complet, edamame, concombre, sauce yuzu-miso et sésame torréfié. Acidulé, net, addictif.",
-    img: "https://images.unsplash.com/photo-1626082927389-6cd097cee6a6?w=800&auto=format&fit=crop&q=80",
+    img: unsplash(photos.heroBowl.id, 800),
     alt: "Barquette de poulet croustillant au sésame et sauce acidulée",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",
@@ -95,7 +96,7 @@ export const defaultDishes: CoverflowDish[] = [
     titleLine1: "Hot Honey",
     titleLine2: "Crunch",
     desc: "Poulet croustillant glacé au miel pimenté, patate douce rôtie, pickles d'oignon rouge et oignons frits. Ça pique juste ce qu'il faut.",
-    img: "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=800&auto=format&fit=crop&q=80",
+    img: unsplash(photos.spicy.id, 800),
     alt: "Barquette de poulet croustillant glacé au piment, sésame et oignons frits",
     ctaText: "Voir le menu",
     ctaUrl: "/menu",

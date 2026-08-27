@@ -53,7 +53,7 @@ export const menuItems: MenuItem[] = [
     name: "The Crispy One",
     category: "croustillant",
     description:
-      "Poulet pané extra-croustillant, riz vinaigré, chou rouge mariné, cheddar fondu, sauce Bowly's fumée et oignons frits.",
+      "Poulet pané, riz vinaigré, cheddar fondu, sauce fumée.",
     price: PRICE_PLACEHOLDER,
     photo: photos.crispyChicken,
     tags: ["Best-seller", "Gourmand"],
@@ -64,7 +64,7 @@ export const menuItems: MenuItem[] = [
     name: "Hot Honey Crunch",
     category: "croustillant",
     description:
-      "Poulet croustillant glacé au miel pimenté, patate douce rôtie, jeunes pousses, pickles d'oignon rouge.",
+      "Poulet croustillant, miel pimenté, patate douce rôtie.",
     price: PRICE_PLACEHOLDER,
     photo: photos.spicy,
     tags: ["Épicé"],
@@ -75,7 +75,7 @@ export const menuItems: MenuItem[] = [
     name: "Crispy Yuzu",
     category: "croustillant",
     description:
-      "Poulet croustillant, semi-complet, edamame, concombre, sauce yuzu-miso et sésame torréfié.",
+      "Poulet croustillant, edamame, sauce yuzu-miso, sésame.",
     price: PRICE_PLACEHOLDER,
     photo: photos.heroBowl,
     tags: ["Nouveau", "Acidulé"],
@@ -85,7 +85,7 @@ export const menuItems: MenuItem[] = [
     name: "Green Garden",
     category: "frais",
     description:
-      "Pois chiches rôtis au cumin, boulgour, avocat, épinards, courgette grillée, sauce herbes fraîches.",
+      "Pois chiches rôtis, boulgour, avocat, sauce aux herbes.",
     price: PRICE_PLACEHOLDER,
     photo: photos.veggie,
     tags: ["Végan", "Riche en fibres"],
@@ -96,7 +96,7 @@ export const menuItems: MenuItem[] = [
     name: "Saumon Poké",
     category: "frais",
     description:
-      "Saumon cru mariné sauce soja-gingembre, riz vinaigré, mangue, avocat, radis, sésame noir.",
+      "Saumon mariné, mangue, avocat, radis, sésame noir.",
     price: PRICE_PLACEHOLDER,
     photo: photos.salmon,
     tags: ["Cru", "Best-seller"],
@@ -107,7 +107,7 @@ export const menuItems: MenuItem[] = [
     name: "Crispy Sides",
     category: "cote",
     description:
-      "Assortiment de toppings croustillants à partager : oignons frits, pois chiches soufflés, graines torréfiées.",
+      "Oignons frits, pois chiches soufflés, graines torréfiées.",
     price: PRICE_PLACEHOLDER,
     photo: photos.toppings,
     tags: ["À partager"],
@@ -117,7 +117,7 @@ export const menuItems: MenuItem[] = [
     name: "Les sauces maison",
     category: "cote",
     description:
-      "Bowly's fumée, yuzu-miso, herbes fraîches, chipotle, tahini citron. Recettes maison, sans arôme artificiel.",
+      "Fumée, yuzu-miso, herbes, chipotle, tahini citron.",
     price: PRICE_PLACEHOLDER,
     photo: photos.ingredients,
     tags: ["Maison"],

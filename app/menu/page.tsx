@@ -39,15 +39,11 @@ export default function MenuPage() {
 
         <MenuExplorer items={items} />
 
-        <Reveal className="border-line bg-sand mt-16 rounded-3xl border p-8 sm:p-10">
-          <h2 className="font-display text-ink text-xl font-extrabold tracking-tight">
-            À propos des prix et des allergènes
-          </h2>
-          <p className="text-ink-soft mt-4 max-w-3xl text-sm leading-relaxed">
-            Les tarifs affichés sous la forme <strong className="text-brand-ink">[X €]</strong>{" "}
-            sont des emplacements réservés : la grille tarifaire définitive n&apos;est
-            pas encore arrêtée. Liste complète des allergènes et informations
-            nutritionnelles : {TODO}.
+        <Reveal className="border-line bg-sand mt-14 rounded-3xl border p-6 sm:p-8">
+          <p className="text-ink-soft text-sm leading-relaxed">
+            Les tarifs <strong className="text-brand-ink">[X €]</strong> sont des
+            emplacements réservés. Allergènes et informations nutritionnelles :{" "}
+            {TODO}.
           </p>
         </Reveal>
       </section>
