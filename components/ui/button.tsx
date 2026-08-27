@@ -7,31 +7,40 @@ import { cn } from "@/lib/utils";
 /**
  * Bouton de base (convention shadcn/ui).
  *
- * `default` : aplat orange vif + texte encre. Le texte blanc sur #ff5a1f ne
- * ferait que 3,1:1 ; l'encre atteint 5,9:1 — et le rendu est plus « street
- * food » qu'un orange délavé.
- * `invert` : version pour les zones sombres (voile photo du hero).
+ * ⚠️ TEXTE SUR APLAT CHAUD
+ * `--bone` sur `--brand` ne fait que 3,29:1 — sous le seuil AA. Toutes les
+ * variantes à aplat chaud portent donc du `text-ink` (5,16:1 sur brand,
+ * 12,04:1 sur crisp). Ce n'est pas un choix esthétique récupérable : changer
+ * ces couleurs de texte casse l'accessibilité.
+ *
+ * Les ombres ne sont pas des ombres mais des halos : sur fond noir, une ombre
+ * noire est invisible, seule la lumière projetée crée le relief.
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-display font-bold tracking-tight transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-3",
+  "group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold whitespace-nowrap transition-all duration-300 ease-[var(--ease-out)] disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
+        /** L'appel à l'action principal. Un seul par écran. */
         default:
-          "bg-brand text-ink shadow-[0_10px_28px_-12px_rgba(255,90,31,0.75)] hover:bg-brand-600 hover:text-cream hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
+          "bg-brand text-ink shadow-[var(--shadow-glow-brand)] hover:bg-brand-hot hover:-translate-y-0.5 active:translate-y-0",
+        /** Le second choix, à côté du principal. */
         outline:
-          "border-2 border-ink/15 bg-transparent text-ink hover:border-brand hover:bg-brand hover:text-ink hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
-        invert:
-          "border-2 border-cream/40 bg-cream/10 text-cream backdrop-blur-sm hover:border-cream hover:bg-cream hover:text-ink hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-cream",
-        secondary:
-          "bg-ink text-cream hover:bg-night-700 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-brand-ink",
-        ghost: "text-ink hover:bg-sand focus-visible:outline-brand-ink",
-        link: "text-brand-ink underline-offset-4 hover:underline rounded-none focus-visible:outline-brand-ink",
+          "border-line-strong text-bone hover:border-crisp hover:text-crisp border bg-transparent hover:-translate-y-0.5 active:translate-y-0",
+        /** Sur une surface déjà claire ou une photo. */
+        crisp:
+          "bg-crisp text-ink shadow-[var(--shadow-glow-crisp)] hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0",
+        /** Discret : navigation secondaire, filtres non actifs. */
+        ghost: "text-bone-dim hover:bg-void-3 hover:text-bone",
+        /** Surface légèrement relevée, pour les cartes. */
+        surface: "surface text-bone hover:border-line-strong hover:text-crisp",
+        link: "text-crisp rounded-none underline-offset-4 hover:underline",
       },
       size: {
         default: "h-12 px-7 text-sm",
         sm: "h-10 px-5 text-xs",
         lg: "h-14 px-9 text-base",
+        xl: "h-16 px-11 text-lg",
         icon: "size-11",
       },
     },
@@ -42,21 +51,18 @@ const buttonVariants = cva(
   },
 );
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
+export type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
+
+function Button({ className, variant, size, asChild = false, children, ...props }: ButtonProps) {
   const Comp = asChild ? Slot : "button";
+
   return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
+    <Comp className={cn(buttonVariants({ variant, size }), className)} {...props}>
+      {children}
+    </Comp>
   );
 }
 

@@ -1,21 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Anton, Inter } from "next/font/google";
 
+import { BarreCommande } from "@/components/layout/barre-commande";
+import { CurseurBowly } from "@/components/layout/curseur";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { branding } from "@/lib/assets";
 import { siteConfig } from "@/lib/site";
 
 import "./globals.css";
 
-/** Poppins : sans-serif géométrique et arrondie — police des titres et du logo. */
-const poppins = Poppins({
+/**
+ * Anton — une seule graisse, très condensée, très noire.
+ *
+ * C'est la voix qui crie : titres d'affiche, noms de bowls, chiffres. Elle
+ * n'est jamais utilisée en dessous de 20 px, où elle deviendrait illisible.
+ * Une seule graisse veut dire un seul fichier : moins de 40 ko sur le réseau
+ * pour toute l'identité typographique du site.
+ */
+const anton = Anton({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-poppins",
+  weight: "400",
+  variable: "--font-anton",
   display: "swap",
 });
 
-/** Inter : texte courant, très lisible en petites tailles. */
+/** Inter — la voix qui informe : tout le texte courant et l'interface. */
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -31,10 +41,10 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     "bowl",
-    "poke bowl",
-    "fast-food healthy",
+    "fast-food",
+    "poulet croustillant",
+    "street food",
     "fast casual",
-    "restauration rapide premium",
     "Bowly's",
   ],
   openGraph: {
@@ -44,35 +54,39 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
+    images: [{ url: branding.og, width: 1200, height: 630, alt: siteConfig.tagline }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
+    images: [branding.og],
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fff8f3",
-  colorScheme: "light",
+  themeColor: "#08070a",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={`${poppins.variable} ${inter.variable}`}>
-      <body className="bg-cream text-ink min-h-dvh antialiased">
-        {/* Accessibilité : lien d'évitement, premier élément focusable de la page. */}
+    <html lang="fr" className={`${anton.variable} ${inter.variable}`}>
+      <body className="bg-void text-bone min-h-dvh antialiased">
+        {/* Premier élément focusable de la page. */}
         <a
           href="#contenu"
-          className="bg-brand focus:ring-ink sr-only rounded-full px-5 py-3 text-sm font-bold text-ink focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:ring-2"
+          className="bg-crisp text-ink sr-only rounded-full px-5 py-3 text-sm font-bold focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200]"
         >
           Aller au contenu principal
         </a>
 
+        <CurseurBowly />
         <SiteHeader />
+        <BarreCommande />
         <main id="contenu">{children}</main>
         <SiteFooter />
       </body>
