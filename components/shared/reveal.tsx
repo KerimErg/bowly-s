@@ -20,6 +20,16 @@ type RevealProps = {
   as?: "div" | "section" | "li" | "article" | "span" | "p";
 };
 
+/**
+ * Amplitude du décalage d'entrée, en pixels.
+ *
+ * ⚠️ Les directions `gauche` et `droite` translatent horizontalement. Une
+ * translation ne change pas la mise en page, mais elle ÉLARGIT LA ZONE
+ * DÉFILABLE du document tant que l'élément n'est pas encore apparu. Sur un
+ * bloc qui touche déjà le bord de l'écran, cela suffit à faire dézoomer toute
+ * la page sur mobile. Tout conteneur d'un `Reveal` horizontal doit donc porter
+ * `overflow-x-clip` — c'est le cas des bandes de la carte.
+ */
 const DECALAGE = 26;
 
 export function Reveal({

@@ -99,13 +99,20 @@ export function Effet() {
               ].map(([label, valeur, note]) => (
                 <div key={label}>
                   <dt className="kicker text-bone-faint">{label}</dt>
-                  {/* `overflow-wrap: anywhere` : « [À COMPLÉTER] » est un mot
-                      long et insécable pour le navigateur. En Anton, à 30 px,
-                      il dépasse une colonne de 163 px sur un écran de 390. */}
-                  <dd className="font-poster text-crisp tabular mt-2 text-2xl [overflow-wrap:anywhere] sm:text-3xl">
-                    {valeur}
+                  {/* Un `<div>` fils de `<dl>` ne peut contenir QUE des `<dt>`
+                      et des `<dd>`. La note était dans un `<p>` : structure
+                      invalide, signalée par axe. Elle vit maintenant dans le
+                      `<dd>`, ce qui est aussi plus juste sémantiquement —
+                      c'est une précision sur la valeur.
+                      `overflow-wrap: anywhere` : « [À COMPLÉTER] » est un mot
+                      long et insécable ; en Anton, à 30 px, il dépassait une
+                      colonne de 163 px sur un écran de 390. */}
+                  <dd className="mt-2">
+                    <span className="font-poster text-crisp tabular block text-2xl [overflow-wrap:anywhere] sm:text-3xl">
+                      {valeur}
+                    </span>
+                    <span className="text-bone-faint mt-1 block text-xs">{note}</span>
                   </dd>
-                  <p className="text-bone-faint mt-1 text-xs">{note}</p>
                 </div>
               ))}
             </dl>
@@ -128,10 +135,13 @@ export function Effet() {
           <div className="relative">
             <div className="ember-cold pointer-events-none absolute inset-0 scale-125 rounded-full blur-3xl" />
 
+            {/* `role="group"` et non `role="img"` : un élément de rôle `img`
+                ne peut pas contenir de descendants interactifs, et cette
+                carte compte cinq points focusables. */}
             <svg
               viewBox="-100 -100 200 200"
-              role="img"
-              aria-label="Hexagone pointillé figurant la France : cinq emplacements à l'étude, aucune ville arrêtée."
+              role="group"
+              aria-label="Carte des emplacements à l'étude : hexagone pointillé figurant la France, cinq points, aucune ville arrêtée."
               className="relative w-full"
             >
               {points.map((p) => (

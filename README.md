@@ -1,499 +1,344 @@
-# Bowly's — site vitrine
+# Bowly's — Enter the bowl
 
-Site web de **Bowly's**, marque de fast-food premium spécialisée dans les bowls
-composés. Next.js (App Router) + TypeScript + Tailwind CSS + structure shadcn/ui.
-
-> ⚠️ **Bowly's n'existe pas encore physiquement.** Aucune donnée réelle
-> (adresse, prix, horaires, téléphone, avis clients, réseaux sociaux) n'a été
-> inventée : tout est marqué `[À COMPLÉTER]`. Voir
-> [Placeholders à remplacer](#placeholders-à-remplacer-avant-mise-en-ligne).
-
----
-
-## Lancer le projet
+Site de marque pour **Bowly's**, enseigne de bowls croustillants **qui n'existe
+pas encore physiquement**. Next.js (App Router), TypeScript, Tailwind CSS v4,
+Framer Motion, react-three-fiber.
 
 ```bash
 npm install
-npm run dev          # http://localhost:3000
+npm run dev        # http://localhost:3000
 ```
 
-Autres commandes :
-
-```bash
-npm run build        # export statique -> dossier out/
-npm run lint         # ESLint
-npx tsc --noEmit     # vérification des types
-```
-
-> `npm run start` n'est pas utilisable : le projet est configuré en export
-> statique (`output: "export"`), il n'y a donc pas de serveur Next.js à lancer.
-> Pour prévisualiser le build : `npx serve out`.
-
-Prérequis : **Node.js 20.9+** (contrainte Next.js 16).
-
----
-
-## Stack
-
-| Brique | Choix |
+| Commande | Ce qu'elle fait |
 | --- | --- |
-| Framework | Next.js 16 — App Router, Turbopack, composants serveur par défaut |
-| Langage | TypeScript (strict) |
-| Styles | Tailwind CSS v4 — tokens déclarés en `@theme` dans `app/globals.css` |
-| Composants | Convention shadcn/ui — primitives copiées dans `components/ui/` |
-| Icônes | `lucide-react` (+ SVG inline pour les logos de réseaux sociaux) |
-| Animations | `framer-motion` — apparitions au scroll et parallaxe du hero |
-| Polices | `next/font/google` — Poppins (titres, logo) et Inter (texte courant) |
-
-### À propos de shadcn/ui
-
-Le projet suit la convention shadcn/ui : `components.json` à la racine, alias
-`@/components/ui`, helper `cn()` dans `lib/utils.ts`, variantes en
-`class-variance-authority`. Les primitives (`button`, `card`, `input`,
-`textarea`, `label`, `badge`) ont été écrites directement dans
-`components/ui/` — c'est exactement ce que fait la CLI, qui copie le code source
-dans le projet plutôt que d'ajouter une dépendance.
-
-Pour ajouter un composant par la suite :
-
-```bash
-npx shadcn@latest add dialog
-```
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Export statique dans `out/` |
+| `npm run lint` | ESLint |
+| `npm run verifier` | Garde-fou de contraste (voir plus bas) |
+| `npm run assets` | Régénère les illustrations de bowls |
 
 ---
 
-## Structure
+## ⚠️ À lire avant de toucher au contenu
 
-```
-app/
-├── layout.tsx              en-tête, pied de page, polices, métadonnées SEO
-├── globals.css             tokens de marque + langage 3D partagé
-├── icon.svg                favicon — même monogramme « B » que le logo
-├── page.tsx                accueil — 5 blocs, dont 3 portés par la photo
-├── menu/page.tsx           la carte + filtres par catégorie
-├── restaurants/page.tsx    adresse, horaires, zone d'intégration Maps
-└── contact/page.tsx        formulaire (UI seule)
+Bowly's est une **marque en construction**. Aucun restaurant n'a ouvert, aucun
+prix n'est arrêté, aucun compte social n'existe, aucune équipe n'est publique.
 
-components/
-├── ui/                     primitives shadcn/ui + composants 3D
-│   ├── 3d-card.tsx                       carte à profondeur (Aceternity)
-│   ├── 3-d-coverflow-carousel.tsx        carousel des best-sellers
-│   └── 3-d-coverflow-carousel.demo.tsx   référence d'usage (non monté)
-├── brand/logo.tsx          logo « B » vectoriel, réutilisable
-├── layout/                 en-tête, pied de page, icônes sociales
-├── home/                   hero, accroche, best-sellers, localisation, CTA
-├── menu/menu-explorer.tsx  filtres client-side de la carte
-├── contact/contact-form.tsx
-└── shared/                 Reveal, TiltCard, SmartImage, PageHero, SectionHeading
+**Toute donnée réelle indisponible est affichée `[À COMPLÉTER]` et n'est jamais
+inventée.** Ce n'est pas une négligence à corriger, c'est une règle de
+fabrication : un numéro de téléphone fictif finit par sonner chez quelqu'un, un
+« 4,9/5 sur 12 000 avis » est un faux témoignage, et une adresse inventée
+déplace réellement des gens.
 
-lib/
-├── site.ts                 ⭐ coordonnées, navigation, liens légaux
-├── menu-data.ts            ⭐ la carte et les prix
-├── images.ts               ⭐ toutes les photos + leur statut de vérification
-└── utils.ts                helper cn()
+Trouver tout ce qui reste à remplir :
+
+```bash
+grep -rn "À COMPLÉTER" lib/ components/ app/
+grep -rn "\[X €\]" lib/
 ```
 
-Les trois fichiers marqués ⭐ concentrent **la totalité** du contenu à remplacer.
+Concrètement, sur ce site :
 
-### Parti pris : la nourriture d'abord
+| Endroit | Ce qui est affiché | Pourquoi |
+| --- | --- | --- |
+| Prix, partout | `[X €]` | Aucune grille tarifaire |
+| « L'effet Bowly's » | Zéro chiffre de fréquentation | La marque n'a pas de clients |
+| Mur social | Auteurs `[À COMPLÉTER]`, compteurs `—` | Les comptes n'existent pas |
+| Page restaurants | Aucune adresse, gabarit vide | Aucun bail signé |
+| Page commander | Boutons **désactivés**, avec le motif | On ne peut pas commander |
+| Réseaux sociaux | Éléments inertes, jamais des liens | Ne pas pointer vers le compte d'un tiers |
 
-L'accueil tient en cinq blocs — hero, accroche d'une ligne, best-sellers,
-localisation, CTA. Sur la page, **les photos occupent 2,1 fois la surface du
-texte** (mesuré au navigateur).
+Les liens légaux (mentions, CGV, cookies, allergènes) sont inertes eux aussi :
+les pages n'existent pas et un lien mort vaut mieux qu'une 404.
 
-Retirés lors de la simplification, récupérables dans l'historique git :
-le teaser « Notre histoire » et la page `/histoire` (qui n'était que des
-placeholders), les avis clients d'exemple et le formulaire newsletter.
+---
 
-## Identité visuelle
+## Le concept
 
-Base claire crème, orange de marque en accent fort. Le sombre est réservé aux
-zones où il est justifié : voile sur les photos et pied de page.
+**Un seul objet 3D traverse toute la page d'accueil.** Le scroll ne fait pas
+apparaître et disparaître des canvas : il déplace une caméra sur un rail autour
+puis à l'intérieur d'un bowl unique, monté une seule fois.
+
+```
+PORTAIL    un objet dans le noir, les ingrédients y tombent un par un
+   ↓
+DESCENTE   la caméra plonge ; chaque couche traversée est une section
+           01 la base · 02 la protéine · 03 la sauce · 04 le croustillant
+   ↓
+ATELIER    on ressort en plan trois quarts ; le visiteur compose le bowl
+           et l'objet à l'écran change réellement
+   ↓
+SORTIE     la caméra recule, le bowl redevient un décor
+           casting · cinéma · carte de France · réseaux · teasing
+```
+
+### La chorégraphie est mesurée, pas codée en dur
+
+`lib/stage.ts` définit quatre **actes** en progression de scroll. Ces bornes ne
+sont pas des constantes : `calerActes()` les recalcule depuis la position
+réelle des sections `#portail`, `#descente` et `#composer`, au montage, après
+le chargement des polices et à chaque redimensionnement.
+
+> La première version utilisait des fractions calculées à la main. Elles se
+> sont désynchronisées dès la première section ajoutée : la caméra était encore
+> au fond du bowl pendant que la page affichait la carte des plats. Une
+> constante ne peut pas connaître la hauteur d'un bloc de texte, qui dépend de
+> la police chargée, de la largeur de l'écran et de la longueur des libellés.
+
+**Conséquence pratique :** ajouter ou déplacer une section de `app/page.tsx` ne
+casse rien, tant que les trois identifiants restent en place.
+
+---
+
+## La 3D
+
+### Pourquoi WebGL2, et pas WebGPU
+
+WebGPU n'est pas disponible sur une part significative du parc, et son rendu
+n'était vérifiable nulle part pendant le développement. WebGL2 est supporté
+quasi partout et donne exactement le même résultat ici. Un hero WebGPU
+expérimental existait dans une version précédente ; il a été retiré — il ne
+survivait à aucun des critères de choix technologique.
+
+### Trois niveaux de rendu
+
+Décidés **une seule fois** au montage (`lib/capacites.ts`), jamais réévalués :
+en changer en cours de visite ferait clignoter la page.
+
+| Niveau | Condition | Effet |
+| --- | --- | --- |
+| `complete` | WebGL2, ≥ 4 cœurs, ≥ 4 Go, grand écran | Scène entière, densité jusqu'à 1,75× |
+| `legere` | WebGL2, machine modeste ou petit écran | Densité 1×, lampe d'appoint coupée |
+| `aucune` | Pas de WebGL2, **ou mouvement réduit demandé** | Repli CSS |
+
+**Le repli n'est pas un écran vide.** C'est la même composition — bowl centré,
+halo chaud à gauche, halo froid à droite — construite avec l'illustration SVG
+de la carte et deux dégradés. Un visiteur sans WebGL voit une page finie.
+
+### Ce que ça coûte
+
+Mesuré sur le build de production, tailles après gzip :
+
+| | Scripts au premier chargement |
+| --- | --- |
+| Avec la scène 3D | ≈ 430 ko |
+| En repli (mouvement réduit, pas de WebGL2) | ≈ 200 ko |
+
+Le morceau Three.js (**236 ko gzip**) est importé dynamiquement : il ne part
+jamais vers un navigateur qui tombe en repli. La boucle de rendu s'arrête aussi
+dès que l'onglet passe en arrière-plan — c'est la première cause de batterie
+vidée sur les sites à scène 3D.
+
+### Deux pièges de géométrie, documentés dans le code
+
+1. **Le dôme de nourriture doit rester dans le profil du bowl.** Son point le
+   plus large est son équateur ; s'il dépasse le rayon intérieur de la
+   céramique à cette hauteur, il traverse la paroi et une bande crème apparaît
+   sous l'objet sans qu'on comprenne d'où elle vient.
+2. **Ne jamais décaler le bowl en visant à côté.** Pour le caler dans la moitié
+   droite pendant l'atelier, on utilise `setViewOffset()` — un décentrement
+   d'objectif. Viser un point décalé placerait l'objet au bord du champ, là où
+   la projection perspective l'étire, et le bowl paraîtrait penché.
+
+### La lumière
+
+**La clé est quasi blanche.** C'est la règle qui a demandé le plus d'essais :
+éclairer avec un orange saturé « pour rester dans la charte » repeint les
+matériaux — le riz crème virait au rose et les morceaux dorés au rouge vif. En
+photo culinaire, la couleur vient des accents et de l'environnement, jamais de
+la source principale. Le contre-jour froid frôle la silhouette, il n'éclaire
+pas.
+
+---
+
+## Direction artistique — « Braise nocturne »
+
+Base presque noire, et **deux températures qui ne se mélangent jamais** :
+
+- **chaud** `--brand` `--crisp` → la nourriture, l'appétit, les appels à l'action ;
+- **froid** `--plasma` → le contour, le portail, les arêtes 3D.
+
+C'est ce rim-light froid sur sujet chaud — un vrai code de photo culinaire
+premium — qui donne à Bowly's une empreinte reconnaissable là où la plupart des
+marques de street-food restent monochromes.
+
+### Jetons
 
 | Rôle | Valeur | Variable |
 | --- | --- | --- |
-| Fond de page | `#fff6f2` | `--cream` / `bg-cream` |
-| Surface alternée | `#f8eae4` | `--sand` / `bg-sand` |
-| Cartes | `#ffffff` | `bg-white` |
-| Bordures | `#e9d3c9` | `--line` / `border-line` |
-| Texte principal | `#1a100e` | `--ink` / `text-ink` |
-| Texte secondaire | `#6d514a` | `--ink-soft` / `text-ink-soft` |
-| Orange — aplats | `#f0452a` | `--brand` / `bg-brand` |
-| Orange — texte sur clair | `#b32a12` | `--brand-ink` / `text-brand-ink` |
-| Zones sombres | `#150f0d` | `--night` / `bg-night` |
-| Texte sur sombre | `#b7a29b` | `--ink-dim` / `text-ink-dim` |
+| Le vide | `#08070a` | `--void` / `bg-void` |
+| Surface relevée | `#0f0d12` | `--void-2` |
+| Cartes | `#17141b` | `--void-3` |
+| Texte principal | `#f4efe9` | `--bone` |
+| Texte secondaire | `#a49a94` | `--bone-dim` |
+| Texte discret | `#8e857f` | `--bone-faint` |
+| Braise | `#f0452a` | `--brand` |
+| Braise claire | `#ff6a3d` | `--brand-hot` |
+| Or du croustillant | `#ffc23d` | `--crisp` |
+| Plasma (froid) | `#8b6bff` | `--plasma` |
+| Encre (sur aplat chaud) | `#120c0a` | `--ink` |
 
-### ⚠️ Deux oranges, non interchangeables
+### ⚠️ Texte sur aplat chaud
 
-C'est le seul piège de la palette :
+`--bone` sur `--brand` ne fait que **3,29:1** — sous le seuil AA. Tout texte
+posé sur un aplat `--brand` ou `--crisp` doit être en `--ink` (5,16:1 et
+12,04:1). Les variantes de bouton l'appliquent déjà.
 
-- **`--brand` (`#f0452a`) sert aux aplats** — boutons, badges, pastilles. En
-  *texte* sur crème il ne fait que **3,53:1**, sous le seuil WCAG AA de 4,5:1
-  pour du texte courant (il passe en texte large, seuil 3:1).
-- **`--brand-ink` (`#b32a12`) sert au texte orange sur fond clair** (6,05:1 sur
-  crème, 5,49:1 sur sable).
-- Sur fond sombre, `--brand` redevient utilisable en texte (5,05:1) : c'est le
-  cas dans le hero, les cartes du carousel et le pied de page. L'utilitaire
-  `.eyebrow` prend l'orange profond, `.eyebrow-invert` l'orange vif.
+Pour les **pastilles du configurateur**, dont la couleur varie avec
+l'ingrédient, une couleur figée ne peut pas marcher : `lisibleSur()` calcule la
+luminance et choisit l'encre ou l'os. Ne pas la remplacer par une constante.
 
-Les boutons orange portent un **texte encre** et non blanc : le blanc sur
-`#f0452a` plafonne à 3,76:1, l'encre atteint 4,97:1 — et le rendu est plus
-franc.
+### `npm run verifier`
 
-Le carousel, lui, calcule cette couleur depuis sa prop `accentColor`
-(`readableOn()`), il reste donc correct si l'on change l'accent.
+Un garde-fou exécutable, distinct de l'audit axe-core :
 
-**Logo** — `components/brand/logo.tsx`. Le « B » est dessiné en tracés SVG (pas
-en texte) : rendu identique quel que soit le chargement de la police, net à
-toutes les tailles, et réutilisable tel quel pour le favicon. Variantes :
-`<Logo />` (monogramme + mot-clé), `<Logo variant="mark" />`, `<LogoGlyph />`.
-La prop `tone` (`dark` par défaut, `light` sur une photo) pilote la couleur du
-mot-clé ; la pastille orange, elle, ne change jamais.
-
-## Les composants 3D
-
-Deux mécaniques distinctes, une seule perspective (`--perspective`, 1600 px) et
-une seule courbe (`--ease-float`), pour que tout semble filmé par le même
-objectif.
-
-| Composant | Rôle | Où |
-| --- | --- | --- |
-| `components/ui/3d-card.tsx` | Carte à profondeur : chaque élément se détache à sa propre hauteur au survol | Cartes de la carte (`/menu`) |
-| `components/shared/tilt-card.tsx` | Inclinaison simple de toute la carte | Hero, piliers « Pourquoi » |
-| `components/ui/3-d-coverflow-carousel.tsx` | Carousel coverflow | Best-sellers de l'accueil |
-
-### `3d-card.tsx` — d'après Aceternity UI
-
-Composant copier-coller (licence permissive), API conservée telle quelle :
-`CardContainer`, `CardBody`, `CardItem`, `useMouseEnter`. Quatre adaptations :
-
-1. perspective prise sur le jeton partagé (1600 px au lieu de 1000 px) ;
-2. `prefers-reduced-motion` neutralise rotation et profondeur ;
-3. props typées sans `any` ;
-4. `py-8` et `h-96 w-96` figés retirés, pour que la carte remplisse sa cellule.
-
-> ⚠️ Ne posez jamais `overflow-hidden` sur `CardBody` : la propriété force
-> `transform-style: flat` et aplatirait toute la profondeur. Arrondissez
-> l'image dans son propre conteneur, qui est une feuille de l'arbre.
-
-Profondeurs utilisées sur les cartes de la carte : photo `translateZ 100`,
-prix `60`, nom `50`, description `30`, étiquettes `40`.
-
-### Animation des photos de la carte
-
-Deux couches, pour que le zoom au survol n'écrase pas l'animation de fond :
-
-- le conteneur porte la transition de survol (`group-hover:scale-[1.06]`) ;
-- l'image porte `.ken-burns`, un zoom-panoramique continu de 16 s, décalé
-  d'une carte à l'autre via un `animationDelay` négatif — sans ce décalage
-  toute la grille respirerait à l'unisson ;
-- un reflet balaie la photo au survol.
-
-Le bloc `prefers-reduced-motion` de `globals.css` neutralise l'ensemble.
-
-## Le carousel 3D coverflow
-
-`components/ui/3-d-coverflow-carousel.tsx` — utilisé dans la section
-« Nos best-sellers » de l'accueil.
-
-- **Aucune dépendance d'icônes** : les chevrons et la flèche sont des SVG inline.
-- **Palette pilotée par props** : `accentColor` (orange de marque, en
-  remplacement du doré d'origine) et `backgroundColor` (fond sombre premium).
-- **Contenu** : `defaultDishes` contient les 5 bowls signature Bowly's, dans la
-  structure de données d'origine (`tag`, `titleLine1`, `titleLine2`, `desc`,
-  `img`, `ctaText`, `ctaUrl`, plus un `alt` optionnel pour l'accessibilité).
-  Chaque CTA pointe vers `/menu`.
-- **Interactions** : flèches ← →, touches Début/Fin, glisser-déposer / swipe,
-  pastilles, clic sur une carte de profil pour l'amener au centre.
-- **Défilement automatique** suspendu au survol, au focus, pendant un glissement,
-  quand l'onglet est masqué, et si `prefers-reduced-motion` est activé.
-
-```tsx
-import { Coverflow3DCarousel } from "@/components/ui/3-d-coverflow-carousel";
-
-<Coverflow3DCarousel
-  accentColor="#f0452a"
-  backgroundColor="transparent"
-  ariaLabel="Les bowls best-sellers de Bowly's"
-/>
+```
+── Jetons de la charte ───────────────────────────
+  ok   texte principal sur le vide        17.58  (seuil 4.5)
+  ok   orange de marque sur le vide        5.35  (seuil 4.5)
+  …
+── Couleurs d'ingrédients ────────────────────────
+  ok   gochujang (#b23a1c, os)             5.23  (seuil 4.5)
+  …
 ```
 
-`3-d-coverflow-carousel.demo.tsx` conserve un exemple d'usage complet (props
-personnalisées), il n'est monté par aucune route.
+Il attrape ce qu'un calcul ne peut pas rattraper : une couleur de luminance
+**moyenne**, sur laquelle ni l'encre ni l'os ne tiennent le seuil. Il a
+effectivement pris la sauce « Fumée » (`#c9421f`, 4,29:1 au mieux, corrigée en
+`#b53a19`) et la paire `--bone-faint` sur `--void-3` (4,46:1), que l'audit du
+site rendu n'avait pas vue parce que la combinaison n'était affichée nulle part
+à ce moment-là.
+
+### Typographie
+
+Deux familles, contraste maximal. **Anton** pour les moments d'affiche (une
+seule graisse, moins de 40 ko), **Inter** pour tout ce qui informe.
+
+> ⚠️ Ne pas descendre l'interlignage d'Anton sous 0,92. Elle place ses accents
+> très haut : le É de « EXPÉRIENCE » et le È de « TIÈDE » disparaissaient
+> derrière la ligne précédente. Rédhibitoire pour un site en français.
 
 ---
 
-## Hero futuriste (expérimental, non monté)
+## Les visuels
 
-Expérience en cours d'arbitrage : un hero rendu en **WebGPU** (Three.js TSL,
-bloom, parallaxe par carte de profondeur). **Le hero de l'accueil n'est pas
-touché.**
+**Aucune image distante.** Le site fonctionne hors ligne, en export statique, et
+rien ne casse parce qu'un CDN a changé d'avis.
 
-- Page de test : `/labo/hero-futuriste` — hors navigation, non indexée.
-- Composant : `components/ui/hero-futuristic.tsx` (+ son module CSS).
-- Enveloppe : `components/labo/hero-futuriste-preview.tsx`.
+Les bowls sont **dessinés**, pas photographiés : `scripts/generate-assets.mjs`
+compose chaque plat couche par couche — base, protéine, sauce, toppings — selon
+sa vraie recette. Ce n'est pas un pis-aller mais un style d'illustration propre
+à la marque, reconnaissable sans le logo, et remplaçable plat par plat le jour
+du shooting. Le générateur est déterministe : deux exécutions produisent des
+fichiers identiques.
 
-### Trois garde-fous
-
-1. **Chargement à la demande** (`dynamic`, `ssr: false`) — Three.js pèse
-   1,5 Mo ; ce chunk n'est référencé par aucune page et ne se télécharge que
-   si WebGPU est disponible.
-2. **Détection réelle** via `requestAdapter()`, et pas seulement la présence de
-   `navigator.gpu` : un navigateur peut exposer l'API et refuser l'adaptateur.
-   C'est exactement le cas rencontré en test.
-3. **Frontière d'erreur** : toute erreur au montage retombe sur le hero
-   statique.
-
-Dans les trois cas de repli, c'est le hero actuel qui s'affiche — jamais un
-écran vide.
-
-### ⚠️ Assets de démonstration à remplacer
-
-`TEXTUREMAP` et `DEPTHMAP` pointent encore vers les images de démo du composant
-d'origine (`i.postimg.cc`) : sans rapport avec Bowly's, et hébergées chez un
-tiers. Il faut deux fichiers :
-
-| Fichier | Quoi |
-| --- | --- |
-| Texture | une photo de bowl, idéalement carrée |
-| Carte de profondeur | la même image en niveaux de gris, clair = proche |
-
-**La carte de profondeur ne peut pas être produite depuis l'environnement de
-développement** : il n'y a ni modèle d'estimation de profondeur disponible, ni
-accès réseau aux photos sources. Pistes pour la générer :
-
-- **Depth Anything V2** ou **MiDaS** — modèles libres, utilisables en ligne,
-  en local, ou dans le navigateur via Transformers.js ;
-- l'export « depth map » des filtres neuronaux de Photoshop ;
-- un rendu Blender, si le visuel est modélisé.
-
-Les deux fichiers vont ensuite dans `public/` et les constantes du composant
-pointent dessus.
-
-### Pour abandonner l'expérience
-
-Supprimer `app/labo/`, `components/labo/`, `components/ui/hero-futuristic.*`,
-retirer la condition `/labo` de `site-header.tsx`, puis :
-
-```bash
-npm uninstall three @react-three/fiber @react-three/drei @types/three
+```
+public/assets/
+├── branding/   symbole, version mono, image Open Graph
+├── products/   un fichier par bowl — le nom de fichier est le contrat
+├── food/       gros plans de la section cinématique
+├── videos/     vide ; la section retombe sur le visuel fixe
+└── 3d/         vide ; la géométrie est générée par code
 ```
 
-## Placeholders à remplacer avant mise en ligne
+`lib/assets.ts` est le **seul** endroit du code qui connaît ces chemins. Voir
+`public/assets/README.md` pour la marche à suivre.
 
-Pour tout retrouver d'un coup :
+Ces illustrations ne représentent aucun plat réel, et aucune photo n'est
+empruntée à une autre enseigne.
 
-```bash
-grep -rn "À COMPLÉTER" app components lib     # données manquantes
-grep -rn "TODO(" app components lib           # branchements techniques
+---
+
+## Architecture
+
+```
+app/
+├── page.tsx            accueil — le parcours complet
+├── menu/               la carte, en bandes pleine largeur
+├── composer/           le configurateur seul (même composant que l'accueil)
+├── commander/          modes de commande — tous désactivés, motifs affichés
+├── restaurants/        gabarit de fiche, cinq emplacements à l'étude
+├── about/              partis pris de la marque + ce qui n'existe pas encore
+└── contact/            formulaire (interface seule) + coordonnées
+
+components/
+├── three/              bowl-scene (décision + repli) · bowl-canvas · bowl-rig
+├── home/               portail · descente · atelier · casting · cinema ·
+│                       effet · partout · next-bowl
+├── menu/carte.tsx      la carte complète
+├── layout/             en-tête · pied de page · curseur · barre de commande
+├── shared/             reveal (apparitions, lignes révélées, ruban) · page-hero
+└── ui/                 primitives shadcn/ui
+
+lib/
+├── stage.ts            pilote de la scène : actes, progression, recette
+├── capacites.ts        détection WebGL et media queries
+├── recette.ts          ingrédients du configurateur + lisibilité
+├── assets.ts           registre des visuels
+├── menu-data.ts        la carte
+└── site.ts             marque, coordonnées, navigation
 ```
 
-### 1. Coordonnées et liens — `lib/site.ts`
+### Le pilote de scène (`lib/stage.ts`)
 
-Adresse, code postal, ville, téléphone, e-mails (général, presse, franchise),
-comptes de réseaux sociaux (les `href` sont à `#`), horaires des sept jours,
-et les cinq pages légales (mentions, confidentialité, CGV, cookies, allergènes)
-qui restent à créer.
+Le scroll et le pointeur écrivent dans un **objet mutable**, lu directement par
+la boucle de rendu WebGL. Aucun rendu React pendant le défilement. Les rares
+composants qui doivent se redessiner (le configurateur) s'abonnent
+explicitement via `useRecette()`, qui ne notifie qu'au changement réel.
 
-Pensez aussi à l'URL du site : `siteConfig.url` lit `NEXT_PUBLIC_SITE_URL` et
-retombe sur `https://www.bowlys.example`. Elle sert de base aux métadonnées
-Open Graph — renseignez le vrai domaine (le workflow GitHub Pages le fait
-automatiquement, voir [Déploiement](#déploiement)).
+Le configurateur est la seule chose qui traverse la frontière dans les deux
+sens, et elle ne circule que dans un sens : l'interface écrit la recette, la
+scène la lit. Pas de boucle de synchronisation possible.
 
-### 2. La carte et les prix — `lib/menu-data.ts`
+---
 
-Sept recettes réparties en trois catégories (Croustillant, Frais, À côté) —
-carte volontairement courte, à la manière d'une enseigne de street-food. Les
-cinq bowls du carousel de l'accueil existent tous sur cette carte : si vous
-retirez un plat, pensez à vérifier `defaultDishes` dans
-`components/ui/3-d-coverflow-carousel.tsx`.
+## Accessibilité
 
-Tous les prix valent `[X €]`. Les descriptions sont des propositions à valider.
-`getMenu()` est le point d'entrée unique : branchez-y un CMS ou une API sans
-toucher à l'interface.
+- **Mouvement réduit** : la scène 3D est remplacée par le repli statique. C'est
+  volontairement radical — les grands mouvements de caméra sont exactement ce
+  que ce réglage sert à éviter. Les transitions déclenchées par l'utilisateur
+  (survol, focus) sont conservées mais raccourcies.
+- **Curseur personnalisé** : pointeur fin uniquement, et le curseur système
+  n'est **jamais** masqué. L'anneau vient en plus, pas à la place.
+- **Configurateur** : de vrais `fieldset`, `radio` et `checkbox`. Les flèches
+  parcourent un groupe, la tabulation passe au suivant — comportement natif.
+  Le récapitulatif est en `aria-live`.
+- **Défilement horizontal du casting** : `overflow-x` natif avec accroche, pas
+  de scroll détourné. La zone est focusable au clavier.
+- **Carte de France** : `role="group"` et non `role="img"` — un rôle `img` ne
+  peut pas contenir de descendants interactifs.
 
-### 3. Textes de marque — `app/histoire/page.tsx`
-
-Manifeste, frise chronologique (4 chapitres) et 3 convictions : chaque bloc est
-balisé `[À COMPLÉTER] — texte de marque à valider`. **Aucune date, aucun nom de
-dirigeant, aucun chiffre n'a été inventé.**
-
-### 3 bis. Ton éditorial
-
-La section « Pourquoi Bowly's » (`components/home/why-bowlys.tsx`) est écrite
-dans un registre street-food : tutoiement, phrases courtes, envie plutôt
-qu'argumentaire. Le reste du site est encore dans un registre plus posé — à
-harmoniser si ce ton est validé.
-
-### 4. Avis clients — `components/home/testimonials.tsx`
-
-Trois témoignages d'exemple, prénoms fictifs génériques (Camille, Yanis, Léa),
-chacun explicitement libellé « Avis d'exemple ». La section elle-même précise
-que Bowly's n'a pas encore ouvert. À remplacer par de vrais avis (avec accord
-écrit des clients) ou par un widget d'avis vérifiés.
-
-### 5. Carte Google Maps — `app/restaurants/page.tsx`
-
-Un bloc réservé attend l'`<iframe>` Maps ; le code exact est en commentaire
-`TODO(intégration)`. Pensez au consentement cookies avant de charger un service
-tiers.
-
-### 6. Formulaires — aucun backend
-
-| Fichier | Ce qu'il manque |
-| --- | --- |
-| `components/contact/contact-form.tsx` | Endpoint d'envoi externe (Formspree, Resend via une fonction serverless, SMTP…), anti-spam, mention RGPD |
-| `components/home/newsletter-cta.tsx` | Service d'e-mailing, double opt-in, stockage du consentement |
-
-Les deux affichent une confirmation locale et indiquent clairement à
-l'utilisateur qu'il s'agit d'une démonstration.
-
-> ⚠️ **L'export statique interdit les Route Handlers et les Server Actions** :
-> il n'y a pas de serveur Next.js à l'exécution. Ces formulaires devront donc
-> appeler une **API externe** depuis le navigateur (service de formulaires,
-> fonction serverless, backend dédié) — et non une route `app/api/...`. Si vous
-> préférez une route interne, il faut abandonner `output: "export"` et déployer
-> sur un hébergeur avec serveur (Vercel, Netlify Functions, Node…).
-
-### 7. Bouton « Commander »
-
-Il pointe aujourd'hui vers `/menu` et `/restaurants`. À rediriger vers la vraie
-plateforme de commande en ligne (voir `TODO(commande)`).
+Audit `axe-core` (WCAG 2.1 A + AA) sur les sept pages, en 1280 px et 390 px :
+**aucune violation**.
 
 ---
 
 ## Déploiement
 
-Le projet est configuré en **export statique** : `npm run build` produit un
-dossier `out/` (HTML/CSS/JS uniquement), hébergeable sur n'importe quel serveur
-de fichiers.
+Export statique (`output: "export"`), déployé sur GitHub Pages par
+`.github/workflows/deploy-github-pages.yml`. Le workflow enchaîne construction,
+publication, puis **une vérification de la page réellement servie** : il télécharge
+l'URL publiée et vérifie qu'elle contient bien les fichiers `_next/static`.
 
-### GitHub Pages (automatique)
+> Ce troisième job existe pour une raison. Le workflow `pages-build-deployment`
+> de GitHub (Jekyll) peut entrer en concurrence avec le déploiement Actions et
+> publier le `README.md` à la place du site, tout en laissant les deux
+> workflows au vert. Un statut vert ne prouve pas qu'un site est en ligne.
 
-Le workflow `.github/workflows/deploy-github-pages.yml` construit et publie le
-site à chaque `push` sur `main`, ainsi qu'à la demande (« Run workflow »).
+`basePath` et `assetPrefix` sont pilotés par `NEXT_PUBLIC_BASE_PATH`, alimenté
+par `actions/configure-pages`. Rien n'est codé en dur : un déploiement à la
+racine d'un domaine fonctionne sans toucher à `next.config.ts`.
 
-**À faire une seule fois** : `Settings` → `Pages` → *Build and deployment* →
-*Source* : **GitHub Actions**. Le site est ensuite servi sur
-`https://<utilisateur>.github.io/<dépôt>/`.
+---
 
-Le workflow enchaîne : `npm ci` → `tsc --noEmit` → `npm run lint` →
-`npm run build` → `upload-pages-artifact` → `deploy-pages`. L'URL publiée
-apparaît dans le résumé du job `Déploiement`.
+## Ce qui reste à faire
 
-> Le déclencheur manuel n'apparaît dans l'onglet *Actions* qu'une fois le
-> fichier de workflow présent sur la branche par défaut.
-
-### ⚠️ Le piège : deux déploiements en concurrence
-
-Si la source Pages est restée sur **« Deploy from a branch »**, GitHub garde
-actif son propre workflow `pages build and deployment` (build Jekyll
-historique). Il se déclenche à chaque push sur `main`, publie **la racine du
-dépôt** — qui n'a pas d'`index.html`, donc Jekyll rend `README.md` — et écrase
-l'artefact de ce workflow en terminant la course quelques secondes après lui.
-
-Les deux workflows affichent alors « succès », et c'est le README qui est en
-ligne. **Un déploiement vert ne prouve pas que le bon site est servi.**
-
-Correction : `Settings` → `Pages` → *Source* : **GitHub Actions**. Si c'est déjà
-le cas mais que `pages build and deployment` apparaît encore dans l'onglet
-*Actions* à chaque push, basculez sur « Deploy from a branch » puis revenez sur
-« GitHub Actions » pour forcer la désactivation du build Jekyll.
-
-Le job `Vérification du site publié` interroge l'URL réellement servie après
-chaque déploiement et échoue si le bundle Next.js en est absent — c'est le
-garde-fou contre ce scénario.
-
-### `basePath` et URL du site
-
-GitHub Pages sert un dépôt « projet » depuis un sous-répertoire
-(`/bowly-s`), pas depuis la racine. Plutôt que de coder ce préfixe en dur — ce
-qui casserait `npm run dev` et un futur déploiement sur domaine propre — il est
-piloté par deux variables d'environnement, renseignées automatiquement par le
-workflow depuis les sorties de `actions/configure-pages` :
-
-| Variable | Rôle | Valeur en local |
-| --- | --- | --- |
-| `NEXT_PUBLIC_BASE_PATH` | Préfixe d'URL (`basePath` + `assetPrefix`) | vide → site à la racine |
-| `NEXT_PUBLIC_SITE_URL` | Base des métadonnées Open Graph (`metadataBase`) | `https://www.bowlys.example` |
-
-Pour reproduire un build « Pages » en local :
-
-```bash
-NEXT_PUBLIC_BASE_PATH=/bowly-s \
-NEXT_PUBLIC_SITE_URL=https://<utilisateur>.github.io/bowly-s \
-npm run build
-```
-
-### Autres hébergeurs
-
-Vercel, Netlify, Cloudflare Pages ou un simple serveur de fichiers servent
-`out/` tel quel, **sans variable d'environnement** : le site se déploie alors à
-la racine du domaine. Pensez à renseigner `NEXT_PUBLIC_SITE_URL` avec le vrai
-domaine pour que les métadonnées Open Graph soient correctes.
-
-### Conséquences de l'export statique
-
-- **`trailingSlash: true`** est activé : sans slash final, GitHub Pages
-  renverrait une 404 sur `/menu`. Next.js émet donc `out/menu/index.html`.
-- **`images.unoptimized: true`** : l'API d'optimisation d'images de Next.js
-  exige un serveur Node.js. `next/image` retombe sur une balise `<img>`, en
-  conservant le lazy loading natif, les `sizes` et les dimensions — donc aucun
-  décalage de mise en page. Pour retrouver une optimisation réelle, branchez un
-  loader personnalisé (Cloudinary, imgix…), voir les commentaires de
-  `next.config.ts`.
-- **Un `.nojekyll`** est déposé dans `out/` par le workflow : sans lui, un
-  hébergement passant par Jekyll ignorerait le dossier `_next/` (préfixé par un
-  underscore) et le site s'afficherait sans CSS ni JavaScript.
-- Les fonctionnalités nécessitant un serveur (Route Handlers, Server Actions,
-  ISR, `cookies()`, redirections/en-têtes via `next.config`) ne sont pas
-  disponibles. Le site n'en utilise aucune — c'est aussi pourquoi les
-  formulaires devront viser une API externe plutôt qu'une route interne.
-
-## Photos
-
-Direction : **« loaded bowl »** — généreux, sauce qui déborde, couleurs
-saturées, éclairage studio. Pas de photo plate et sage.
-
-`lib/images.ts` est le point d'entrée unique, **carousel compris** : un seul
-fichier à corriger quand un visuel ne va pas.
-
-### Statut de vérification
-
-Chaque entrée porte un champ `statut` :
-
-| Statut | Sens |
-| --- | --- |
-| `verifie` | URL testée, elle répond |
-| `a-verifier` | choisie pour son sujet, **jamais testée** |
-
-Les URLs `a-verifier` n'ont pas pu l'être depuis l'environnement de
-développement, dont la politique réseau bloque `images.unsplash.com`. Après
-déploiement, il suffit de signaler celles qui ne s'affichent pas : le champ
-`recherche` de chaque entrée ouvre la bonne recherche Unsplash, on copie le
-segment `photo-...` dans `id`, et c'est réglé.
-
-`<SmartImage />` affiche un dégradé de marque en secours : une photo
-indisponible ne casse jamais la mise en page.
-
-**N'utilisez pas les photos d'une enseigne existante** (Crousty One, Tasty
-Crousty ou autre) : elles sont protégées par le droit d'auteur, et présenter
-leurs plats comme ceux de Bowly's serait trompeur.
-
-## Performance, SEO, accessibilité
-
-- **Images** : `next/image` partout, lazy loading natif, `priority` réservé aux
-  photos de hero (LCP), formats AVIF/WebP, `sizes` renseigné sur chaque image en
-  `fill`.
-- **Rendu** : les 5 pages sont pré-rendues statiquement ; seuls les îlots
-  réellement interactifs sont des composants client.
-- **SEO** : `metadataBase`, titres par page via `template`, descriptions,
-  Open Graph et Twitter Card, `lang="fr"`, hiérarchie `h1 → h2 → h3` respectée.
-- **Accessibilité** : lien d'évitement, focus visible sur toute la page,
-  `aria-label` sur les boutons d'action, `aria-live` sur le carousel et les
-  filtres, navigation clavier complète, `prefers-reduced-motion` respecté à la
-  fois en CSS et dans framer-motion.
-  Audit axe-core (WCAG 2.1 AA + best practices) : **0 violation** sur les
-  5 pages.
-- **Responsive** : mobile-first, vérifié de 360 px à 1920 px, aucun débordement
-  horizontal.
+1. **Contenu réel** — remplacer tous les `[À COMPLÉTER]` de `lib/site.ts` et
+   les `[X €]` de `lib/menu-data.ts` et `lib/recette.ts`.
+2. **Photos et vidéos** — déposer dans `public/assets/`, aux mêmes chemins.
+3. **Formulaire de contact** — il n'envoie rien (export statique : ni Route
+   Handler ni Server Action). Les cinq étapes sont listées en tête de
+   `components/contact/contact-form.tsx`.
+4. **Plateforme de commande** — brancher `LIEN_COMMANDE` dans `lib/site.ts` et
+   réactiver les boutons de `app/commander/page.tsx`.
+5. **Pages légales** — mentions, confidentialité, CGV, cookies, allergènes.

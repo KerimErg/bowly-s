@@ -535,7 +535,7 @@ const RAIL: Record<keyof typeof ACTES, [Station, Station]> = {
   // Recul final : le bowl redevient un objet, la page peut se terminer.
   sortie: [
     { position: [2.3, 2.05, 4.5], cible: [0, 0.45, 0], fov: 42 },
-    { position: [0.4, 3.9, 7.6], cible: [0, 0.45, 0], fov: 40 },
+    { position: [0.6, 4.8, 10.2], cible: [0, 0.45, 0], fov: 38 },
   ],
 };
 
@@ -665,6 +665,19 @@ export function BowlRig({ qualite }: { qualite: "complete" | "legere" }) {
     <>
       <Horloge />
       <Camera />
+
+      {/* BROUILLARD LINÉAIRE, de la couleur exacte du fond.
+          Sa raison d'être est de composition, pas d'atmosphère : dans la
+          seconde moitié de la page (carte, cinéma, réseaux, teasing), le bowl
+          n'est plus le sujet, c'est un décor. Sans lui, il restait aussi net
+          et aussi contrasté qu'au premier écran et venait percuter les
+          titres — « BOWLY'S IS EVERYWHERE. » passait littéralement dedans.
+
+          Le plan proche est calé à 8 unités : au portail la caméra est à
+          environ 6,9, donc l'objet reste parfaitement net là où il doit
+          l'être. À la station de sortie (≈ 11,3) il est fondu à près de
+          moitié. Le bowl s'éloigne dans le noir au lieu de rétrécir bêtement. */}
+      <fog attach="fog" args={["#08070a", 8, 15]} />
 
       {/* Ambiante volontairement faible et presque neutre.
           Première version : 0,55 en plein --plasma. Résultat, tout baignait

@@ -73,7 +73,7 @@ export const ETAPES: GroupeEtape[] = [
     consigne: "Maison. Une seule, sinon ça se marche dessus.",
     mode: "unique",
     options: [
-      { id: "fumee", nom: "Fumée", note: "Paprika, mélasse", couleur: "#c9421f", supplement: P },
+      { id: "fumee", nom: "Fumée", note: "Paprika, mélasse", couleur: "#b53a19", supplement: P },
       { id: "chili", nom: "Chili-miel", note: "Ça pique, ça colle", couleur: "#ff2d10", supplement: P, marqueur: "Fort" },
       { id: "yuzu", nom: "Yuzu-miso", note: "Acidulé, salé", couleur: "#e8b53a", supplement: P },
       { id: "herbes", nom: "Herbes", note: "Persil, ciboulette", couleur: "#8ec44a", supplement: P, marqueur: "Végan" },
@@ -108,6 +108,63 @@ export const ETAPES: GroupeEtape[] = [
     ],
   },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*  Lisibilité                                                                 */
+/* -------------------------------------------------------------------------- */
+
+const INK = "#120c0a";
+const BONE = "#f4efe9";
+
+function luminance(hex: string): number {
+  const v = hex.replace("#", "");
+  const canal = (n: number) => {
+    const s = n / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  return (
+    0.2126 * canal(parseInt(v.slice(0, 2), 16)) +
+    0.7152 * canal(parseInt(v.slice(2, 4), 16)) +
+    0.0722 * canal(parseInt(v.slice(4, 6), 16))
+  );
+}
+
+/**
+ * Couleur de texte lisible sur une pastille d'ingrédient.
+ *
+ * ⚠️ NE PAS REMPLACER PAR UNE COULEUR FIGÉE.
+ * Les pastilles du configurateur prennent la couleur de leur ingrédient. Une
+ * encre sombre passe sur le riz crème et l'or des oignons ; elle échoue sur
+ * le gochujang et l'effiloché fumé, qui sont sombres. Le contrôle
+ * d'accessibilité a effectivement attrapé le cas « Fumée » quand la couleur
+ * était codée en dur.
+ *
+ * On calcule donc la luminance relative de la pastille et on choisit celui
+ * des deux qui contraste le plus. Une couleur ajoutée dans `ETAPES` est
+ * traitée correctement sans qu'on ait à y penser — à une condition, vérifiée
+ * par le test ci-dessous.
+ */
+export function lisibleSur(couleur: string): string {
+  const l = luminance(couleur);
+  const contrasteEncre = (l + 0.05) / (luminance(INK) + 0.05);
+  const contrasteOs = (luminance(BONE) + 0.05) / (l + 0.05);
+  return contrasteEncre >= contrasteOs ? INK : BONE;
+}
+
+/**
+ * Le meilleur contraste atteignable sur une couleur donnée.
+ *
+ * Sert au garde-fou : une couleur de luminance moyenne (un rouge brique, par
+ * exemple) peut échouer avec les DEUX encres. Aucun calcul ne rattrape ça —
+ * il faut éclaircir ou assombrir la couleur elle-même.
+ */
+export function meilleurContraste(couleur: string): number {
+  const l = luminance(couleur);
+  return Math.max(
+    (l + 0.05) / (luminance(INK) + 0.05),
+    (luminance(BONE) + 0.05) / (l + 0.05),
+  );
+}
 
 /** Retrouve un ingrédient par son identifiant, toutes étapes confondues. */
 export function trouverIngredient(id: string): Ingredient | undefined {

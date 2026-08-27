@@ -8,7 +8,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LIEN_COMMANDE } from "@/lib/site";
-import { ETAPES, resumePrix, trouverIngredient, type Etape } from "@/lib/recette";
+import { ETAPES, lisibleSur, resumePrix, trouverIngredient, type Etape } from "@/lib/recette";
 import { RECETTE_INITIALE, setRecette, type Recette } from "@/lib/stage";
 
 /**
@@ -139,6 +139,9 @@ export function Atelier() {
                                   // ingrédient : le lien avec la 3D est
                                   // visible avant même de regarder le bowl.
                                   backgroundColor: option.couleur,
+                                  // Encre ou os selon la luminance de la
+                                  // pastille — jamais une couleur figée.
+                                  color: lisibleSur(option.couleur),
                                   boxShadow: `0 0 0 1px ${option.couleur}, 0 14px 40px -16px ${option.couleur}`,
                                 }
                               : undefined
@@ -161,7 +164,7 @@ export function Atelier() {
                           />
 
                           {actif ? (
-                            <Check size={14} className="text-ink" aria-hidden="true" />
+                            <Check size={14} aria-hidden="true" />
                           ) : (
                             <span
                               aria-hidden="true"
@@ -173,9 +176,9 @@ export function Atelier() {
                           <span
                             className={cn(
                               "text-sm font-semibold whitespace-nowrap",
-                              // Sur pastille colorée, le texte passe en encre :
-                              // le blanc n'y tiendrait pas le contraste AA.
-                              actif ? "text-ink" : "text-bone-dim group-hover:text-bone",
+                              // Quand la pastille est active, la couleur est
+                              // posée en ligne par `lisibleSur` sur le parent.
+                              !actif && "text-bone-dim group-hover:text-bone",
                             )}
                           >
                             {option.nom}
@@ -185,7 +188,7 @@ export function Atelier() {
                             <span
                               className={cn(
                                 "rounded-full px-2 py-0.5 text-[0.6rem] font-bold tracking-wide uppercase",
-                                actif ? "bg-ink/15 text-ink" : "bg-void-3 text-bone-faint",
+                                actif ? "bg-black/15" : "bg-void-3 text-bone-dim",
                               )}
                             >
                               {option.marqueur}

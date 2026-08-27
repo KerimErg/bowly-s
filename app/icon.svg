@@ -1,11 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Favicon Bowly's — même symbole que components/brand/logo.tsx, redessiné
+       pour tenir à 16 px : la vapeur est plus épaisse, le « B » plus large, et
+       les couleurs sont écrites en dur puisqu'aucune variable CSS n'existe
+       dans le contexte d'une icône. -->
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ff8a4c"/>
-      <stop offset="55%" stop-color="#ff5a1f"/>
-      <stop offset="100%" stop-color="#e8440c"/>
+    <linearGradient id="coupe" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#b32a12"/>
+      <stop offset="55%" stop-color="#f0452a"/>
+      <stop offset="100%" stop-color="#ff6a3d"/>
     </linearGradient>
   </defs>
-  <rect width="100" height="100" rx="28" fill="url(#g)"/>
-  <path fill="#ffffff" fill-rule="evenodd" d="M20 14 C20 10.7 22.7 8 26 8 H52 C67.5 8 79 18.5 79 32.3 C79 40 75.3 46.6 69.2 50.2 C77.2 53.6 82.5 60.9 82.5 70 C82.5 84.4 70.2 94 53.6 94 H26 C22.7 94 20 91.3 20 88 Z M36 24 H50 C55.5 24 59 27.5 59 32.5 C59 37.5 55.5 41 50 41 H36 Z M36 57 H52 C58.5 57 62.5 61 62.5 67.5 C62.5 74 58.5 78 52 78 H36 Z"/>
+
+  <rect width="100" height="100" rx="26" fill="#08070a"/>
+
+  <!-- La vapeur -->
+  <path d="M31 26c0-6 6-6 6-12M50 20c0-6 6-6 6-12M69 26c0-6 6-6 6-12"
+        fill="none" stroke="#ffc23d" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- La coupe -->
+  <path d="M12 42h76c0 24.5-17 42-38 42S12 66.5 12 42Z" fill="url(#coupe)"/>
+
+  <!-- Le « B » en réserve -->
+  <path d="M36 48h15.5c6.6 0 10.7 3.2 10.7 8.2 0 3.2-1.9 5.6-4.9 6.6v.2c3.7 .9 6 3.7 6 7.3 0 5.9-4.8 9.5-12.5 9.5H36V48Zm14.2 12.7c3 0 4.8-1.4 4.8-3.7s-1.7-3.6-4.6-3.6H43v7.3h7.2Zm.6 13c3.4 0 5.3-1.5 5.3-4.1 0-2.5-2-3.9-5.5-3.9H43v8h7.8Z"
+        fill="#120c0a"/>
 </svg>

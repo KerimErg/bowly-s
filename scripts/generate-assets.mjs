@@ -407,27 +407,56 @@ ${etoiles.join("")}
 `;
 }
 
-/** Affiche verticale pour la section cinématique — un gros plan abstrait. */
-function grosPlanSvg(cle, seed, teinte) {
+/**
+ * Gros plan de la section cinématique.
+ *
+ * Première version : des cercles flous de couleur. Techniquement un
+ * placeholder, visuellement un écran de veille — et la section « donne faim »
+ * ne donnait pas faim.
+ *
+ * Deuxième version, celle-ci : une VRAIE MACRO. On réutilise exactement les
+ * couches d'un bowl (base, protéine, sauce, toppings) et on recadre le
+ * `viewBox` sur une petite région du plat. Le zoom est donc réel : ce sont les
+ * mêmes grains, les mêmes morceaux et le même filet de sauce, vus de très
+ * près. Rien de flou, rien d'abstrait — et le jour où les rushes existent,
+ * ils prennent la place au même chemin de fichier.
+ */
+function grosPlanSvg(cle, recette, seed, cadre) {
+  const c = { ...RECETTES[recette], seed };
   const r = rng(seed);
-  const formes = [];
-  for (let i = 0; i < 70; i++) {
-    const x = round(r() * 900);
-    const y = round(r() * 1200);
-    const s = round(30 + r() * 180);
-    formes.push(
-      `<circle cx="${x}" cy="${y}" r="${s}" fill="${teinte}" opacity="${round(0.05 + r() * 0.22)}"/>`,
-    );
-  }
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Gros plan ${cle}">
-<defs><filter id="flou"><feGaussianBlur stdDeviation="26"/></filter></defs>
-<rect width="900" height="1200" fill="#0f0d12"/>
-<g filter="url(#flou)">${formes.join("")}</g>
-<rect width="900" height="1200" fill="url(#vign)"/>
-<defs><radialGradient id="vign" cx="50%" cy="45%" r="65%">
-<stop offset="55%" stop-color="#000000" stop-opacity="0"/>
-<stop offset="100%" stop-color="#000000" stop-opacity="0.8"/>
-</radialGradient></defs>
+  const [x, y, w, h] = cadre;
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${w} ${h}" width="900" height="1200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Gros plan ${cle}">
+<defs>
+<radialGradient id="reliefBase" cx="44%" cy="36%" r="70%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+<stop offset="58%" stop-color="#000000" stop-opacity="0.05"/>
+<stop offset="100%" stop-color="#000000" stop-opacity="0.5"/>
+</radialGradient>
+<linearGradient id="faceLumiere" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+<stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+<stop offset="100%" stop-color="#000000" stop-opacity="0.28"/>
+</linearGradient>
+<radialGradient id="vignette" cx="50%" cy="45%" r="72%">
+<stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+<stop offset="100%" stop-color="#000000" stop-opacity="0.72"/>
+</radialGradient>
+<radialGradient id="chaleur" cx="26%" cy="24%" r="60%">
+<stop offset="0%" stop-color="#ffc23d" stop-opacity="0.3"/>
+<stop offset="100%" stop-color="#ffc23d" stop-opacity="0"/>
+</radialGradient>
+</defs>
+
+${couchemBase(r, c)}
+${couchemProteine(r, c)}
+${couchemSauce(r, c)}
+${couchemToppings(r, c)}
+
+<!-- Lumière rasante chaude, puis vignettage : c'est ce qui transforme une
+     illustration à plat en plan de cinéma. -->
+<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#chaleur)"/>
+<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#vignette)"/>
 </svg>
 `;
 }
@@ -453,14 +482,21 @@ ecrits.push(ecrire("branding/mark.svg", marqueSvg()));
 ecrits.push(ecrire("branding/mark-mono.svg", marqueSvg({ fond: "#f4efe9", trait: "#08070a" })));
 ecrits.push(ecrire("branding/og.svg", ogSvg()));
 
+/**
+ * Quatre cadrages, quatre recettes.
+ *
+ * Le cadre `[x, y, largeur, hauteur]` découpe une région de la composition
+ * 800×800 d'un bowl. Plus il est petit, plus le zoom est fort : 260×347 donne
+ * un rapport d'environ 3:1, soit le cadrage d'un objectif macro.
+ */
 const GROS_PLANS = [
-  ["croustillant", 4101, "#f0452a"],
-  ["sauce", 4202, "#c9421f"],
-  ["verdure", 4303, "#7fb642"],
-  ["braise", 4404, "#ffc23d"],
+  ["croustillant", "the-og", 4101, [250, 230, 260, 347]],
+  ["sauce", "spicy-bowly", 4202, [300, 300, 230, 307]],
+  ["braise", "smoke-show", 4404, [230, 300, 280, 373]],
+  ["verdure", "green-riot", 4303, [280, 250, 250, 333]],
 ];
-for (const [cle, seed, teinte] of GROS_PLANS) {
-  ecrits.push(ecrire(`food/${cle}.svg`, grosPlanSvg(cle, seed, teinte)));
+for (const [cle, recette, seed, cadre] of GROS_PLANS) {
+  ecrits.push(ecrire(`food/${cle}.svg`, grosPlanSvg(cle, recette, seed, cadre)));
 }
 
 console.log(`${ecrits.length} fichiers écrits dans public/assets/`);

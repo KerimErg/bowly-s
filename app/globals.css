@@ -21,7 +21,14 @@
    --brand ou --crisp doit être en --ink (5,16:1 sur brand, 12,04:1 sur
    crisp). Les utilitaires et variantes de bouton l'appliquent déjà.
 
-   Tous les ratios cités dans ce fichier ont été calculés, pas estimés.
+   ⚠️  LES TROIS FONDS NE SE VALENT PAS
+   Un texte lisible sur --void ne l'est pas forcément sur --void-3, qui est
+   plus clair. --bone-faint valait #857c76 : 4,92:1 sur le vide (conforme)
+   mais 4,46:1 sur une surface relevée (non conforme). Le contrôle
+   `npm run verifier` teste désormais les deux fonds.
+
+   Tous les ratios cités dans ce fichier ont été calculés, pas estimés, et
+   `npm run verifier` les revérifie à la demande.
 =========================================================================== */
 
 :root {
@@ -36,7 +43,7 @@
   /* --- Texte --- */
   --bone: #f4efe9;        /* 17,58:1 sur --void */
   --bone-dim: #a49a94;    /*  7,30:1 sur --void */
-  --bone-faint: #857c76;  /*  4,70:1 sur --void — seuil AA tout juste tenu */
+  --bone-faint: #8e857f;  /*  5,56:1 sur --void, 5,04:1 sur --void-3 */
   --ink: #120c0a;         /* texte sur aplat chaud */
 
   /* --- Chaud --- */

@@ -92,7 +92,7 @@ export function Partout() {
         mots={["#bowlys", "#enterthebowl", "#pasunbowl", "#croustillant"]}
         duree={30}
         separateur="·"
-        className="font-poster text-bone/20 mt-16 py-4 text-3xl uppercase md:text-5xl"
+        className="font-poster text-bone/40 mt-16 py-4 text-3xl uppercase md:text-5xl"
       />
     </section>
   );

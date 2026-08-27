@@ -104,7 +104,14 @@ function Bande({ bowl, position }: { bowl: Bowl; position: number }) {
   const aGauche = position % 2 === 0;
 
   return (
-    <li className="border-line group border-b">
+    /* `overflow-x-clip` et non `overflow-hidden` : on veut couper le
+       débordement horizontal SANS créer de conteneur de défilement, ce qui
+       casserait le `sticky` de la barre de filtres au-dessus.
+       Ce qui déborde ici, c'est le décalage d'entrée de `Reveal from="droite"`
+       (26 px de translation). Il n'affecte pas la mise en page mais il élargit
+       la zone défilable du document : sur un écran de 360 px, Chrome dézoomait
+       toute la page pour la faire tenir. */
+    <li className="border-line group overflow-x-clip border-b">
       <article
         className="bowly-wide grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20"
         style={{ ["--accent" as string]: accent }}
@@ -145,6 +152,7 @@ function Bande({ bowl, position }: { bowl: Bowl; position: number }) {
               <span className="bg-line-strong h-px flex-1" aria-hidden="true" />
               {bowl.intensite > 0 && (
                 <span
+                  role="img"
                   className="flex items-center gap-1"
                   aria-label={`Intensité : ${bowl.intensite} sur 3`}
                 >

@@ -47,7 +47,7 @@ export function Cinema() {
       <Ruban
         mots={["ça craque", "ça coule", "ça fume", "ça croque", "ça déborde"]}
         duree={38}
-        className="font-poster text-bone/25 border-line border-y py-6 text-4xl uppercase md:text-6xl"
+        className="font-poster text-bone/40 border-line border-y py-6 text-4xl uppercase md:text-6xl"
       />
     </section>
   );
@@ -67,7 +67,9 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
   // Le plan s'enfonce et s'assombrit pendant que le suivant le recouvre.
   const echelle = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
   const voile = useTransform(scrollYProgress, [0, 1], [0, 0.85]);
-  const motY = useTransform(scrollYProgress, [0, 1], ["0%", "-45%"]);
+    // ⚠️ Amplitude limitée à -18 %. À -45 %, la première ligne du mot passait
+  // derrière l'en-tête fixe et se retrouvait coupée en deux.
+  const motY = useTransform(scrollYProgress, [0, 1], ["6%", "-18%"]);
 
   return (
     <div ref={ref} className="h-[100svh]">
@@ -108,20 +110,30 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
           style={reduit ? { opacity: 0.25 } : { opacity: voile }}
         />
 
-        {/* Assombrissement fixe : garantit le contraste du mot quelle que
-            soit l'image déposée plus tard. */}
+        {/* Assombrissement fixe. Deux couches, et les deux sont nécessaires :
+            un voile uniforme qui abaisse toute l'image, et un dégradé qui
+            appuie le bas où vivent les mentions. C'est ce qui garantit le
+            contraste du mot QUELLE QUE SOIT l'image déposée plus tard —
+            y compris une photo claire. */}
+        <div aria-hidden="true" className="bg-void/45 absolute inset-0" />
         <div
           aria-hidden="true"
-          className="from-void/85 via-void/25 absolute inset-0 bg-gradient-to-t to-transparent"
+          className="from-void/90 via-void/20 absolute inset-0 bg-gradient-to-t to-transparent"
         />
 
         <motion.div
           style={reduit ? undefined : { y: motY }}
           className="absolute inset-0 flex items-center justify-center"
         >
+          {/* ⚠️ Le mot est en --bone, PAS dans la couleur du plan.
+              Première version : `color: plan.accent`. Le rouge de « ÇA COULE »
+              se posait sur une macro de sauce rouge — le mot disparaissait.
+              Une couleur d'accent ne peut pas contraster avec une image dont
+              elle est tirée. La couleur du plan sert donc au filet et au
+              numéro, jamais au mot lui-même. */}
           <p
-            className="poster text-center"
-            style={{ color: plan.accent, textShadow: "0 12px 60px rgba(0,0,0,0.75)" }}
+            className="poster text-bone text-center"
+            style={{ textShadow: "0 10px 50px rgba(8,7,10,0.9), 0 2px 12px rgba(8,7,10,0.8)" }}
           >
             ÇA
             <br />
@@ -129,9 +141,16 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
           </p>
         </motion.div>
 
-        <div className="bowly-wide absolute inset-x-0 bottom-8 flex items-center justify-between">
+        <div className="bowly-wide absolute inset-x-0 bottom-8 flex items-center gap-5">
+          {/* Le filet prend la couleur du plan : l'accent survit, sans jamais
+              porter de texte. */}
+          <span
+            aria-hidden="true"
+            className="h-0.5 w-14 shrink-0 rounded-full"
+            style={{ backgroundColor: plan.accent }}
+          />
           <span className="kicker text-bone-dim">{plan.cle}</span>
-          <span className="kicker text-bone-faint tabular">
+          <span className="kicker text-bone-faint tabular ml-auto">
             {String(rang + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
         </div>

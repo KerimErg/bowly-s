@@ -149,6 +149,7 @@ function Personnage({ bowl, rang }: { bowl: Bowl; rang: number }) {
           {/* Intensité, en pastilles plutôt qu'en mots. */}
           {bowl.intensite > 0 && (
             <span
+              role="img"
               className="bg-void/70 absolute top-4 right-4 flex items-center gap-1 rounded-full px-3 py-1.5 backdrop-blur-sm"
               aria-label={`Intensité : ${bowl.intensite} sur 3`}
             >

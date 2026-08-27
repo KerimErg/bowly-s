@@ -82,7 +82,7 @@ export default function AboutPage() {
       <Ruban
         mots={["croustillant", "composé devant toi", "cinq minutes", "cinq sauces", "zéro sachet"]}
         duree={46}
-        className="font-poster text-bone/20 border-line border-y py-5 text-3xl uppercase md:text-5xl"
+        className="font-poster text-bone/40 border-line border-y py-5 text-3xl uppercase md:text-5xl"
       />
 
       {/* --- Les partis pris ----------------------------------------------- */}
