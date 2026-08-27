@@ -45,19 +45,19 @@ export function ContactForm() {
     return (
       <div
         role="status"
-        className="border-crisp/40 bg-void-2 flex flex-col items-start gap-4 rounded-3xl border p-8"
+        className="border-rouge/40 bg-beurre flex flex-col items-start gap-4 rounded-[var(--radius)] border p-8"
       >
-        <span className="bg-crisp text-ink flex size-12 items-center justify-center rounded-full">
+        <span className="bg-jaune text-encre flex size-12 items-center justify-center rounded-full">
           <Check size={22} aria-hidden="true" />
         </span>
-        <h2 className="text-bone poster-section">
+        <h2 className="text-encre poster-section">
           Message « envoyé »
         </h2>
-        <p className="text-bone-dim text-sm leading-relaxed">
+        <p className="text-encre-douce text-sm leading-relaxed">
           Ceci est une démonstration : le formulaire n&apos;est relié à aucun
           serveur, votre message n&apos;a donc pas été transmis ni conservé.
           Branchez une API (voir les commentaires du fichier{" "}
-          <code className="text-crisp">components/contact/contact-form.tsx</code>)
+          <code className="text-rouge-fonce">components/contact/contact-form.tsx</code>)
           pour le rendre fonctionnel.
         </p>
         <Button variant="outline" onClick={() => setStatut("idle")}>
@@ -72,7 +72,7 @@ export function ContactForm() {
       onSubmit={handleSubmit}
       noValidate={false}
       aria-describedby="contact-avertissement"
-      className="surface flex flex-col gap-6 rounded-3xl p-8 sm:p-10"
+      className="bg-creme border-2 border-encre flex flex-col gap-6 rounded-[var(--radius)] p-8 sm:p-10"
     >
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
@@ -121,7 +121,7 @@ export function ContactForm() {
         />
       </div>
 
-      <p id="contact-avertissement" className="text-bone-faint text-xs leading-relaxed">
+      <p id="contact-avertissement" className="text-encre-faible text-xs leading-relaxed">
         Formulaire de démonstration : aucune donnée n&apos;est envoyée, stockée ni
         traitée. La mention d&apos;information RGPD reste à rédiger.
       </p>

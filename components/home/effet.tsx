@@ -76,11 +76,11 @@ export function Effet() {
       <div className="bowly-wide grid items-center gap-16 lg:grid-cols-2">
         <div>
           <Reveal>
-            <p className="kicker text-plasma">L&apos;effet Bowly&apos;s</p>
-            <h2 id="effet-titre" className="poster-title text-bone mt-5">
+            <p className="kicker text-vert-fonce">L&apos;effet Bowly&apos;s</p>
+            <h2 id="effet-titre" className="poster-title text-encre mt-5">
               La prochaine
               <br />
-              <span className="text-brand">obsession.</span>
+              <span className="text-rouge-fonce">obsession.</span>
             </h2>
             <p className="lead mt-6 max-w-md">
               Aucun restaurant n&apos;a encore ouvert. Cinq emplacements sont à
@@ -98,7 +98,7 @@ export function Effet() {
                 ["Ouverture", TODO, "Calendrier non fixé"],
               ].map(([label, valeur, note]) => (
                 <div key={label}>
-                  <dt className="kicker text-bone-faint">{label}</dt>
+                  <dt className="kicker text-encre-faible">{label}</dt>
                   {/* Un `<div>` fils de `<dl>` ne peut contenir QUE des `<dt>`
                       et des `<dd>`. La note était dans un `<p>` : structure
                       invalide, signalée par axe. Elle vit maintenant dans le
@@ -108,10 +108,10 @@ export function Effet() {
                       long et insécable ; en Anton, à 30 px, il dépassait une
                       colonne de 163 px sur un écran de 390. */}
                   <dd className="mt-2">
-                    <span className="font-poster text-crisp tabular block text-2xl [overflow-wrap:anywhere] sm:text-3xl">
+                    <span className="font-poster text-rouge-fonce tabular block text-2xl [overflow-wrap:anywhere] sm:text-3xl">
                       {valeur}
                     </span>
-                    <span className="text-bone-faint mt-1 block text-xs">{note}</span>
+                    <span className="text-encre-faible mt-1 block text-xs">{note}</span>
                   </dd>
                 </div>
               ))}
@@ -133,7 +133,7 @@ export function Effet() {
         {/* --- La carte ---------------------------------------------------- */}
         <Reveal from="droite" delay={0.1}>
           <div className="relative">
-            <div className="ember-cold pointer-events-none absolute inset-0 scale-125 rounded-full blur-3xl" />
+            
 
             {/* `role="group"` et non `role="img"` : un élément de rôle `img`
                 ne peut pas contenir de descendants interactifs, et cette
@@ -184,7 +184,7 @@ export function Effet() {
                       onBlur={() => setActif(null)}
                       onMouseEnter={() => setActif(e.rang)}
                       onMouseLeave={() => setActif(null)}
-                      className="focus-visible:outline-crisp cursor-pointer transition-all duration-300"
+                      className="focus-visible:outline-rouge-fonce cursor-pointer transition-all duration-300"
                     />
                     <text
                       x={e.x + 7}
@@ -204,10 +204,10 @@ export function Effet() {
               })}
             </svg>
 
-            <p className="text-bone-faint mt-6 text-center text-xs">
+            <p className="text-encre-faible mt-6 text-center text-xs">
               Les cinq points figurent des emplacements à l&apos;étude. Aucune
               ville n&apos;est arrêtée : les libellés resteront{" "}
-              <span className="text-bone-dim">[À COMPLÉTER]</span> jusqu&apos;à
+              <span className="text-encre-douce">[À COMPLÉTER]</span> jusqu&apos;à
               la signature d&apos;un bail.
             </p>
           </div>

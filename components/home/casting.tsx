@@ -5,24 +5,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Flame } from "lucide-react";
 
+import { CadrePhoto, Etiquette, Numero } from "@/components/shared/decor";
 import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
-import { accentDe, getVedettes, visuelDe, type Bowl } from "@/lib/menu-data";
+import { cn } from "@/lib/utils";
+import { visuelBowl } from "@/lib/assets";
+import { accentDe, getVedettes, type Bowl } from "@/lib/menu-data";
 
 /**
- * LE CASTING
+ * LE CASTING — le mur de tirages.
  *
- * Un bowl n'est pas une ligne de carte, c'est un personnage. Ici il a donc un
- * nom en très gros, une réplique, et une couleur qui lui appartient — pas une
- * vignette + un prix + un bouton.
+ * CE QUI A CHANGÉ, ET POURQUOI
+ * Avant : quatre cartes identiques à coins arrondis, alignées, ombres floues,
+ * halo dégradé au survol. C'est la vignette e-commerce par défaut, et c'est
+ * exactement ce que le client a désigné en disant « les rectangles ».
  *
- * POURQUOI UN DÉFILEMENT HORIZONTAL NATIF, ET PAS DÉTOURNÉ
- * La mode est de capturer le scroll vertical pour le transformer en
- * déplacement horizontal. C'est spectaculaire et c'est une plaie : la barre
- * de défilement ment, le clavier ne suit pas, le retour arrière du navigateur
- * atterrit n'importe où, et sur trackpad la moindre inertie part de travers.
- * Ici c'est un `overflow-x` natif avec accroche : le doigt fonctionne, les
- * flèches du clavier fonctionnent, et les deux boutons couvrent la souris.
+ * Maintenant : des TIRAGES PAPIER punaisés au mur. Bordure épaisse, ombre
+ * portée dure et décalée, chaque tirage penché différemment, étiquette collée
+ * de travers, et le nom du bowl qui déborde par-dessus l'image. Rien n'est
+ * aligné sur rien : c'est ce désalignement qui fait la différence entre un
+ * assemblage d'atelier et une grille générée.
+ *
+ * Le défilement reste natif (`overflow-x`), donc utilisable au doigt et au
+ * clavier. On ne détourne pas le scroll vertical.
  */
 export function Casting() {
   const piste = React.useRef<HTMLUListElement>(null);
@@ -31,32 +36,35 @@ export function Casting() {
   const glisser = (sens: 1 | -1) => {
     const el = piste.current;
     if (!el) return;
-    // Un « écran de carte » : la largeur du premier enfant plus l'écart.
     const carte = el.firstElementChild as HTMLElement | null;
-    const pas = carte ? carte.offsetWidth + 24 : el.clientWidth * 0.8;
+    const pas = carte ? carte.offsetWidth + 28 : el.clientWidth * 0.8;
     el.scrollBy({ left: pas * sens, behavior: "smooth" });
   };
 
   return (
-    <section aria-labelledby="casting-titre" className="relative py-24 md:py-32">
-      <div className="bowly-wide">
+    <section
+      aria-labelledby="casting-titre"
+      className="bg-beurre papier bord-dechire-haut relative py-24 md:py-32"
+      style={{ ["--bord" as string]: "var(--beurre)" }}
+    >
+      <div className="bowly-wide relative">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <Reveal>
-            <p className="kicker text-crisp">Le casting</p>
-            <h2 id="casting-titre" className="poster-title text-bone mt-5">
+            <p className="kicker text-rouge-fonce">Le casting</p>
+            <h2 id="casting-titre" className="poster-title text-encre mt-4">
               Ils ont tous
               <br />
-              <span className="text-brand">un caractère.</span>
+              <span className="souligne-main">un caractère.</span>
             </h2>
           </Reveal>
 
-          <Reveal delay={0.1} className="flex items-center gap-2">
+          <Reveal delay={0.1} className="flex items-center gap-3">
             {/* Boutons d'appoint : le contenu reste atteignable sans eux. */}
             <button
               type="button"
               onClick={() => glisser(-1)}
               aria-label="Faire défiler vers la gauche"
-              className="border-line-strong text-bone hover:border-crisp hover:text-crisp flex size-12 items-center justify-center rounded-full border transition-colors duration-300"
+              className="border-encre text-encre hover:bg-encre hover:text-creme flex size-12 items-center justify-center rounded-[var(--radius)] border-2 shadow-[3px_3px_0_var(--encre)] transition-colors duration-200"
             >
               <ArrowLeft size={18} aria-hidden="true" />
             </button>
@@ -64,7 +72,7 @@ export function Casting() {
               type="button"
               onClick={() => glisser(1)}
               aria-label="Faire défiler vers la droite"
-              className="border-line-strong text-bone hover:border-crisp hover:text-crisp flex size-12 items-center justify-center rounded-full border transition-colors duration-300"
+              className="border-encre text-encre hover:bg-encre hover:text-creme flex size-12 items-center justify-center rounded-[var(--radius)] border-2 shadow-[3px_3px_0_var(--encre)] transition-colors duration-200"
             >
               <ArrowRight size={18} aria-hidden="true" />
             </button>
@@ -72,29 +80,30 @@ export function Casting() {
         </div>
       </div>
 
-      {/* La piste déborde volontairement du conteneur : les cartes touchent le
-          bord de l'écran, ce qui indique qu'il y a une suite. */}
+      {/* Les tirages débordent du conteneur : ils touchent le bord de l'écran,
+          ce qui dit qu'il y a une suite sans avoir à l'écrire. */}
       <ul
         ref={piste}
-        // `tabIndex` : une zone défilante doit être atteignable au clavier,
-        // sinon son contenu est inaccessible sans souris.
         tabIndex={0}
         aria-label="Les bowls signature"
-        className="focus-visible:outline-crisp mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 md:px-10 [&::-webkit-scrollbar]:hidden"
+        className="focus-visible:outline-rouge-fonce mt-16 flex snap-x snap-mandatory gap-7 overflow-x-auto px-5 pt-6 pb-12 md:px-10 [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: "none" }}
       >
         {bowls.map((bowl, i) => (
-          <Personnage key={bowl.id} bowl={bowl} rang={i} />
+          <Tirage key={bowl.id} bowl={bowl} rang={i} />
         ))}
 
-        <li className="w-[78vw] shrink-0 snap-start sm:w-[22rem]">
-          <div className="surface flex h-full flex-col items-start justify-center gap-6 rounded-3xl p-9">
-            <p className="poster-section text-bone">
+        <li className="w-[76vw] shrink-0 snap-start sm:w-[21rem]">
+          <div className="border-encre bg-carton flex h-full flex-col items-start justify-center gap-5 border-4 p-9 shadow-[6px_6px_0_var(--encre)]">
+            <Numero className="text-6xl" ton="rouge">
+              +3
+            </Numero>
+            <p className="poster-section text-encre">
               Et les
               <br />
               autres.
             </p>
-            <p className="text-bone-dim text-sm">
+            <p className="text-encre-douce text-sm">
               Sept bowls, cinq sauces maison, et de quoi en composer bien plus.
             </p>
             <Button asChild variant="outline" size="lg">
@@ -109,68 +118,85 @@ export function Casting() {
 
 /* -------------------------------------------------------------------------- */
 
-function Personnage({ bowl, rang }: { bowl: Bowl; rang: number }) {
+/** Trois inclinaisons qui tournent, pour qu'aucun voisin ne penche pareil. */
+const INCLINAISONS = [1, 3, 2] as const;
+
+function Tirage({ bowl, rang }: { bowl: Bowl; rang: number }) {
   const accent = accentDe(bowl);
-  const visuel = visuelDe(bowl);
+  const visuel = visuelBowl(bowl.id);
+  const inclinaison = INCLINAISONS[rang % INCLINAISONS.length];
 
   return (
-    <li className="w-[78vw] shrink-0 snap-start sm:w-[22rem]">
+    <li className="w-[76vw] shrink-0 snap-start sm:w-[21rem]">
       <Link
         href="/menu"
         data-curseur="Voir"
-        className="sheen-on-hover group border-line bg-void-2/80 focus-visible:outline-crisp relative block h-full overflow-hidden rounded-3xl border backdrop-blur-sm transition-all duration-500 ease-[var(--ease-out)] hover:-translate-y-1.5"
-        style={{ ["--accent" as string]: accent }}
+        className="focus-visible:outline-rouge-fonce group block"
       >
-        {/* Halo de la couleur du plat, révélé au survol. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 left-1/2 size-64 -translate-x-1/2 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-60"
-          style={{ backgroundColor: accent }}
-        />
+        <CadrePhoto
+          inclinaison={inclinaison}
+          className="p-3 transition-transform duration-300 ease-[var(--ease-snap)] group-hover:rotate-0 group-hover:-translate-y-1"
+        >
+          <div
+            className="relative aspect-[4/5] overflow-hidden"
+            style={{ backgroundColor: `${accent}22` }}
+          >
+            <Image
+              src={visuel.src}
+              alt={visuel.alt}
+              fill
+              sizes="(max-width: 640px) 76vw, 21rem"
+              loading={rang === 0 ? "eager" : "lazy"}
+              // Une photo se recadre, une illustration se pose entière : les
+              // deux ne se traitent pas pareil, et `estPhoto` le dit.
+              className={cn(
+                "transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.04]",
+                visuel.estPhoto ? "object-cover" : "object-contain p-2",
+              )}
+            />
 
-        {/* Balayage lumineux au survol (classe `sheen-on-hover`). */}
-        <span
-          aria-hidden="true"
-          className="sheen pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-        />
+            {/* Intensité : des flammes tamponnées dans un coin, pas une
+                pastille centrée. */}
+            {bowl.intensite > 0 && (
+              <span
+                role="img"
+                aria-label={`Intensité : ${bowl.intensite} sur 3`}
+                className="bg-encre absolute top-3 right-3 flex items-center gap-0.5 px-2 py-1.5"
+              >
+                {Array.from({ length: bowl.intensite }).map((_, i) => (
+                  <Flame key={i} size={12} className="text-jaune" aria-hidden="true" />
+                ))}
+              </span>
+            )}
 
-        <div className="relative aspect-square overflow-hidden">
-          <Image
-            src={visuel.src}
-            alt={visuel.alt}
-            fill
-            sizes="(max-width: 640px) 78vw, 22rem"
-            // Seule la première carte est prioritaire : les suivantes sont
-            // hors écran au chargement et n'ont aucune raison de concourir.
-            loading={rang === 0 ? "eager" : "lazy"}
-            className="object-cover transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-[1.07]"
-          />
-
-          {/* Intensité, en pastilles plutôt qu'en mots. */}
-          {bowl.intensite > 0 && (
-            <span
-              role="img"
-              className="bg-void/70 absolute top-4 right-4 flex items-center gap-1 rounded-full px-3 py-1.5 backdrop-blur-sm"
-              aria-label={`Intensité : ${bowl.intensite} sur 3`}
-            >
-              {Array.from({ length: bowl.intensite }).map((_, i) => (
-                <Flame key={i} size={12} className="text-brand" aria-hidden="true" />
-              ))}
-            </span>
-          )}
-        </div>
-
-        <div className="relative p-7">
-          <h3 className="poster-section text-bone transition-colors duration-300 group-hover:text-[var(--accent)]">
-            {bowl.nom}
-          </h3>
-          <p className="text-bone-dim mt-3 text-sm">{bowl.temperament}</p>
-
-          <div className="border-line mt-6 flex items-center justify-between border-t pt-5">
-            <span className="text-bone-faint text-xs">{bowl.etiquettes.join(" · ") || "Toute l'année"}</span>
-            <span className="font-poster text-crisp tabular text-xl">{bowl.prix}</span>
+            {bowl.etiquettes[0] && (
+              <Etiquette
+                inclinaison={inclinaison === 1 ? 3 : 1}
+                ton={rang % 2 === 0 ? "jaune" : "vert"}
+                className="absolute bottom-3 left-3"
+              >
+                {bowl.etiquettes[0]}
+              </Etiquette>
+            )}
           </div>
-        </div>
+
+          {/* Le pied du tirage : nom, réplique, prix. Le nom déborde
+              volontairement de la largeur de l'image. */}
+          <div className="px-1 pt-4 pb-1">
+            <h3 className="poster-section text-encre -mx-1">{bowl.nom}</h3>
+            <p className="text-encre-douce mt-2 text-sm leading-snug">
+              {bowl.temperament}
+            </p>
+            <div className="border-trait mt-4 flex items-baseline justify-between border-t pt-3">
+              <span className="text-encre-faible text-xs">
+                {bowl.etiquettes.slice(1).join(" · ") || "Toute l'année"}
+              </span>
+              <span className="font-poster text-rouge-fonce tabular text-2xl">
+                {bowl.prix}
+              </span>
+            </div>
+          </div>
+        </CadrePhoto>
       </Link>
     </li>
   );

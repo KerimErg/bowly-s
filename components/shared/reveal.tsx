@@ -176,7 +176,7 @@ export function Ruban({
       {mots.map((mot, i) => (
         <span key={i} className="flex items-center">
           <span className="px-6">{mot}</span>
-          <span className="text-brand" aria-hidden="true">
+          <span className="text-rouge-fonce" aria-hidden="true">
             {separateur}
           </span>
         </span>

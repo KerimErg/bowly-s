@@ -21,12 +21,17 @@
 <stop offset="100%" stop-color="#000000" stop-opacity="0.28"/>
 </linearGradient>
 <linearGradient id="rimChaud" x1="0" y1="1" x2="1" y2="0">
-<stop offset="0%" stop-color="#f0452a" stop-opacity="0.75"/>
-<stop offset="100%" stop-color="#ffc23d" stop-opacity="0.2"/>
+<stop offset="0%" stop-color="#ee4520" stop-opacity="0.7"/>
+<stop offset="100%" stop-color="#ffbf2e" stop-opacity="0.25"/>
 </linearGradient>
+<!-- Le second liseré était violet, en écho au contre-jour froid de la scène
+     3D. Les deux ont disparu pour la même raison : sur une illustration de
+     nourriture, un violet saturé est le marqueur le plus reconnaissable d'un
+     rendu généré. Celui-ci est doré — il détache la silhouette du bol sans
+     introduire une couleur qui n'existe pas dans une cuisine. -->
 <linearGradient id="rimFroid" x1="1" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#8b6bff" stop-opacity="0.8"/>
-<stop offset="100%" stop-color="#8b6bff" stop-opacity="0"/>
+<stop offset="0%" stop-color="#ffd08a" stop-opacity="0.85"/>
+<stop offset="100%" stop-color="#ffd08a" stop-opacity="0"/>
 </linearGradient>
 <clipPath id="dansLeBowl"><circle cx="400" cy="400" r="296"/></clipPath>
 </defs>

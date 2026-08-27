@@ -8,7 +8,7 @@
  * (l'orange de la braise, le vert des herbes, le rouge de la sauce fumée), pas
  * pour leur luminance. Deux pièges reviennent sans arrêt :
  *
- *   1. figer une couleur de texte sur une pastille dont la couleur varie —
+ *   1. figer une couleur de texte sur une case dont la couleur varie —
  *      l'encre passe sur le riz crème et échoue sur le gochujang ;
  *   2. choisir une couleur d'ingrédient de luminance MOYENNE, sur laquelle ni
  *      l'encre ni l'os ne tiennent le seuil. Aucun calcul ne rattrape ça : il
@@ -63,17 +63,20 @@ const css = readFileSync(join(ROOT, "app/globals.css"), "utf8");
 const recette = readFileSync(join(ROOT, "lib/recette.ts"), "utf8");
 
 const T = {
-  void: jeton(css, "void"),
-  void2: jeton(css, "void-2"),
-  void3: jeton(css, "void-3"),
-  bone: jeton(css, "bone"),
-  boneDim: jeton(css, "bone-dim"),
-  boneFaint: jeton(css, "bone-faint"),
-  ink: jeton(css, "ink"),
-  brand: jeton(css, "brand"),
-  brandHot: jeton(css, "brand-hot"),
-  crisp: jeton(css, "crisp"),
-  plasma: jeton(css, "plasma"),
+  creme: jeton(css, "creme"),
+  beurre: jeton(css, "beurre"),
+  carton: jeton(css, "carton"),
+  braise: jeton(css, "braise"),
+  braise2: jeton(css, "braise-2"),
+  encre: jeton(css, "encre"),
+  encreDouce: jeton(css, "encre-douce"),
+  encreFaible: jeton(css, "encre-faible"),
+  rouge: jeton(css, "rouge"),
+  rougeFonce: jeton(css, "rouge-fonce"),
+  rougeClair: jeton(css, "rouge-clair"),
+  jaune: jeton(css, "jaune"),
+  vert: jeton(css, "vert"),
+  vertFonce: jeton(css, "vert-fonce"),
 };
 
 const AA = 4.5;
@@ -88,29 +91,45 @@ function verifier(libelle, valeur, seuil) {
   console.log(`${marque}  ${libelle.padEnd(46)} ${valeur.toFixed(2)}  (seuil ${seuil})`);
 }
 
-console.log("\n── Jetons de la charte ───────────────────────────────────────────");
-verifier("texte principal sur le vide", contraste(T.bone, T.void), AA);
-verifier("texte secondaire sur le vide", contraste(T.boneDim, T.void), AA);
-verifier("texte discret sur le vide", contraste(T.boneFaint, T.void), AA);
-verifier("texte discret sur surface relevée", contraste(T.boneFaint, T.void3), AA);
-verifier("orange de marque sur le vide", contraste(T.brand, T.void), AA);
-verifier("orange clair sur le vide", contraste(T.brandHot, T.void), AA);
-verifier("or du croustillant sur le vide", contraste(T.crisp, T.void), AA);
-verifier("plasma sur le vide", contraste(T.plasma, T.void), AA);
-verifier("encre sur aplat orange", contraste(T.ink, T.brand), AA);
-verifier("encre sur aplat or", contraste(T.ink, T.crisp), AA);
+console.log("\n── Textes sur les trois papiers ──────────────────────────────────");
+// ⚠️ Les trois surfaces claires ne se valent pas : ce qui passe sur le crème
+// peut échouer sur le carton, plus foncé. Les trois sont donc testées.
+for (const [nomFond, fond] of [["crème", T.creme], ["beurre", T.beurre], ["carton", T.carton]]) {
+  verifier(`encre / ${nomFond}`, contraste(T.encre, fond), AA);
+  verifier(`encre douce / ${nomFond}`, contraste(T.encreDouce, fond), AA);
+  verifier(`encre faible / ${nomFond}`, contraste(T.encreFaible, fond), AA);
+  verifier(`rouge foncé / ${nomFond}`, contraste(T.rougeFonce, fond), AA);
+  verifier(`vert foncé / ${nomFond}`, contraste(T.vertFonce, fond), AA);
+}
 
-console.log("\n── Règle des aplats chauds ───────────────────────────────────────");
-// Ce n'est pas un échec mais une VÉRIFICATION D'INTENTION : si un jour l'os
-// passait sur l'orange, la règle « texte encre sur aplat chaud » deviendrait
-// inutile et il faudrait la retirer plutôt que de la traîner.
-const osSurOrange = contraste(T.bone, T.brand);
-console.log(
-  `  info  os sur aplat orange                         ${osSurOrange.toFixed(2)}  ` +
-    (osSurOrange < AA
-      ? "→ sous AA : la règle « texte encre sur aplat chaud » reste nécessaire."
-      : "→ au-dessus de AA : la règle peut être réexaminée."),
-);
+console.log("\n── Textes sur les zones sombres (teasing, pied de page) ──────────");
+verifier("crème / braise", contraste(T.creme, T.braise), AA);
+verifier("crème / braise-2", contraste(T.creme, T.braise2), AA);
+verifier("rouge / braise", contraste(T.rouge, T.braise), AA);
+verifier("jaune / braise", contraste(T.jaune, T.braise), AA);
+verifier("vert / braise", contraste(T.vert, T.braise), AA);
+
+console.log("\n── Textes sur aplats chauds ──────────────────────────────────────");
+verifier("encre sur aplat rouge", contraste(T.encre, T.rouge), AA);
+verifier("encre sur aplat jaune", contraste(T.encre, T.jaune), AA);
+verifier("encre sur aplat vert", contraste(T.encre, T.vert), AA);
+
+console.log("\n── Règles à deux tons ────────────────────────────────────────────");
+// Vérifications d'INTENTION, pas d'échec : elles confirment que les paires
+// « aplat / texte » distinctes restent nécessaires. Le jour où l'une passe,
+// il faut retirer la règle plutôt que de la traîner.
+for (const [libelle, valeur, regle] of [
+  ["crème sur aplat rouge", contraste(T.creme, T.rouge), "texte encre sur aplat chaud"],
+  ["rouge vif en texte sur crème", contraste(T.rouge, T.creme), "--rouge-fonce pour le texte"],
+  ["vert vif en texte sur crème", contraste(T.vert, T.creme), "--vert-fonce pour le texte"],
+]) {
+  console.log(
+    `  info  ${libelle.padEnd(40)} ${valeur.toFixed(2)}  ` +
+      (valeur < AA
+        ? `→ sous AA : la règle « ${regle} » reste nécessaire.`
+        : `→ au-dessus de AA : la règle « ${regle} » peut être réexaminée.`),
+  );
+}
 
 console.log("\n── Couleurs d'ingrédients (pastilles du configurateur) ───────────");
 // `lisibleSur()` choisit l'encre ou l'os selon la luminance. Il ne peut rien
@@ -127,22 +146,32 @@ if (couleurs.length === 0) {
   echecs++;
 }
 for (const [, id, couleur] of couleurs) {
-  const encre = contraste(T.ink, couleur);
-  const os = contraste(T.bone, couleur);
-  const meilleur = Math.max(encre, os);
-  verifier(`${id} (${couleur}, ${encre >= os ? "encre" : "os"})`, meilleur, AA);
+  const encre = contraste(T.encre, couleur);
+  const clair = contraste(T.creme, couleur);
+  const meilleur = Math.max(encre, clair);
+  verifier(`${id} (${couleur}, ${encre >= clair ? "encre" : "crème"})`, meilleur, AA);
 }
 
 console.log("\n── Textes décoratifs de grande taille (seuil texte large) ────────");
-// Les rubans défilants sont posés en `text-bone/40` sur le vide. Ils sont
-// décoratifs, mais un utilisateur voyant les lit quand même.
-const surVide = (alpha) => {
-  const f = [1, 3, 5].map((i) => parseInt(T.bone.slice(i, i + 2), 16));
-  const b = [1, 3, 5].map((i) => parseInt(T.void.slice(i, i + 2), 16));
+// Les rubans défilants sont posés en `text-encre/50` sur le crème. Ils sont
+// décoratifs, mais un utilisateur voyant les lit quand même — d'où le seuil
+// « texte large », qu'ils atteignent tout juste à 50 % et pas à 30 %.
+const melange = (avant, arriere, alpha) => {
+  const f = [1, 3, 5].map((i) => parseInt(avant.slice(i, i + 2), 16));
+  const b = [1, 3, 5].map((i) => parseInt(arriere.slice(i, i + 2), 16));
   const m = f.map((c, i) => Math.round(c * alpha + b[i] * (1 - alpha)));
   return "#" + m.map((c) => c.toString(16).padStart(2, "0")).join("");
 };
-verifier("ruban à 40 % d'opacité sur le vide", contraste(surVide(0.4), T.void), AA_GRAND);
+verifier(
+  "ruban à 50 % d'encre sur crème",
+  contraste(melange(T.encre, T.creme, 0.5), T.creme),
+  AA_GRAND,
+);
+verifier(
+  "ruban à 40 % de crème sur braise",
+  contraste(melange(T.creme, T.braise, 0.4), T.braise),
+  AA_GRAND,
+);
 
 console.log("");
 if (echecs > 0) {

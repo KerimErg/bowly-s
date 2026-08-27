@@ -49,11 +49,11 @@ export function Partout() {
     <section aria-labelledby="partout-titre" className="relative overflow-hidden py-24 md:py-32">
       <div className="bowly-wide">
         <Reveal>
-          <p className="kicker text-crisp">Le flux</p>
-          <h2 id="partout-titre" className="poster-title text-bone mt-5">
+          <p className="kicker text-rouge-fonce">Le flux</p>
+          <h2 id="partout-titre" className="poster-title text-encre mt-5">
             Bowly&apos;s
             <br />
-            <span className="text-brand">is everywhere.</span>
+            <span className="text-rouge-fonce">is everywhere.</span>
           </h2>
           <p className="lead mt-6 max-w-lg">
             Enfin, presque. Les comptes ouvriront avec le premier restaurant.
@@ -77,10 +77,10 @@ export function Partout() {
               <li key={social.label}>
                 {/* URL réelle inconnue : le lien reste inerte plutôt que de
                     pointer vers le compte de quelqu'un d'autre. */}
-                <span className="surface text-bone-dim inline-flex items-center gap-2.5 rounded-full px-5 py-3 text-sm">
+                <span className="bg-creme border-2 border-encre text-encre-douce inline-flex items-center gap-2.5 rounded-full px-5 py-3 text-sm">
                   <Send size={14} aria-hidden="true" />
                   {social.label}
-                  <span className="text-bone-faint text-xs">{social.handle}</span>
+                  <span className="text-encre-faible text-xs">{social.handle}</span>
                 </span>
               </li>
             ))}
@@ -92,7 +92,7 @@ export function Partout() {
         mots={["#bowlys", "#enterthebowl", "#pasunbowl", "#croustillant"]}
         duree={30}
         separateur="·"
-        className="font-poster text-bone/40 mt-16 py-4 text-3xl uppercase md:text-5xl"
+        className="font-poster text-encre/50 mt-16 py-4 text-3xl uppercase md:text-5xl"
       />
     </section>
   );
@@ -139,7 +139,7 @@ function Carte({ post }: { post: Post }) {
   const visuel = visuelsBowls[post.bowl];
 
   return (
-    <article className="border-line bg-void-2 w-56 shrink-0 overflow-hidden rounded-2xl border">
+    <article className="border-trait bg-beurre w-56 shrink-0 overflow-hidden rounded-[var(--radius)] border">
       <div className="relative aspect-[9/16] overflow-hidden">
         {/* Le visuel du bowl, recadré en vertical : c'est le format des
             réseaux, et c'est celui qu'il faudra tourner. */}
@@ -151,25 +151,25 @@ function Carte({ post }: { post: Post }) {
           loading="lazy"
           className="scale-[1.35] object-cover"
         />
-        <div className="from-void/90 absolute inset-0 bg-gradient-to-t to-transparent" />
+        <div className="from-creme/90 absolute inset-0 bg-gradient-to-t to-transparent" />
 
         {post.format === "video" && (
-          <span className="bg-void/70 absolute top-3 right-3 flex size-8 items-center justify-center rounded-full backdrop-blur-sm">
-            <Play size={13} className="text-bone" />
+          <span className="bg-creme/70 absolute top-3 right-3 flex size-8 items-center justify-center rounded-full backdrop-blur-sm">
+            <Play size={13} className="text-encre" />
           </span>
         )}
 
-        <p className="text-bone absolute inset-x-3 bottom-3 text-xs leading-snug font-semibold">
+        <p className="text-encre absolute inset-x-3 bottom-3 text-xs leading-snug font-semibold">
           {post.legende}
         </p>
       </div>
 
       <div className="p-3.5">
-        <p className="text-bone-faint text-[0.65rem]">{TODO}</p>
+        <p className="text-encre-faible text-[0.65rem]">{TODO}</p>
 
         {/* Les compteurs sont dessinés, jamais chiffrés : un nombre inventé
             ici serait un faux témoignage. */}
-        <div className="text-bone-faint mt-2.5 flex items-center gap-4 text-[0.65rem]">
+        <div className="text-encre-faible mt-2.5 flex items-center gap-4 text-[0.65rem]">
           <span className="flex items-center gap-1.5">
             <Heart size={11} /> —
           </span>

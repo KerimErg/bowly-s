@@ -9,6 +9,7 @@ import {
   adoucir,
   avancement,
   clamp01,
+  couleurFond,
   dansActe,
   lerp,
   scene as pilote,
@@ -39,9 +40,21 @@ const DOME = 0.34;
 /** Hauteur de l'équateur du dôme. */
 const Y_DOME = 0.52;
 
-const CHAUD = new THREE.Color("#f0452a");
-const FROID = new THREE.Color("#8b6bff");
-const OR = new THREE.Color("#ffc23d");
+const CHAUD = new THREE.Color("#ee4520");
+const OR = new THREE.Color("#ffbf2e");
+/**
+ * ⚠️ IL N'Y A PLUS DE CONTRE-JOUR VIOLET.
+ *
+ * L'ancienne version détourait le bowl avec un --plasma froid, au motif que le
+ * rim-light froid sur sujet chaud est un code de photo culinaire. C'est vrai en
+ * photo — et faux ici : combiné à l'orange saturé sur fond noir, ce violet
+ * produisait exactement la signature « rendu 3D généré ». C'était le premier
+ * marqueur d'artificialité de toute la scène.
+ *
+ * Le contre-jour est désormais doré : même fonction — détacher la silhouette
+ * du fond — mais une couleur qui existe dans une cuisine.
+ */
+const CONTRE_JOUR = new THREE.Color("#ffd08a");
 
 /** Hauteur du dôme à une distance `r` de l'axe. */
 function hauteurDome(r: number): number {
@@ -310,28 +323,35 @@ function useTextureHalo(couleur: string) {
   }, [couleur]);
 }
 
-function Halo({ couleur, taille, position }: { couleur: string; taille: number; position: [number, number, number] }) {
-  const tex = useTextureHalo(couleur);
-  const ref = React.useRef<THREE.Mesh>(null);
-
-  useFrame(() => {
-    const m = ref.current;
-    if (!m) return;
-    // Le halo pulse très lentement : c'est une braise, pas un stroboscope.
-    const battement = pilote.mouvementReduit ? 1 : 1 + Math.sin(pilote.temps * 0.55) * 0.06;
-    m.scale.setScalar(battement);
-  });
-
+/**
+ * L'ombre portée au sol.
+ *
+ * ⚠️ ELLE REMPLACE LES HALOS LUMINEUX, ET CE N'EST PAS UN DÉTAIL.
+ * Sur fond noir, un objet se détache par la lumière : d'où les anciens halos
+ * dégradés derrière le bowl. Sur fond clair, ce raisonnement s'inverse
+ * complètement — un halo lumineux sur du crème ne se voit pas, et s'il se
+ * voyait il ressemblerait à un défaut d'objectif.
+ *
+ * Ce qui pose un objet sur une surface claire, c'est son OMBRE. Sans elle, le
+ * bowl flotte dans le vide et retrouve exactement l'aspect « rendu 3D » qu'on
+ * cherche à fuir. Avec elle, il est posé sur une table.
+ *
+ * Un vrai `shadowMap` coûterait une passe de rendu supplémentaire pour un
+ * résultat à peine meilleur : un disque dégradé sous l'objet suffit, et c'est
+ * ce que fait tout studio photo avec un carton.
+ */
+function OmbrePortee({ taille, y }: { taille: number; y: number }) {
+  const tex = useTextureHalo("#3a2419");
   if (!tex) return null;
 
   return (
-    <mesh ref={ref} position={position} renderOrder={-1}>
+    <mesh position={[0, y, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={-1}>
       <planeGeometry args={[taille, taille]} />
       <meshBasicMaterial
         map={tex}
         transparent
+        opacity={0.45}
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
         toneMapped={false}
       />
     </mesh>
@@ -361,6 +381,7 @@ function Plateau() {
   const groupe = React.useRef<THREE.Group>(null);
   const groupeSauce = React.useRef<THREE.Group>(null);
   const groupeDome = React.useRef<THREE.Group>(null);
+
 
   const geoBowl = useGeometrieBowl();
   const geoDome = useGeometrieDome();
@@ -413,6 +434,7 @@ function Plateau() {
     if (groupeSauce.current) {
       groupeSauce.current.position.y = ecart * 1.35;
     }
+
   });
 
   return (
@@ -423,12 +445,13 @@ function Plateau() {
         {/* Une pointe d'émission chaude tient la céramique au-dessus du noir
             absolu : sans elle, la moitié non éclairée du bowl se confond
             avec le fond et l'objet perd sa silhouette. */}
+        {/* Céramique brune mate. Sur fond crème, un bol sombre est un objet
+            posé ; il n'a plus besoin d'émission propre pour exister, et lui
+            en donner le ferait paraître lumineux de l'intérieur. */}
         <meshStandardMaterial
-          color="#1d1720"
-          emissive={CHAUD}
-          emissiveIntensity={0.06}
-          roughness={0.72}
-          metalness={0.16}
+          color="#40291f"
+          roughness={0.62}
+          metalness={0.08}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -488,9 +511,8 @@ function Plateau() {
         ))}
       </group>
 
-      {/* Les deux températures de la charte, matérialisées. */}
-      <Halo couleur="#f0452a" taille={9} position={[-1.6, 0.4, -2.6]} />
-      <Halo couleur="#8b6bff" taille={7} position={[2.2, 2.4, -3.2]} />
+      {/* L'ombre au sol, légèrement décalée du côté opposé à la lumière clé. */}
+      <OmbrePortee taille={5.2} y={-0.02} />
     </group>
   );
 }
@@ -519,17 +541,26 @@ const RAIL: Record<keyof typeof ACTES, [Station, Station]> = {
     { position: [0, 3.15, 6.15], cible: [0, -0.82, 0], fov: 40 },
     { position: [0, 2.95, 5.5], cible: [0, -0.72, 0], fov: 40 },
   ],
-  // On plonge. La caméra descend au-dessus du bowl et s'y enfonce pendant
-  // que les couches s'écartent au-dessus d'elle.
+  // On plonge. La caméra descend au-dessus du bowl pendant que les couches
+  // s'écartent.
+  //
+  // ⚠️ ELLE NE RENTRE PLUS DEDANS.
+  // La version précédente finissait à l'intérieur du bol (y = 1,15, z = 0,42).
+  // Spectaculaire sur fond noir ; catastrophique sur fond crème — l'écran se
+  // remplissait d'un aplat beige uniforme qu'on prenait pour un bug
+  // d'affichage. La station finale est désormais un plan très serré en
+  // plongée, assez proche pour qu'on ne voie presque que la nourriture, mais
+  // assez reculé pour que la lèvre du bol reste dans le cadre et donne
+  // l'échelle.
   descente: [
     { position: [0, 2.95, 5.5], cible: [0, -0.72, 0], fov: 40 },
-    { position: [0, 1.15, 0.42], cible: [0, 0.5, 0], fov: 62 },
+    { position: [0, 2.15, 1.35], cible: [0, 0.45, 0], fov: 58 },
   ],
   // On ressort en plan trois quarts. La caméra reste braquée SUR le bowl :
   // le décalage vers la droite de l'écran est obtenu par décentrement
   // d'objectif (voir `decalageAtelier` plus bas), pas en visant à côté.
   atelier: [
-    { position: [0, 1.15, 0.42], cible: [0, 0.5, 0], fov: 62 },
+    { position: [0, 2.15, 1.35], cible: [0, 0.45, 0], fov: 58 },
     { position: [2.3, 2.05, 4.5], cible: [0, 0.45, 0], fov: 42 },
   ],
   // Recul final : le bowl redevient un objet, la page peut se terminer.
@@ -659,6 +690,32 @@ function Horloge() {
 }
 
 /* ========================================================================== */
+/*  BROUILLARD                                                                 */
+/* ========================================================================== */
+
+/**
+ * Le brouillard suit la couleur de fond de la page.
+ *
+ * Sans ça, le bowl s'estomperait vers un brun sombre alors que la page a viré
+ * au crème : on verrait une auréole grise autour de l'objet. Les deux valeurs
+ * viennent de la même fonction, elles ne peuvent donc pas diverger.
+ */
+function Brouillard() {
+  const { scene: troisD } = useThree();
+  const teinte = React.useMemo(() => new THREE.Color(), []);
+
+  useFrame(() => {
+    const brouillard = troisD.fog;
+    if (!brouillard) return;
+      const [r, v, b] = couleurFond(pilote.progression);
+    teinte.setRGB(r / 255, v / 255, b / 255, THREE.SRGBColorSpace);
+    if (!brouillard.color.equals(teinte)) brouillard.color.copy(teinte);
+  });
+
+  return null;
+}
+
+/* ========================================================================== */
 
 export function BowlRig({ qualite }: { qualite: "complete" | "legere" }) {
   return (
@@ -666,6 +723,7 @@ export function BowlRig({ qualite }: { qualite: "complete" | "legere" }) {
       <Horloge />
       <Camera />
 
+      <Brouillard />
       {/* BROUILLARD LINÉAIRE, de la couleur exacte du fond.
           Sa raison d'être est de composition, pas d'atmosphère : dans la
           seconde moitié de la page (carte, cinéma, réseaux, teasing), le bowl
@@ -673,18 +731,21 @@ export function BowlRig({ qualite }: { qualite: "complete" | "legere" }) {
           et aussi contrasté qu'au premier écran et venait percuter les
           titres — « BOWLY'S IS EVERYWHERE. » passait littéralement dedans.
 
-          Le plan proche est calé à 8 unités : au portail la caméra est à
-          environ 6,9, donc l'objet reste parfaitement net là où il doit
-          l'être. À la station de sortie (≈ 11,3) il est fondu à près de
-          moitié. Le bowl s'éloigne dans le noir au lieu de rétrécir bêtement. */}
-      <fog attach="fog" args={["#08070a", 8, 15]} />
+          Le plan proche est repoussé à 11 unités : sur fond clair le
+          brouillard délave beaucoup plus vite qu'en fond sombre, et à 8 le
+          bowl devenait laiteux dès la sortie de la descente. */}
+      <fog attach="fog" args={["#fff7ec", 11, 22]} />
 
       {/* Ambiante volontairement faible et presque neutre.
           Première version : 0,55 en plein --plasma. Résultat, tout baignait
           dans le violet et le riz virait au rose. L'ambiante ne sert qu'à
           empêcher les ombres d'être bouchées ; le caractère vient des deux
           directionnelles, pas d'elle. */}
-      <ambientLight intensity={0.5} color="#9a9cab" />
+      {/* Ambiante ÉLEVÉE et crème : sur un fond clair, l'environnement renvoie
+          énormément de lumière sur l'objet. Une ambiante faible — correcte
+          dans le noir — donnerait ici un objet découpé au cutter, incohérent
+          avec la surface sur laquelle il est censé reposer. */}
+      <ambientLight intensity={0.68} color="#ffeedb" />
 
       {/* CLÉ — quasi blanche, à peine ambrée.
           ⚠️ C'EST LA RÈGLE QUI A COÛTÉ LE PLUS D'ESSAIS ICI.
@@ -694,16 +755,20 @@ export function BowlRig({ qualite }: { qualite: "complete" | "legere" }) {
           vif. En photo culinaire la clé est neutre ; la couleur vient des
           accents et de l'environnement, jamais de la source principale.
           C'est ce qui permet au riz de rester du riz. */}
-      <directionalLight position={[-3.2, 2.6, 2.8]} intensity={2.5} color="#fff0e2" />
+      <directionalLight position={[-3.2, 3.2, 2.8]} intensity={2.8} color="#fff4ea" />
 
-      {/* CONTRE-JOUR — froid, haut et derrière. Il ne sert qu'à détourer la
-          silhouette du bowl sur le fond noir : il frôle, il n'éclaire pas. */}
-      <directionalLight position={[3.4, 4.2, -3.2]} intensity={1.35} color={FROID} />
+      {/* CONTRE-JOUR — doré, haut et derrière. Il détoure la silhouette et
+          fait briller la lèvre du bol. */}
+      <directionalLight position={[3.4, 4.2, -3.2]} intensity={1.2} color={CONTRE_JOUR} />
+
+      {/* DÉBOUCHEUR — face, très doux. C'est le carton blanc du photographe :
+          il ouvre le côté à l'ombre sans créer de seconde source visible. */}
+      <directionalLight position={[1.2, 1.4, 4.2]} intensity={0.7} color="#ffffff" />
 
       {/* Ponctuelle juste au-dessus de la nourriture : creuse le relief des
           morceaux et fait briller la sauce. Coupée en mode léger. */}
       {qualite === "complete" && (
-        <pointLight position={[0, 1.9, 0.7]} intensity={6} distance={6.5} decay={2} color={OR} />
+        <pointLight position={[0, 1.9, 0.7]} intensity={9} distance={6.5} decay={2} color={OR} />
       )}
 
       <Plateau />

@@ -55,7 +55,7 @@ export function BarreCommande() {
         // atteint un bouton invisible.
         tabIndex={visible ? undefined : -1}
         aria-hidden={!visible}
-        className="bg-brand text-ink flex h-14 items-center justify-center gap-2 rounded-full text-base font-bold shadow-[var(--shadow-glow-brand)]"
+        className="bg-rouge text-encre flex h-14 items-center justify-center gap-2 rounded-full text-base font-bold shadow-[4px_4px_0_var(--encre)]"
       >
         Commander
         <ArrowUpRight size={19} aria-hidden="true" />

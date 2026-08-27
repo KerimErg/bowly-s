@@ -217,6 +217,50 @@ export function dansActe(p: number, acte: Acte): number {
 
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+/* -------------------------------------------------------------------------- */
+/*  Couleur de fond, pilotée par le scroll                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Le fond de page, du kraft au crème.
+ *
+ * ⚠️ DEUX VERSIONS ONT ÉTÉ ESSAYÉES AVANT CELLE-CI.
+ *   1. Fond presque noir partout. Retour client : « beaucoup trop noir ».
+ *   2. Fond brun brûlé qui s'éclaircissait pendant la descente. Mieux, mais
+ *      les deux premiers écrans — c'est-à-dire la première impression —
+ *      restaient sombres.
+ *
+ * Version actuelle : le site est CLAIR de bout en bout. On part d'un kraft
+ * légèrement plus soutenu et on s'éclaircit vers le crème, ce qui garde une
+ * progression et un peu de profondeur sans jamais tomber dans le noir. Le seul
+ * bloc réellement sombre du site est le pied de page.
+ *
+ * C'est aussi ce qui donne à la nourriture sa gourmandise : sur fond sombre un
+ * plat est en vitrine, sur fond chaud il est sur une table.
+ *
+ * ⚠️ Ces valeurs doivent rester synchronisées avec `--carton` et `--creme`
+ * dans `app/globals.css`. Elles sont écrites en clair ici parce que la boucle
+ * de rendu WebGL en a besoin sous forme de nombres, soixante fois par seconde,
+ * et que relire une variable CSS à chaque image coûterait un recalcul de style.
+ */
+const FOND_SOMBRE: [number, number, number] = [0xf2, 0xe2, 0xc9];
+const FOND_CLAIR: [number, number, number] = [0xff, 0xf7, 0xec];
+
+/** Fraction de la descente déjà éclaircie, 0 → 1. */
+export function eclaircissement(p: number): number {
+  return adoucir(clamp01(dansActe(p, "descente")));
+}
+
+/** Couleur de fond courante, en composantes 0 → 255. */
+export function couleurFond(p: number): [number, number, number] {
+  const t = eclaircissement(p);
+  return [
+    Math.round(lerp(FOND_SOMBRE[0], FOND_CLAIR[0], t)),
+    Math.round(lerp(FOND_SOMBRE[1], FOND_CLAIR[1], t)),
+    Math.round(lerp(FOND_SOMBRE[2], FOND_CLAIR[2], t)),
+  ];
+}
+
 /** Courbe douce aux deux extrémités — évite les départs et arrêts secs. */
 export const adoucir = (t: number) => t * t * (3 - 2 * t);
 

@@ -88,16 +88,16 @@ export function CurseurBowly() {
     >
       <div
         className={[
-          "flex items-center justify-center rounded-full border transition-[width,height,background-color,border-color] duration-300 ease-[var(--ease-out)]",
+          "flex items-center justify-center rounded-full border-2 transition-[width,height,background-color,border-color] duration-300 ease-[var(--ease-out)]",
           mot
-            ? "bg-brand/90 border-brand h-20 w-20"
+            ? "bg-rouge border-encre h-20 w-20 border-2"
             : dilate
-              ? "border-crisp bg-crisp/15 h-12 w-12"
-              : "border-bone/45 h-6 w-6 bg-transparent",
+              ? "border-rouge bg-rouge/20 h-12 w-12"
+              : "border-encre/45 h-6 w-6 bg-transparent",
         ].join(" ")}
       >
         {mot && (
-          <span className="text-ink text-[0.6rem] font-bold tracking-[0.14em] uppercase">
+          <span className="text-encre text-[0.6rem] font-extrabold tracking-[0.14em] uppercase">
             {mot}
           </span>
         )}

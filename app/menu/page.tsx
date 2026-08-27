@@ -16,7 +16,7 @@ export default function MenuPage() {
         kicker="La carte"
         lignes={[
           <span key="1">Sept bowls.</span>,
-          <span key="2" className="text-brand">
+          <span key="2" className="text-rouge-fonce">
             Sept caractères.
           </span>,
         ]}

@@ -5,7 +5,13 @@ import dynamic from "next/dynamic";
 
 import Image from "next/image";
 
-import { calerActes, setPointeur, setProgression, scene as pilote } from "@/lib/stage";
+import {
+  calerActes,
+  couleurFond,
+  setPointeur,
+  setProgression,
+  scene as pilote,
+} from "@/lib/stage";
 import { useQualite, type Qualite } from "@/lib/capacites";
 import { visuelsBowls } from "@/lib/assets";
 
@@ -46,9 +52,10 @@ const Canvas3D = dynamic(() => import("./bowl-canvas").then((m) => m.BowlCanvas)
 
 function ReplitStatique() {
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="ember absolute top-[42%] left-[8%] h-[70vmin] w-[70vmin] -translate-y-1/2 rounded-full blur-3xl" />
-      <div className="ember-cold absolute top-[24%] right-[6%] h-[52vmin] w-[52vmin] rounded-full blur-3xl" />
+    <div aria-hidden="true" className="bg-carton pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      {/* Trame d'imprimerie plutôt que halos dégradés : c'est une texture, pas
+          un effet de lumière artificiel. */}
+      <div className="trame trame-rouge absolute inset-0 opacity-30" />
       <div className="absolute top-1/2 left-1/2 aspect-square w-[min(74vmin,640px)] -translate-x-1/2 -translate-y-1/2">
         <Image
           src={visuelsBowls["the-og"].src}
@@ -61,7 +68,7 @@ function ReplitStatique() {
           className="object-contain opacity-90"
         />
       </div>
-      <div className="from-void absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t to-transparent" />
+      <div className="from-creme absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t to-transparent" />
     </div>
   );
 }
@@ -85,10 +92,22 @@ function useSuiveur(actif: boolean) {
     let frame = 0;
     let enAttente = false;
 
+    /* Dernière couleur écrite : on évite de repeindre `body` quand rien n'a
+       bougé, ce qui arrive à chaque image dès qu'on arrête de scroller. */
+    let dernierFond = "";
+
     const mesurer = () => {
       enAttente = false;
       const course = document.documentElement.scrollHeight - window.innerHeight;
-      setProgression(course > 0 ? window.scrollY / course : 0);
+      const p = course > 0 ? window.scrollY / course : 0;
+      setProgression(p);
+
+      const [r, v, b] = couleurFond(p);
+      const fond = `rgb(${r} ${v} ${b})`;
+      if (fond !== dernierFond) {
+        dernierFond = fond;
+        document.body.style.backgroundColor = fond;
+      }
     };
 
     /* Recalage des actes sur la hauteur réelle des sections. Refait à chaque
@@ -136,6 +155,9 @@ function useSuiveur(actif: boolean) {
       window.removeEventListener("resize", caler);
       window.removeEventListener("pointermove", auPointeur);
       document.removeEventListener("pointerleave", auDepart);
+      // Le fond repasse à la feuille de style : sans ça, une navigation vers
+      // une page intérieure garderait la couleur figée par le dernier scroll.
+      document.body.style.backgroundColor = "";
     };
   }, [actif]);
 }
@@ -166,13 +188,7 @@ export function BowlScene() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10">
-      {/* Ambiance peinte en CSS derrière le canvas : elle reste visible si le
-          contexte WebGL est perdu en cours de route (onglet en arrière-plan
-          trop longtemps, pilote graphique qui redémarre). */}
-      <div className="ember absolute top-[46%] left-[4%] h-[64vmin] w-[64vmin] -translate-y-1/2 rounded-full opacity-70 blur-3xl" />
-      <div className="ember-cold absolute top-[18%] right-[4%] h-[46vmin] w-[46vmin] rounded-full opacity-70 blur-3xl" />
       <Canvas3D qualite={qualite as Exclude<Qualite, "aucune">} />
-      <div className="from-void/90 absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t to-transparent" />
     </div>
   );
 }

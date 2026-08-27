@@ -64,7 +64,7 @@ export default function CommanderPage() {
         kicker="Commander"
         lignes={[
           <span key="1">Pas encore.</span>,
-          <span key="2" className="text-brand">
+          <span key="2" className="text-rouge-fonce">
             Bientôt.
           </span>,
         ]}
@@ -74,13 +74,13 @@ export default function CommanderPage() {
       {/* --- Avertissement, en clair et en haut ---------------------------- */}
       <section className="bowly-wide">
         <Reveal>
-          <div className="border-crisp/35 bg-crisp/5 rounded-3xl border p-7 md:p-9">
-            <p className="kicker text-crisp">État du service</p>
-            <p className="text-bone mt-4 text-lg leading-snug font-bold">
+          <div className="border-encre bg-jaune/25 rounded-[var(--radius)] border-2 p-7 shadow-[6px_6px_0_var(--encre)] md:p-9">
+            <p className="kicker text-rouge-fonce">État du service</p>
+            <p className="text-encre mt-4 text-lg leading-snug font-bold">
               Zéro restaurant ouvert. Zéro plateforme de commande connectée.
               Zéro partenaire de livraison signé.
             </p>
-            <p className="text-bone-dim mt-4 max-w-2xl text-sm leading-relaxed">
+            <p className="text-encre-douce mt-4 max-w-2xl text-sm leading-relaxed">
               Les trois modes ci-dessous décrivent le service tel qu&apos;il est
               prévu. Ils sont présentés pour que vous sachiez à quoi vous
               attendre, pas pour laisser croire qu&apos;ils fonctionnent
@@ -93,7 +93,7 @@ export default function CommanderPage() {
       {/* --- Les trois modes ------------------------------------------------ */}
       <section aria-labelledby="modes-titre" className="bowly-wide py-20 md:py-28">
         <Reveal>
-          <h2 id="modes-titre" className="poster-section text-bone">
+          <h2 id="modes-titre" className="poster-section text-encre">
             Trois façons, à terme.
           </h2>
         </Reveal>
@@ -101,14 +101,14 @@ export default function CommanderPage() {
         <ul className="mt-12 grid gap-5 md:grid-cols-3">
           {MODES.map((mode, i) => (
             <Reveal as="li" key={mode.titre} delay={i * 0.06}>
-              <div className="surface flex h-full flex-col rounded-3xl p-7">
-                <span className="border-line text-crisp flex size-12 items-center justify-center rounded-full border">
+              <div className="bg-creme border-2 border-encre flex h-full flex-col rounded-[var(--radius)] p-7">
+                <span className="border-trait text-rouge-fonce flex size-12 items-center justify-center rounded-full border">
                   <mode.icone size={20} aria-hidden="true" />
                 </span>
 
-                <h3 className="poster-section text-bone mt-6">{mode.titre}</h3>
-                <p className="text-bone mt-3 text-base font-bold">{mode.ligne}</p>
-                <p className="text-bone-dim mt-3 flex-1 text-sm leading-relaxed">
+                <h3 className="poster-section text-encre mt-6">{mode.titre}</h3>
+                <p className="text-encre mt-3 text-base font-bold">{mode.ligne}</p>
+                <p className="text-encre-douce mt-3 flex-1 text-sm leading-relaxed">
                   {mode.detail}
                 </p>
 
@@ -117,7 +117,7 @@ export default function CommanderPage() {
                 <button
                   type="button"
                   disabled
-                  className="border-line text-bone-faint mt-7 w-full cursor-not-allowed rounded-full border px-5 py-3 text-sm font-semibold"
+                  className="border-encre/30 text-encre-faible mt-7 w-full cursor-not-allowed rounded-[var(--radius)] border-2 border-dashed px-5 py-3 text-sm font-bold"
                 >
                   {mode.statut}
                 </button>
@@ -129,18 +129,15 @@ export default function CommanderPage() {
 
       {/* --- Ce qu'on peut vraiment faire ---------------------------------- */}
       <section aria-labelledby="prevenir-titre" className="relative overflow-hidden py-20 md:py-28">
-        <div
-          aria-hidden="true"
-          className="ember pointer-events-none absolute -bottom-1/2 left-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 rounded-full opacity-50 blur-3xl"
-        />
+
 
         <div className="bowly-wide relative">
           <Reveal>
-            <p className="kicker text-crisp">Ce qui est possible, maintenant</p>
-            <h2 id="prevenir-titre" className="poster-title text-bone mt-5">
+            <p className="kicker text-rouge-fonce">Ce qui est possible, maintenant</p>
+            <h2 id="prevenir-titre" className="poster-title text-encre mt-5">
               Sois prévenu
               <br />
-              <span className="text-brand">le premier jour.</span>
+              <span className="text-rouge-fonce">le premier jour.</span>
             </h2>
             <p className="lead mt-6 max-w-lg">
               Laisse une adresse et la ville où tu voudrais qu&apos;on ouvre. Ça
@@ -160,15 +157,15 @@ export default function CommanderPage() {
               </Button>
             </div>
 
-            <dl className="border-line mt-14 grid gap-8 border-t pt-10 sm:grid-cols-3">
+            <dl className="border-trait mt-14 grid gap-8 border-t pt-10 sm:grid-cols-3">
               {[
                 ["Téléphone", contactInfo.phone],
                 ["E-mail", contactInfo.email],
                 ["Ouverture", TODO],
               ].map(([k, v]) => (
                 <div key={k}>
-                  <dt className="kicker text-bone-faint">{k}</dt>
-                  <dd className="text-bone-dim mt-2 text-sm break-words">{v}</dd>
+                  <dt className="kicker text-encre-faible">{k}</dt>
+                  <dd className="text-encre-douce mt-2 text-sm break-words">{v}</dd>
                 </div>
               ))}
             </dl>

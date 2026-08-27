@@ -31,7 +31,7 @@ export default function ComposerPage() {
         kicker="L'atelier"
         lignes={[
           <span key="1">Ton bowl.</span>,
-          <span key="2" className="text-brand">
+          <span key="2" className="text-rouge-fonce">
             Tes règles.
           </span>,
         ]}

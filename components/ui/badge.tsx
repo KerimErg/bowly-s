@@ -10,10 +10,10 @@ const badgeVariants = cva(
     variants: {
       variant: {
         /* Texte encre sur aplat chaud : le blanc n'y tient pas le AA. */
-        default: "bg-brand text-ink px-3 py-1",
-        crisp: "bg-crisp text-ink px-3 py-1",
-        outline: "border-line-strong text-bone-dim border px-3 py-1",
-        muted: "bg-void-3 text-bone-dim px-3 py-1",
+        default: "bg-rouge text-encre px-3 py-1",
+        crisp: "bg-jaune text-encre px-3 py-1",
+        outline: "border-trait-fort text-encre-douce border px-3 py-1",
+        muted: "bg-carton text-encre-douce px-3 py-1",
       },
     },
     defaultVariants: { variant: "default" },

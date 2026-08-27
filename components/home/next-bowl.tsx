@@ -42,16 +42,16 @@ export function NextBowl() {
     <section
       ref={ref}
       aria-labelledby="next-titre"
-      className="grain relative overflow-hidden py-28 md:py-40"
+      className="papier relative overflow-hidden py-28 md:py-40"
     >
       {/* Fond plus noir que le reste de la page : on change d'ambiance. */}
-      <div aria-hidden="true" className="bg-void absolute inset-0" />
-      <div className="ember pointer-events-none absolute -bottom-1/4 left-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 rounded-full opacity-45 blur-3xl" />
+      <div aria-hidden="true" className="bg-braise absolute inset-0" />
+      <div aria-hidden="true" className="trame trame-rouge pointer-events-none absolute inset-0 opacity-35" />
 
       <div className="bowly-wide relative">
         <Reveal>
-          <p className="kicker text-brand flex items-center gap-3">
-            <span className="bg-brand size-1.5 animate-pulse rounded-full" aria-hidden="true" />
+          <p className="kicker text-rouge flex items-center gap-3">
+            <span className="bg-rouge size-2 animate-pulse" aria-hidden="true" />
             Édition limitée
           </p>
         </Reveal>
@@ -66,7 +66,7 @@ export function NextBowl() {
           >
             NEXT BOWL
           </p>
-          <h2 id="next-titre" className="poster text-bone relative">
+          <h2 id="next-titre" className="poster text-creme relative">
             NEXT BOWL
           </h2>
         </div>
@@ -85,8 +85,8 @@ export function NextBowl() {
                 ["Quantité", "Limitée"],
               ].map(([k, v]) => (
                 <div key={k}>
-                  <dt className="kicker text-bone-faint">{k}</dt>
-                  <dd className="text-bone mt-2 text-base font-bold">{v}</dd>
+                  <dt className="kicker text-creme/50">{k}</dt>
+                  <dd className="text-creme mt-2 text-base font-bold">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -114,7 +114,7 @@ export function NextBowl() {
                   entièrement révélé. */}
               <div
                 aria-hidden="true"
-                className="from-void via-void/85 absolute inset-0 bg-gradient-to-t to-transparent"
+                className="from-braise via-braise/85 absolute inset-0 bg-gradient-to-t to-transparent"
               />
             </div>
           </motion.div>

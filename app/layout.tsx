@@ -66,8 +66,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08070a",
-  colorScheme: "dark",
+  themeColor: "#fff7ec",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -75,11 +75,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr" className={`${anton.variable} ${inter.variable}`}>
-      <body className="bg-void text-bone min-h-dvh antialiased">
+      <body className="bg-creme text-encre min-h-dvh antialiased">
         {/* Premier élément focusable de la page. */}
         <a
           href="#contenu"
-          className="bg-crisp text-ink sr-only rounded-full px-5 py-3 text-sm font-bold focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200]"
+          className="bg-jaune text-encre sr-only rounded-[var(--radius)] px-5 py-3 text-sm font-extrabold shadow-[4px_4px_0_var(--encre)] focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200]"
         >
           Aller au contenu principal
         </a>

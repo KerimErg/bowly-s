@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 
+import { Numero, TraitMain } from "@/components/shared/decor";
 import { cn } from "@/lib/utils";
 
 /**
@@ -10,16 +11,24 @@ import { cn } from "@/lib/utils";
  *
  * L'idée qui tient tout le site : pendant que le visiteur fait défiler, la
  * caméra 3D plonge dans le bowl et les couches s'écartent au-dessus d'elle.
- * Chaque couche traversée est une section de la page. On ne lit pas une liste
+ * Chaque couche traversée est une section. On ne lit pas une liste
  * d'arguments, on descend dans le produit.
  *
- * La 3D et le texte ne sont pas synchronisés par un minuteur mais par la même
- * grandeur : la progression de scroll. Ils ne peuvent donc pas se désaligner,
- * même si le visiteur scrolle à toute vitesse ou remonte.
+ * ⚠️ UN PROBLÈME DE CONTRASTE PROPRE À CETTE SECTION
+ * Le fond de page s'éclaircit progressivement pendant ces quatre écrans : il
+ * part du brun brûlé et finit en crème (voir `couleurFond()` dans
+ * `lib/stage.ts`). Un texte posé directement dessus serait donc illisible à
+ * l'une des deux extrémités, quelle que soit sa couleur — et un basculement
+ * de couleur en cours de route se verrait.
  *
- * ⚠️ Quatre strates = quatre écrans. La chorégraphie de la caméra
- * (`ACTES.descente` dans `lib/stage.ts`) est calée sur ce nombre. En ajouter
- * une cinquième sans y retoucher désynchronise la caméra du texte.
+ * D'où le parti pris : chaque strate est écrite sur un TICKET DE PAPIER opaque,
+ * bordé d'encre et posé sur son ombre. Le ticket porte son propre fond, donc
+ * son contraste ne dépend plus du tout de ce qui se passe derrière. Et
+ * accessoirement, quatre bouts de papier penchés valent mieux que quatre blocs
+ * de texte alignés.
+ *
+ * ⚠️ Quatre strates = quatre écrans. La chorégraphie de la caméra est calée
+ * sur ce nombre : en ajouter une cinquième désynchronise la 3D du texte.
  */
 
 type Strate = {
@@ -36,28 +45,28 @@ const STRATES: Strate[] = [
     nom: "La base",
     ligne: "Riz vinaigré tiède.",
     detail: "Ou céréales complètes. Ou rien que du vert. C'est toi qui décides du sol.",
-    accent: "#e8d5ab",
+    accent: "var(--jaune)",
   },
   {
     index: "02",
     nom: "La protéine",
     ligne: "Panée à la commande.",
     detail: "Jamais réchauffée, jamais tenue au chaud. Elle sort de l'huile quand tu arrives.",
-    accent: "#c9762e",
+    accent: "var(--rouge)",
   },
   {
     index: "03",
     nom: "La sauce",
     ligne: "Cinq maisons.",
     detail: "Fumée, chili-miel, yuzu, herbes, tahini. Zéro industrielle. Zéro sachet.",
-    accent: "#f0452a",
+    accent: "var(--rouge-fonce)",
   },
   {
     index: "04",
     nom: "Le croustillant",
     ligne: "Ajouté en dernier.",
     detail: "Pour qu'il craque encore quand tu ouvres la boîte. C'est tout le sujet.",
-    accent: "#ffc23d",
+    accent: "var(--vert-fonce)",
   },
 ];
 
@@ -72,82 +81,56 @@ function Couche({ strate, position }: { strate: Strate; position: number }) {
     offset: ["start end", "end start"],
   });
 
-  // Le bloc traverse l'écran un peu plus lentement que le scroll : c'est la
-  // parallaxe qui crée l'impression de couches empilées en profondeur.
-  const y = useTransform(scrollYProgress, [0, 1], ["14%", "-14%"]);
-  const opacite = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0]);
+  // Le ticket traverse l'écran un peu plus lentement que le scroll : c'est la
+  // parallaxe qui donne l'impression de couches empilées en profondeur.
+  const y = useTransform(scrollYProgress, [0, 1], ["12%", "-12%"]);
+  const opacite = useTransform(scrollYProgress, [0, 0.26, 0.74, 1], [0, 1, 1, 0]);
 
-  // Un côté sur deux : sans alternance, quatre écrans identiques donnent
-  // l'impression que la page ne bouge pas.
+  // Un côté sur deux : sans alternance, quatre écrans se ressemblent.
   const aGauche = position % 2 === 0;
+  const inclinaisons = ["colle-1", "colle-2", "colle-3", "colle-1"];
 
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[100svh] items-center"
+      className="relative flex min-h-[100svh] items-center overflow-x-clip"
       aria-labelledby={`strate-${strate.index}`}
     >
       <div className="bowly-wide w-full">
         <motion.div
           style={reduit ? undefined : { y, opacity: opacite }}
-          className={cn(
-            "max-w-xl",
-            aGauche ? "mr-auto" : "ml-auto text-right",
-          )}
+          className={cn("max-w-lg", aGauche ? "mr-auto" : "ml-auto")}
         >
           <div
             className={cn(
-              "flex items-center gap-4",
-              !aGauche && "flex-row-reverse",
+              "bg-creme papier border-encre border-4 px-8 py-9 shadow-[10px_10px_0_var(--encre)]",
+              inclinaisons[position],
             )}
           >
-            <span
-              className="font-poster text-5xl leading-none"
+            <div className="flex items-center gap-4">
+              <Numero className="text-4xl" ton="rouge">
+                {strate.index}
+              </Numero>
+              <span className="kicker text-encre-faible">{strate.nom}</span>
+            </div>
+
+            <h2
+              id={`strate-${strate.index}`}
+              className="poster-title text-encre mt-5"
               style={{ color: strate.accent }}
-              aria-hidden="true"
             >
-              {strate.index}
-            </span>
-            <span className="bg-line-strong h-px flex-1" aria-hidden="true" />
-            <span className="kicker text-bone-faint">{strate.nom}</span>
+              {strate.ligne}
+            </h2>
+
+            <div className="mt-5 mb-4 max-w-[14rem]">
+              <TraitMain ton="encre" />
+            </div>
+
+            <p className="text-encre-douce text-base leading-relaxed">
+              {strate.detail}
+            </p>
           </div>
-
-          <h2
-            id={`strate-${strate.index}`}
-            className="poster-title text-bone mt-7"
-          >
-            {strate.ligne}
-          </h2>
-
-          <p className="lead mt-5">{strate.detail}</p>
         </motion.div>
-      </div>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-
-/** Rail de progression : où en est-on dans la descente. */
-function Rail() {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
-  const hauteur = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-  return (
-    <div
-      ref={ref}
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-y-0 left-6 hidden w-px lg:block xl:left-10"
-    >
-      <div className="bg-line sticky top-0 h-[100svh] w-px">
-        <motion.div
-          style={{ height: hauteur }}
-          className="from-crisp to-brand w-px bg-gradient-to-b"
-        />
       </div>
     </div>
   );
@@ -158,7 +141,6 @@ function Rail() {
 export function Descente() {
   return (
     <section id="descente" className="relative">
-      <Rail />
       {STRATES.map((strate, i) => (
         <Couche key={strate.index} strate={strate} position={i} />
       ))}

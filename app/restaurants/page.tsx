@@ -31,7 +31,7 @@ export default function RestaurantsPage() {
         kicker="Nos restaurants"
         lignes={[
           <span key="1">Zéro ouvert.</span>,
-          <span key="2" className="text-brand">
+          <span key="2" className="text-rouge-fonce">
             Cinq à l&apos;étude.
           </span>,
         ]}
@@ -51,11 +51,11 @@ export default function RestaurantsPage() {
       {/* --- La fiche type -------------------------------------------------- */}
       <section aria-labelledby="fiche-titre" className="bowly-wide py-16 md:py-24">
         <Reveal>
-          <p className="kicker text-plasma">Gabarit</p>
-          <h2 id="fiche-titre" className="poster-section text-bone mt-4">
+          <p className="kicker text-vert-fonce">Gabarit</p>
+          <h2 id="fiche-titre" className="poster-section text-encre mt-4">
             À quoi ressemblera une fiche.
           </h2>
-          <p className="text-bone-dim mt-4 max-w-xl text-sm leading-relaxed">
+          <p className="text-encre-douce mt-4 max-w-xl text-sm leading-relaxed">
             Voici la fiche telle qu&apos;elle s&apos;affichera pour chaque
             restaurant. Toutes les valeurs sont des placeholders — aucune
             n&apos;a été inventée pour meubler.
@@ -63,52 +63,52 @@ export default function RestaurantsPage() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <article className="surface mt-10 overflow-hidden rounded-3xl">
-            <div className="border-line flex flex-wrap items-center justify-between gap-4 border-b px-7 py-6">
+          <article className="bg-creme border-2 border-encre mt-10 overflow-hidden rounded-[var(--radius)]">
+            <div className="border-trait flex flex-wrap items-center justify-between gap-4 border-b px-7 py-6">
               <div>
-                <h3 className="poster-section text-bone">Bowly&apos;s {TODO}</h3>
-                <p className="text-bone-faint mt-1.5 text-xs">
+                <h3 className="poster-section text-encre">Bowly&apos;s {TODO}</h3>
+                <p className="text-encre-faible mt-1.5 text-xs">
                   Établissement n° 01 — non ouvert
                 </p>
               </div>
-              <span className="border-line text-bone-faint rounded-full border px-4 py-2 text-xs font-semibold">
+              <span className="border-trait text-encre-faible rounded-full border px-4 py-2 text-xs font-semibold">
                 Ouverture {TODO}
               </span>
             </div>
 
             <div className="grid gap-px md:grid-cols-3">
               <div className="p-7">
-                <span className="text-crisp flex items-center gap-2">
+                <span className="text-rouge-fonce flex items-center gap-2">
                   <MapPin size={15} aria-hidden="true" />
                   <span className="kicker">Adresse</span>
                 </span>
-                <p className="text-bone-dim mt-4 text-sm leading-relaxed">
+                <p className="text-encre-douce mt-4 text-sm leading-relaxed">
                   {contactInfo.address}
                   <br />
                   {contactInfo.postalCode} {contactInfo.city}
                 </p>
               </div>
 
-              <div className="border-line p-7 md:border-x">
-                <span className="text-crisp flex items-center gap-2">
+              <div className="border-trait p-7 md:border-x">
+                <span className="text-rouge-fonce flex items-center gap-2">
                   <Phone size={15} aria-hidden="true" />
                   <span className="kicker">Téléphone</span>
                 </span>
-                <p className="text-bone-dim mt-4 text-sm">{contactInfo.phone}</p>
-                <p className="text-bone-faint mt-6 text-xs">Accès</p>
-                <p className="text-bone-dim mt-1 text-sm">{TODO}</p>
+                <p className="text-encre-douce mt-4 text-sm">{contactInfo.phone}</p>
+                <p className="text-encre-faible mt-6 text-xs">Accès</p>
+                <p className="text-encre-douce mt-1 text-sm">{TODO}</p>
               </div>
 
               <div className="p-7">
-                <span className="text-crisp flex items-center gap-2">
+                <span className="text-rouge-fonce flex items-center gap-2">
                   <Clock size={15} aria-hidden="true" />
                   <span className="kicker">Horaires</span>
                 </span>
                 <dl className="mt-4 flex flex-col gap-1.5">
                   {openingHours.map((jour) => (
                     <div key={jour.day} className="flex justify-between gap-4 text-sm">
-                      <dt className="text-bone-dim">{jour.day}</dt>
-                      <dd className="text-bone-faint">{jour.hours}</dd>
+                      <dt className="text-encre-douce">{jour.day}</dt>
+                      <dd className="text-encre-faible">{jour.hours}</dd>
                     </div>
                   ))}
                 </dl>
@@ -121,14 +121,14 @@ export default function RestaurantsPage() {
       {/* --- Les cinq emplacements ------------------------------------------ */}
       <section
         aria-labelledby="etude-titre"
-        className="border-line bg-void-2/60 border-y py-16 md:py-24"
+        className="border-trait bg-beurre/60 border-y py-16 md:py-24"
       >
         <div className="bowly-wide">
           <Reveal>
-            <h2 id="etude-titre" className="poster-section text-bone">
+            <h2 id="etude-titre" className="poster-section text-encre">
               Cinq emplacements à l&apos;étude.
             </h2>
-            <p className="text-bone-dim mt-4 max-w-xl text-sm leading-relaxed">
+            <p className="text-encre-douce mt-4 max-w-xl text-sm leading-relaxed">
               Aucune ville n&apos;est arrêtée. Les cinq lignes ci-dessous
               existent pour que vous voyiez l&apos;état d&apos;avancement, pas
               pour laisser deviner un lieu.
@@ -138,17 +138,17 @@ export default function RestaurantsPage() {
           <ul className="mt-10">
             {Array.from({ length: 5 }).map((_, i) => (
               <Reveal as="li" key={i} delay={i * 0.05}>
-                <div className="border-line flex flex-wrap items-center justify-between gap-4 border-t py-6">
+                <div className="border-trait flex flex-wrap items-center justify-between gap-4 border-t py-6">
                   <div className="flex items-center gap-5">
                     <span
-                      className="font-poster text-bone-faint text-2xl leading-none"
+                      className="font-poster text-encre-faible text-2xl leading-none"
                       aria-hidden="true"
                     >
                       0{i + 1}
                     </span>
-                    <span className="text-bone text-base font-bold">{TODO}</span>
+                    <span className="text-encre text-base font-bold">{TODO}</span>
                   </div>
-                  <span className="text-bone-faint text-xs">
+                  <span className="text-encre-faible text-xs">
                     Bail non signé · Ouverture {TODO}
                   </span>
                 </div>
@@ -160,10 +160,10 @@ export default function RestaurantsPage() {
 
       <section className="bowly-wide py-20 md:py-28">
         <Reveal>
-          <h2 className="poster-title text-bone">
+          <h2 className="poster-title text-encre">
             Ta ville
             <br />
-            <span className="text-brand">mérite mieux&nbsp;?</span>
+            <span className="text-rouge-fonce">mérite mieux&nbsp;?</span>
           </h2>
           <p className="lead mt-6 max-w-lg">
             Dis-nous laquelle. Les premiers emplacements ne sont pas arrêtés,

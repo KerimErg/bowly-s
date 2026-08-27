@@ -27,16 +27,16 @@ export function SiteFooter() {
   const annee = new Date().getFullYear();
 
   return (
-    <footer className="border-line bg-void relative overflow-hidden border-t">
-      <div className="ember pointer-events-none absolute -bottom-1/3 left-1/2 h-[90vmin] w-[90vmin] -translate-x-1/2 rounded-full opacity-60 blur-3xl" />
+    <footer className="border-trait-clair bg-braise relative overflow-hidden border-t">
+      <div aria-hidden="true" className="trame trame-rouge pointer-events-none absolute inset-0 opacity-30" />
 
       {/* --- L'affiche de sortie ------------------------------------------ */}
       <div className="bowly-wide relative pt-24 pb-16 md:pt-32">
-        <p className="kicker text-bone-faint">Fin du parcours</p>
-        <h2 className="poster text-bone mt-6">
+        <p className="kicker text-creme/50">Fin du parcours</p>
+        <h2 className="poster text-creme mt-6">
           À BIENTÔT
           <br />
-          <span className="text-brand">CHEZ BOWLY&apos;S.</span>
+          <span className="text-rouge">CHEZ BOWLY&apos;S.</span>
         </h2>
 
         <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -46,25 +46,25 @@ export function SiteFooter() {
               <ArrowUpRight size={20} aria-hidden="true" />
             </Link>
           </Button>
-          <Button asChild size="xl" variant="outline">
+          <Button asChild size="xl" variant="outline-clair">
             <Link href="/menu">Voir la carte</Link>
           </Button>
         </div>
       </div>
 
       <div className="bowly-wide relative">
-        <div className="hairline" />
+        <div className="bg-trait-clair h-px" />
       </div>
 
       {/* --- Les liens ----------------------------------------------------- */}
       <div className="bowly-wide relative grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <h3 className="kicker text-brand">Le site</h3>
+          <h3 className="kicker text-rouge">Le site</h3>
           <ul className="mt-5 flex flex-col gap-3">
             <li>
               <Link
                 href="/"
-                className="text-bone-dim hover:text-bone text-sm transition-colors duration-300"
+                className="text-creme/70 hover:text-creme text-sm transition-colors duration-300"
               >
                 Accueil
               </Link>
@@ -73,7 +73,7 @@ export function SiteFooter() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-bone-dim hover:text-bone text-sm transition-colors duration-300"
+                  className="text-creme/70 hover:text-creme text-sm transition-colors duration-300"
                 >
                   {item.label}
                 </Link>
@@ -83,7 +83,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="kicker text-brand">Suivre</h3>
+          <h3 className="kicker text-rouge">Suivre</h3>
           <ul className="mt-5 flex flex-col gap-3">
             {socialLinks.map((social) => (
               <li key={social.label}>
@@ -91,11 +91,11 @@ export function SiteFooter() {
                     Ne jamais pointer vers un profil tiers pour meubler. */}
                 <a
                   href={social.href}
-                  className="text-bone-dim hover:text-bone group inline-flex items-center gap-2.5 text-sm transition-colors duration-300"
+                  className="text-creme/70 hover:text-creme group inline-flex items-center gap-2.5 text-sm transition-colors duration-300"
                 >
                   <SocialIcon name={social.icon} />
                   {social.label}
-                  <span className="text-bone-faint text-xs">{social.handle}</span>
+                  <span className="text-creme/50 text-xs">{social.handle}</span>
                 </a>
               </li>
             ))}
@@ -103,44 +103,44 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="kicker text-brand">Nous joindre</h3>
-          <ul className="text-bone-dim mt-5 flex flex-col gap-3 text-sm">
+          <h3 className="kicker text-rouge">Nous joindre</h3>
+          <ul className="text-creme/70 mt-5 flex flex-col gap-3 text-sm">
             <li>
-              <span className="text-bone-faint block text-xs">Adresse</span>
+              <span className="text-creme/50 block text-xs">Adresse</span>
               {contactInfo.address}, {contactInfo.postalCode} {contactInfo.city}
             </li>
             <li>
-              <span className="text-bone-faint block text-xs">Téléphone</span>
+              <span className="text-creme/50 block text-xs">Téléphone</span>
               {contactInfo.phone}
             </li>
             <li>
-              <span className="text-bone-faint block text-xs">E-mail</span>
+              <span className="text-creme/50 block text-xs">E-mail</span>
               {contactInfo.email}
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="kicker text-brand">Légal</h3>
+          <h3 className="kicker text-rouge">Légal</h3>
           <ul className="mt-5 flex flex-col gap-3">
             {legalNav.map((item) => (
               <li key={item.label}>
                 {/* Pages non rédigées : le lien reste inerte plutôt que de
                     mener à une 404. */}
-                <span className="text-bone-faint text-sm">{item.label}</span>
+                <span className="text-creme/50 text-sm">{item.label}</span>
               </li>
             ))}
           </ul>
         </div>
       </div>
 
-      <div className="bowly-wide border-line text-bone-faint relative flex flex-col gap-3 border-t py-8 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="bowly-wide border-trait-clair text-creme/50 relative flex flex-col gap-3 border-t py-8 text-xs sm:flex-row sm:items-center sm:justify-between">
         <p>
           © {annee} {siteConfig.name}. {siteConfig.shortPitch}
         </p>
         <p>
           Marque en construction — les informations marquées{" "}
-          <span className="text-bone-dim">[À COMPLÉTER]</span> ne sont pas encore
+          <span className="text-creme/70">[À COMPLÉTER]</span> ne sont pas encore
           publiques.
         </p>
       </div>

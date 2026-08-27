@@ -56,9 +56,14 @@ export function BowlCanvas({ qualite }: { qualite: Exclude<Qualite, "aucune"> })
       // La caméra est ensuite pilotée image par image par `BowlRig`.
       camera={{ position: [0, 3.5, 6.6], fov: 42, near: 0.1, far: 60 }}
       onCreated={({ gl }) => {
-        gl.toneMapping = THREE.ACESFilmicToneMapping;
-        // Exposition neutre. Au-dessus de 1, ACES sature les rouges et le
-        // riz vire au rose : vérifié, c'était le cas à 1,15.
+        /* ⚠️ PAS ACES SUR UNE SCÈNE CLAIRE.
+           ACESFilmic est fait pour du cinéma : il compresse fortement les
+           hautes lumières, ce qui est parfait dans le noir et désastreux ici —
+           sur fond crème, le riz virait au blanc et les morceaux dorés au
+           beige. `NeutralToneMapping` (la courbe PBR neutre de Khronos)
+           conserve la saturation dans les clairs. Sur de la nourriture, c'est
+           exactement ce qu'on veut : la panure doit rester dorée. */
+        gl.toneMapping = THREE.NeutralToneMapping;
         gl.toneMappingExposure = 1.0;
       }}
       style={{ position: "absolute", inset: 0 }}

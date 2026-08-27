@@ -29,12 +29,14 @@ import { plansCinema, type PlanCinema } from "@/lib/assets";
 export function Cinema() {
   return (
     <section aria-labelledby="cinema-titre" className="relative">
+      {/* L'introduction est sur le fond clair de la page ; les plans qui
+          suivent sont plein cadre et sombres par nature. */}
       <div className="bowly-wide py-20">
-        <p className="kicker text-crisp">Sans commentaire</p>
-        <h2 id="cinema-titre" className="poster-title text-bone mt-5">
+        <p className="kicker text-rouge-fonce">Sans commentaire</p>
+        <h2 id="cinema-titre" className="poster-title text-encre mt-4">
           Regarde,
           <br />
-          <span className="text-brand">puis commande.</span>
+          <span className="souligne-main">puis commande.</span>
         </h2>
       </div>
 
@@ -47,7 +49,7 @@ export function Cinema() {
       <Ruban
         mots={["ça craque", "ça coule", "ça fume", "ça croque", "ça déborde"]}
         duree={38}
-        className="font-poster text-bone/40 border-line border-y py-6 text-4xl uppercase md:text-6xl"
+        className="font-poster text-encre/50 border-encre border-y-2 py-6 text-4xl uppercase md:text-6xl"
       />
     </section>
   );
@@ -106,7 +108,7 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
         {/* Voile progressif — c'est lui qui crée le fondu entre deux plans. */}
         <motion.div
           aria-hidden="true"
-          className="bg-void absolute inset-0"
+          className="bg-braise absolute inset-0"
           style={reduit ? { opacity: 0.25 } : { opacity: voile }}
         />
 
@@ -115,10 +117,10 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
             appuie le bas où vivent les mentions. C'est ce qui garantit le
             contraste du mot QUELLE QUE SOIT l'image déposée plus tard —
             y compris une photo claire. */}
-        <div aria-hidden="true" className="bg-void/45 absolute inset-0" />
+        <div aria-hidden="true" className="bg-braise/45 absolute inset-0" />
         <div
           aria-hidden="true"
-          className="from-void/90 via-void/20 absolute inset-0 bg-gradient-to-t to-transparent"
+          className="from-braise/90 via-braise/20 absolute inset-0 bg-gradient-to-t to-transparent"
         />
 
         <motion.div
@@ -132,7 +134,7 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
               elle est tirée. La couleur du plan sert donc au filet et au
               numéro, jamais au mot lui-même. */}
           <p
-            className="poster text-bone text-center"
+            className="poster text-creme text-center"
             style={{ textShadow: "0 10px 50px rgba(8,7,10,0.9), 0 2px 12px rgba(8,7,10,0.8)" }}
           >
             ÇA
@@ -149,8 +151,8 @@ function Plan({ plan, rang, total }: { plan: PlanCinema; rang: number; total: nu
             className="h-0.5 w-14 shrink-0 rounded-full"
             style={{ backgroundColor: plan.accent }}
           />
-          <span className="kicker text-bone-dim">{plan.cle}</span>
-          <span className="kicker text-bone-faint tabular ml-auto">
+          <span className="kicker text-creme/70">{plan.cle}</span>
+          <span className="kicker text-creme/50 tabular ml-auto">
             {String(rang + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
         </div>

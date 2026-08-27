@@ -26,24 +26,23 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden pt-36 pb-16 md:pt-44 md:pb-24">
+      {/* Trame d'imprimerie en fond, pas un halo dégradé : une texture qui
+          se voit de près et disparaît de loin, comme sur une affiche sérigraphiée. */}
       <div
         aria-hidden="true"
-        className="ember pointer-events-none absolute -top-32 -left-40 h-[70vmin] w-[70vmin] rounded-full opacity-70 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="ember-cold pointer-events-none absolute -top-20 right-0 h-[46vmin] w-[46vmin] rounded-full opacity-60 blur-3xl"
+        className="trame trame-rouge pointer-events-none absolute inset-0 opacity-40"
+        style={{ maskImage: "radial-gradient(ellipse at 15% 0%, black, transparent 65%)" }}
       />
 
       <div className="bowly-wide relative">
         <Reveal au="montage">
-          <p className="kicker text-crisp">{kicker}</p>
+          <p className="kicker text-rouge-fonce">{kicker}</p>
         </Reveal>
 
         <LignesRevelees
           as="h1"
           delaiInitial={0.12}
-          className="poster-title text-bone mt-6"
+          className="poster-title text-encre mt-6"
           lignes={lignes}
         />
 

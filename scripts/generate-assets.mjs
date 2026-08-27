@@ -326,12 +326,17 @@ function bowlSvg(cle) {
 <stop offset="100%" stop-color="#000000" stop-opacity="0.28"/>
 </linearGradient>
 <linearGradient id="rimChaud" x1="0" y1="1" x2="1" y2="0">
-<stop offset="0%" stop-color="#f0452a" stop-opacity="0.75"/>
-<stop offset="100%" stop-color="#ffc23d" stop-opacity="0.2"/>
+<stop offset="0%" stop-color="#ee4520" stop-opacity="0.7"/>
+<stop offset="100%" stop-color="#ffbf2e" stop-opacity="0.25"/>
 </linearGradient>
+<!-- Le second liseré était violet, en écho au contre-jour froid de la scène
+     3D. Les deux ont disparu pour la même raison : sur une illustration de
+     nourriture, un violet saturé est le marqueur le plus reconnaissable d'un
+     rendu généré. Celui-ci est doré — il détache la silhouette du bol sans
+     introduire une couleur qui n'existe pas dans une cuisine. -->
 <linearGradient id="rimFroid" x1="1" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="#8b6bff" stop-opacity="0.8"/>
-<stop offset="100%" stop-color="#8b6bff" stop-opacity="0"/>
+<stop offset="0%" stop-color="#ffd08a" stop-opacity="0.85"/>
+<stop offset="100%" stop-color="#ffd08a" stop-opacity="0"/>
 </linearGradient>
 <clipPath id="dansLeBowl"><circle cx="400" cy="400" r="296"/></clipPath>
 </defs>
@@ -374,35 +379,26 @@ function marqueSvg({ fond = "#f0452a", trait = "#120c0a" } = {}) {
 
 /** Image Open Graph — 1200×630, générée pour ne dépendre d'aucune photo. */
 function ogSvg() {
-  const r = rng(9001);
-  const etoiles = [];
-  for (let i = 0; i < 90; i++) {
-    etoiles.push(
-      `<circle cx="${round(r() * 1200)}" cy="${round(r() * 630)}" r="${round(r() * 1.6 + 0.4)}" fill="#f4efe9" opacity="${round(r() * 0.4 + 0.06)}"/>`,
-    );
-  }
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
 <defs>
-<radialGradient id="halo" cx="76%" cy="52%" r="52%">
-<stop offset="0%" stop-color="#f0452a" stop-opacity="0.62"/>
-<stop offset="55%" stop-color="#f0452a" stop-opacity="0.12"/>
-<stop offset="100%" stop-color="#08070a" stop-opacity="0"/>
-</radialGradient>
-<radialGradient id="froid" cx="16%" cy="18%" r="42%">
-<stop offset="0%" stop-color="#8b6bff" stop-opacity="0.35"/>
-<stop offset="100%" stop-color="#08070a" stop-opacity="0"/>
+<pattern id="trame" width="9" height="9" patternUnits="userSpaceOnUse">
+<circle cx="2" cy="2" r="1.4" fill="#ee4520" opacity="0.16"/>
+</pattern>
+<radialGradient id="ombreBol" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#3a2419" stop-opacity="0.45"/>
+<stop offset="100%" stop-color="#3a2419" stop-opacity="0"/>
 </radialGradient>
 </defs>
-<rect width="1200" height="630" fill="#08070a"/>
-${etoiles.join("")}
-<rect width="1200" height="630" fill="url(#froid)"/>
-<rect width="1200" height="630" fill="url(#halo)"/>
-<circle cx="900" cy="330" r="215" fill="#2a2029"/>
-<circle cx="900" cy="330" r="215" fill="none" stroke="#f0452a" stroke-opacity="0.75" stroke-width="4"/>
-<circle cx="900" cy="330" r="176" fill="#120c0a" opacity="0.7"/>
-<text x="80" y="250" font-family="Haettenschweiler, 'Arial Narrow', sans-serif" font-size="96" fill="#f4efe9" letter-spacing="-2">PAS UN BOWL.</text>
-<text x="80" y="352" font-family="Haettenschweiler, 'Arial Narrow', sans-serif" font-size="96" fill="#f0452a" letter-spacing="-2">UNE EXPÉRIENCE.</text>
-<text x="82" y="430" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#a49a94" letter-spacing="6">BOWLY'S</text>
+<rect width="1200" height="630" fill="#fff7ec"/>
+<rect width="1200" height="630" fill="url(#trame)"/>
+<ellipse cx="900" cy="470" rx="230" ry="46" fill="url(#ombreBol)"/>
+<circle cx="900" cy="320" r="200" fill="#40291f"/>
+<circle cx="900" cy="320" r="200" fill="none" stroke="#ee4520" stroke-opacity="0.55" stroke-width="5"/>
+<circle cx="900" cy="312" r="163" fill="#e8d2a0"/>
+<text x="80" y="250" font-family="Haettenschweiler, 'Arial Narrow', sans-serif" font-size="96" fill="#17100d" letter-spacing="-2">PAS UN BOWL.</text>
+<text x="80" y="352" font-family="Haettenschweiler, 'Arial Narrow', sans-serif" font-size="96" fill="#ee4520" letter-spacing="-2">UNE EXPÉRIENCE.</text>
+<rect x="80" y="392" width="360" height="10" fill="#ee4520" opacity="0.35"/>
+<text x="82" y="452" font-family="Inter, sans-serif" font-size="24" font-weight="800" fill="#775f4f" letter-spacing="6">BOWLY'S</text>
 </svg>
 `;
 }

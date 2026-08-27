@@ -19,6 +19,37 @@ npm run dev        # http://localhost:3000
 
 ---
 
+## 📷 Mettre vos photos et vos vidéos
+
+**Un seul fichier : `lib/photos.ts`.** Collez une adresse entre les guillemets,
+enregistrez, c'est à l'écran. Laissez vide, le site retombe sur l'illustration
+dessinée. Rien d'autre à toucher.
+
+```ts
+"the-og": {
+  src: "/assets/products/the-og.jpg",        // un fichier à vous
+  // ou
+  src: "https://images.unsplash.com/photo-…", // une adresse, pour aller vite
+  alt: "…",
+},
+```
+
+Pour les vidéos de la section cinéma, même fichier : `.mp4` muet, en boucle,
+3 à 6 secondes, cadrage vertical. Sans vidéo, la section affiche l'image fixe —
+pas de lecteur cassé, pas de trou.
+
+La page **La marque** affiche un compteur de visuels réellement fournis, calculé
+depuis ce fichier. Il se met à jour tout seul.
+
+### ⚠️ Ne pas prendre les photos d'une autre enseigne
+
+Ce sont leurs plats, leur shooting, leur budget. Les afficher comme ceux de
+Bowly's — même « juste pour la maquette » — est une contrefaçon dès que le site
+est en ligne, et il l'est. Unsplash et Pexels sont gratuits, libres pour un
+usage commercial, et personne ne viendra les réclamer.
+
+---
+
 ## ⚠️ À lire avant de toucher au contenu
 
 Bowly's est une **marque en construction**. Aucun restaurant n'a ouvert, aucun
@@ -57,20 +88,28 @@ les pages n'existent pas et un lien mort vaut mieux qu'une 404.
 
 **Un seul objet 3D traverse toute la page d'accueil.** Le scroll ne fait pas
 apparaître et disparaître des canvas : il déplace une caméra sur un rail autour
-puis à l'intérieur d'un bowl unique, monté une seule fois.
+d'un bowl unique, monté une seule fois.
 
 ```
-PORTAIL    un objet dans le noir, les ingrédients y tombent un par un
+PORTAIL    un objet posé sur la table, avec son ombre ; les ingrédients
+           y tombent un par un
    ↓
-DESCENTE   la caméra plonge ; chaque couche traversée est une section
+DESCENTE   la caméra plonge en plan de plus en plus serré, les couches
+           s'écartent ; chaque couche traversée est une section
            01 la base · 02 la protéine · 03 la sauce · 04 le croustillant
    ↓
-ATELIER    on ressort en plan trois quarts ; le visiteur compose le bowl
-           et l'objet à l'écran change réellement
+ATELIER    plan serré en plongée ; le visiteur compose le bowl sur un
+           carnet de commande et l'objet à l'écran change réellement
    ↓
 SORTIE     la caméra recule, le bowl redevient un décor
            casting · cinéma · carte de France · réseaux · teasing
 ```
+
+> ⚠️ **La caméra ne rentre plus dans le bol.** Elle le faisait quand le fond
+> était noir : spectaculaire. Sur fond crème, l'écran se remplissait d'un aplat
+> beige uniforme qu'on prenait pour un bug d'affichage. La station finale de la
+> descente est un plan très serré, mais la lèvre du bol reste dans le cadre —
+> c'est elle qui donne l'échelle.
 
 ### La chorégraphie est mesurée, pas codée en dur
 
@@ -111,9 +150,9 @@ en changer en cours de visite ferait clignoter la page.
 | `legere` | WebGL2, machine modeste ou petit écran | Densité 1×, lampe d'appoint coupée |
 | `aucune` | Pas de WebGL2, **ou mouvement réduit demandé** | Repli CSS |
 
-**Le repli n'est pas un écran vide.** C'est la même composition — bowl centré,
-halo chaud à gauche, halo froid à droite — construite avec l'illustration SVG
-de la carte et deux dégradés. Un visiteur sans WebGL voit une page finie.
+**Le repli n'est pas un écran vide.** C'est la même composition — bowl centré
+sur un fond kraft tramé — construite avec l'illustration SVG de la carte. Un
+visiteur sans WebGL voit une page finie.
 
 ### Ce que ça coûte
 
@@ -140,74 +179,99 @@ vidée sur les sites à scène 3D.
    d'objectif. Viser un point décalé placerait l'objet au bord du champ, là où
    la projection perspective l'étire, et le bowl paraîtrait penché.
 
-### La lumière
+### La lumière — trois règles apprises à la dure
 
-**La clé est quasi blanche.** C'est la règle qui a demandé le plus d'essais :
-éclairer avec un orange saturé « pour rester dans la charte » repeint les
-matériaux — le riz crème virait au rose et les morceaux dorés au rouge vif. En
-photo culinaire, la couleur vient des accents et de l'environnement, jamais de
-la source principale. Le contre-jour froid frôle la silhouette, il n'éclaire
-pas.
+1. **La clé est quasi blanche.** Éclairer avec un orange saturé « pour rester
+   dans la charte » repeint les matériaux : le riz crème virait au rose, les
+   morceaux dorés au rouge vif. En photo culinaire la couleur vient des accents
+   et de l'environnement, jamais de la source principale.
+2. **Pas d'ACES sur une scène claire.** `ACESFilmicToneMapping` est fait pour le
+   cinéma : il compresse les hautes lumières, parfait dans le noir et désastreux
+   sur fond crème — la panure y devenait beige. `NeutralToneMapping` conserve la
+   saturation dans les clairs.
+3. **Sur fond clair, c'est l'ombre qui pose l'objet, pas la lumière.** Les halos
+   lumineux derrière le bowl — indispensables sur noir — ne se voient pas sur du
+   crème, et s'ils se voyaient ils ressembleraient à un défaut d'objectif. Ils
+   ont été remplacés par une ombre portée au sol. Sans elle, le bowl flotte et
+   retrouve exactement l'aspect « rendu 3D » qu'on cherche à fuir.
+
+Le contre-jour, lui, était violet — en écho au rim-light froid de la photo
+culinaire. Il est désormais doré : le violet saturé sur objet chaud est **le**
+marqueur du rendu généré, et c'était le premier point d'artificialité de toute
+la scène.
 
 ---
 
-## Direction artistique — « Braise nocturne »
+## Direction artistique — « Cantine »
 
-Base presque noire, et **deux températures qui ne se mélangent jamais** :
+Base **claire et chaude** — crème, beurre, kraft. Le sombre n'est plus une
+ambiance mais une ponctuation : le bloc de teasing et le pied de page, rien
+d'autre.
 
-- **chaud** `--brand` `--crisp` → la nourriture, l'appétit, les appels à l'action ;
-- **froid** `--plasma` → le contour, le portail, les arêtes 3D.
+> Trois versions ont précédé celle-ci. D'abord un site presque noir. Puis un
+> fond brun brûlé qui s'éclaircissait pendant la descente. Dans les deux cas le
+> même défaut : **un plat sur fond sombre est en vitrine, on l'admire ; sur un
+> fond chaud il est sur une table, on a faim.** C'est aussi ce qui a réglé le
+> « ça fait trop IA » : la combinaison orange saturé + violet froid + halos
+> flous sur noir est la signature du rendu généré.
 
-C'est ce rim-light froid sur sujet chaud — un vrai code de photo culinaire
-premium — qui donne à Bowly's une empreinte reconnaissable là où la plupart des
-marques de street-food restent monochromes.
+Trois familles, toutes comestibles :
+
+| | Rôle |
+| --- | --- |
+| **Braise** `--rouge` | la friture, la sauce piquante, les appels à l'action |
+| **Doré** `--jaune` | la panure, le miel, le croustillant |
+| **Frais** `--vert` | les herbes, les pickles — c'est lui qui apporte la vivacité |
 
 ### Jetons
 
 | Rôle | Valeur | Variable |
 | --- | --- | --- |
-| Le vide | `#08070a` | `--void` / `bg-void` |
-| Surface relevée | `#0f0d12` | `--void-2` |
-| Cartes | `#17141b` | `--void-3` |
-| Texte principal | `#f4efe9` | `--bone` |
-| Texte secondaire | `#a49a94` | `--bone-dim` |
-| Texte discret | `#8e857f` | `--bone-faint` |
-| Braise | `#f0452a` | `--brand` |
-| Braise claire | `#ff6a3d` | `--brand-hot` |
-| Or du croustillant | `#ffc23d` | `--crisp` |
-| Plasma (froid) | `#8b6bff` | `--plasma` |
-| Encre (sur aplat chaud) | `#120c0a` | `--ink` |
+| Papier principal | `#fff7ec` | `--creme` |
+| Papier alterné | `#ffedd0` | `--beurre` |
+| Kraft | `#f2e2c9` | `--carton` |
+| Texte principal | `#17100d` | `--encre` |
+| Texte secondaire | `#6b5346` | `--encre-douce` |
+| Texte discret | `#775f4f` | `--encre-faible` |
+| Braise (aplats) | `#ee4520` | `--rouge` |
+| Braise (texte sur clair) | `#b82a0e` | `--rouge-fonce` |
+| Doré | `#ffbf2e` | `--jaune` |
+| Frais (aplats) | `#8fd11f` | `--vert` |
+| Frais (texte sur clair) | `#456d08` | `--vert-fonce` |
+| Zones sombres | `#1c120e` | `--braise` |
 
-### ⚠️ Texte sur aplat chaud
+### ⚠️ Deux rouges, deux verts
 
-`--bone` sur `--brand` ne fait que **3,29:1** — sous le seuil AA. Tout texte
-posé sur un aplat `--brand` ou `--crisp` doit être en `--ink` (5,16:1 et
-12,04:1). Les variantes de bouton l'appliquent déjà.
+`--rouge` sur crème ne fait que **3,59:1**, `--vert` **1,75:1**. Le texte
+coloré sur fond clair utilise donc `--rouge-fonce` et `--vert-fonce`. Et sur un
+aplat `--rouge` ou `--jaune`, le texte est en `--encre` : `--creme` n'y fait que
+3,59:1.
 
-Pour les **pastilles du configurateur**, dont la couleur varie avec
-l'ingrédient, une couleur figée ne peut pas marcher : `lisibleSur()` calcule la
-luminance et choisit l'encre ou l'os. Ne pas la remplacer par une constante.
+Pour les **cases du configurateur**, dont la couleur varie avec l'ingrédient,
+une couleur figée ne peut pas marcher : `lisibleSur()` calcule la luminance et
+choisit. Ne pas la remplacer par une constante.
+
+### Ce qui remplace les « rectangles »
+
+`components/shared/decor.tsx` fournit le vocabulaire d'atelier qui a remplacé
+les cartes à coins arrondis : **tampon** à l'encre posé de travers, **étiquette**
+collée avec ombre dure, **trait au feutre**, **cadre photo** punaisé, **numéro
+détouré**, **entourage** tracé à la main. Plus, en CSS : texture **papier**,
+**trame** d'imprimerie, **bord déchiré**, **soulignement** à main levée.
+
+> Règle d'usage : jamais deux fois la même rotation à la suite. Si deux
+> étiquettes voisines penchent pareil, l'effet « posé à la main » s'effondre et
+> on retombe dans la grille.
 
 ### `npm run verifier`
 
-Un garde-fou exécutable, distinct de l'audit axe-core :
+Un garde-fou exécutable, distinct de l'audit axe-core. Il teste chaque encre sur
+**les trois papiers** — ce qui passe sur le crème peut échouer sur le carton,
+plus foncé — et chaque couleur d'ingrédient.
 
-```
-── Jetons de la charte ───────────────────────────
-  ok   texte principal sur le vide        17.58  (seuil 4.5)
-  ok   orange de marque sur le vide        5.35  (seuil 4.5)
-  …
-── Couleurs d'ingrédients ────────────────────────
-  ok   gochujang (#b23a1c, os)             5.23  (seuil 4.5)
-  …
-```
-
-Il attrape ce qu'un calcul ne peut pas rattraper : une couleur de luminance
-**moyenne**, sur laquelle ni l'encre ni l'os ne tiennent le seuil. Il a
-effectivement pris la sauce « Fumée » (`#c9421f`, 4,29:1 au mieux, corrigée en
-`#b53a19`) et la paire `--bone-faint` sur `--void-3` (4,46:1), que l'audit du
-site rendu n'avait pas vue parce que la combinaison n'était affichée nulle part
-à ce moment-là.
+Il a effectivement attrapé, à chaque refonte de palette, ce que l'audit du site
+rendu ne voyait pas : la sauce « Fumée » (4,29:1 au mieux), `--bone-faint` sur
+`--void-3` (4,46:1), et `--vert-fonce` sur carton (4,02:1).
 
 ### Typographie
 
@@ -222,32 +286,31 @@ seule graisse, moins de 40 ko), **Inter** pour tout ce qui informe.
 
 ## Les visuels
 
-**Aucune image distante.** Le site fonctionne hors ligne, en export statique, et
-rien ne casse parce qu'un CDN a changé d'avis.
+**Aucune image distante par défaut.** Le site fonctionne hors ligne, en export
+statique, et rien ne casse parce qu'un CDN a changé d'avis.
+
+Deux couches, une seule règle — **votre photo d'abord, l'illustration sinon** :
+
+1. `lib/photos.ts` — vos photos et vos vidéos ;
+2. `public/assets/` — les illustrations dessinées, qui prennent le relais.
+
+`lib/assets.ts` applique la bascule. Aucun composant ne la connaît : ils
+demandent un visuel, ils en reçoivent un, avec un drapeau `estPhoto` qui leur
+dit s'il faut recadrer (`cover`) ou poser entier (`contain`).
 
 Les bowls sont **dessinés**, pas photographiés : `scripts/generate-assets.mjs`
 compose chaque plat couche par couche — base, protéine, sauce, toppings — selon
-sa vraie recette. Ce n'est pas un pis-aller mais un style d'illustration propre
-à la marque, reconnaissable sans le logo, et remplaçable plat par plat le jour
-du shooting. Le générateur est déterministe : deux exécutions produisent des
+sa vraie recette. Générateur déterministe : deux exécutions produisent des
 fichiers identiques.
 
 ```
 public/assets/
 ├── branding/   symbole, version mono, image Open Graph
 ├── products/   un fichier par bowl — le nom de fichier est le contrat
-├── food/       gros plans de la section cinématique
-├── videos/     vide ; la section retombe sur le visuel fixe
+├── food/       macros de la section cinématique
+├── videos/     vide ; la section retombe sur l'image fixe
 └── 3d/         vide ; la géométrie est générée par code
 ```
-
-`lib/assets.ts` est le **seul** endroit du code qui connaît ces chemins. Voir
-`public/assets/README.md` pour la marche à suivre.
-
-Ces illustrations ne représentent aucun plat réel, et aucune photo n'est
-empruntée à une autre enseigne.
-
----
 
 ## Architecture
 

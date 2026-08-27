@@ -52,18 +52,25 @@ const nextConfig: NextConfig = {
     unoptimized: true,
 
     /**
-     * Sans effet tant que `unoptimized` est actif, mais conservé : la liste
-     * redevient la source de vérité dès qu'un loader ou un hébergement avec
-     * serveur est mis en place.
+     * N'importe quel hôte HTTPS est accepté.
+     *
+     * C'est délibéré et sans risque ici : avec `unoptimized: true` et un export
+     * statique, Next.js ne va JAMAIS chercher ces images côté serveur — il
+     * écrit simplement l'adresse dans la balise, et c'est le navigateur du
+     * visiteur qui la charge. Il n'y a donc pas de serveur à protéger d'une
+     * requête sortante arbitraire.
+     *
+     * La raison d'être : `lib/photos.ts` invite à coller une adresse
+     * d'Unsplash, de Pexels ou d'un CDN. Restreindre la liste ici obligerait à
+     * revenir modifier ce fichier à chaque nouvelle source, pour une erreur
+     * incompréhensible côté utilisateur.
+     *
+     * ⚠️ Le jour où l'on abandonne l'export statique pour un hébergement avec
+     * serveur, cette permissivité redevient un vrai sujet — l'optimiseur
+     * d'images irait alors chercher n'importe quelle URL. Il faudra restreindre
+     * la liste aux hôtes réellement utilisés.
      */
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
     formats: ["image/avif", "image/webp"],
   },
 };
