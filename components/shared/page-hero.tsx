@@ -1,45 +1,63 @@
-import * as React from "react";
+import { LignesRevelees, Reveal } from "@/components/shared/reveal";
 
-import { SmartImage } from "@/components/shared/smart-image";
-import type { Photo } from "@/lib/images";
-
-/** En-tête de page intérieure : photo pleine largeur + titre en réserve. */
+/**
+ * En-tête des pages intérieures.
+ *
+ * Volontairement SANS scène 3D : la 3D est le langage de la page d'accueil,
+ * qui est un parcours. Les pages intérieures sont des pages de service — on y
+ * vient chercher une information ou passer une commande. Y remettre un canvas
+ * WebGL coûterait plusieurs centaines de kilo-octets pour un décor que
+ * personne ne regarde, et retarderait ce que l'utilisateur est venu faire.
+ *
+ * La continuité visuelle est assurée autrement : mêmes halos chaud/froid,
+ * même typographie d'affiche, même vide autour.
+ */
 export function PageHero({
-  eyebrow,
-  title,
-  description,
-  photo,
+  kicker,
+  lignes,
+  chapo,
+  enfants,
 }: {
-  eyebrow: string;
-  title: React.ReactNode;
-  description?: React.ReactNode;
-  photo: Photo;
+  kicker: string;
+  /** Le titre, découpé en lignes — c'est le rythme qui fait l'affiche. */
+  lignes: React.ReactNode[];
+  chapo?: string;
+  enfants?: React.ReactNode;
 }) {
   return (
-    <section className="relative flex min-h-[62svh] items-end overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <SmartImage
-          photo={photo}
-          fallbackTone="dark"
-          fill
-          priority
-          sizes="100vw"
-          cdnWidth={1800}
-          className="object-cover object-center"
-        />
-        <div aria-hidden="true" className="photo-scrim absolute inset-0" />
-      </div>
+    <section className="relative overflow-hidden pt-36 pb-16 md:pt-44 md:pb-24">
+      <div
+        aria-hidden="true"
+        className="ember pointer-events-none absolute -top-32 -left-40 h-[70vmin] w-[70vmin] rounded-full opacity-70 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="ember-cold pointer-events-none absolute -top-20 right-0 h-[46vmin] w-[46vmin] rounded-full opacity-60 blur-3xl"
+      />
 
-      <div className="bowly-container pt-36 pb-16 lg:pb-20">
-        <p className="eyebrow-invert mb-4">{eyebrow}</p>
-        <h1 className="text-display max-w-3xl text-5xl text-white sm:text-6xl lg:text-7xl">
-          {title}
-        </h1>
-        {description ? (
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
-            {description}
-          </p>
-        ) : null}
+      <div className="bowly-wide relative">
+        <Reveal au="montage">
+          <p className="kicker text-crisp">{kicker}</p>
+        </Reveal>
+
+        <LignesRevelees
+          as="h1"
+          delaiInitial={0.12}
+          className="poster-title text-bone mt-6"
+          lignes={lignes}
+        />
+
+        {chapo && (
+          <Reveal au="montage" delay={0.35}>
+            <p className="lead mt-7 max-w-xl">{chapo}</p>
+          </Reveal>
+        )}
+
+        {enfants && (
+          <Reveal au="montage" delay={0.45}>
+            <div className="mt-10">{enfants}</div>
+          </Reveal>
+        )}
       </div>
     </section>
   );

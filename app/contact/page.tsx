@@ -1,93 +1,116 @@
 import type { Metadata } from "next";
-import { Briefcase, Mail, Newspaper, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 import { ContactForm } from "@/components/contact/contact-form";
 import { PageHero } from "@/components/shared/page-hero";
 import { Reveal } from "@/components/shared/reveal";
-import { photos } from "@/lib/images";
-import { contactInfo } from "@/lib/site";
+import { SocialIcon } from "@/components/layout/social-icon";
+import { TODO, contactInfo, socialLinks } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Une question, une demande presse, un projet de franchise ? Écrivez à l'équipe Bowly's.",
+    "Écrire à Bowly's : proposer une ville, poser une question, parler franchise ou presse.",
 };
 
-const contactChannels = [
-  {
-    icon: Mail,
-    label: "Questions générales",
-    value: contactInfo.email,
-  },
-  {
-    icon: Phone,
-    label: "Par téléphone",
-    value: contactInfo.phone,
-  },
-  {
-    icon: Newspaper,
-    label: "Presse & médias",
-    value: contactInfo.pressEmail,
-  },
-  {
-    icon: Briefcase,
-    label: "Franchise & partenariats",
-    value: contactInfo.franchiseEmail,
-  },
+/**
+ * CONTACT.
+ *
+ * ⚠️ Le formulaire n'est relié à aucun serveur (le site est en export
+ * statique : ni Route Handler ni Server Action). Il le dit lui-même à
+ * l'envoi — voir `components/contact/contact-form.tsx`, qui liste les cinq
+ * étapes à faire avant mise en production.
+ *
+ * Toutes les coordonnées viennent de `lib/site.ts` et restent
+ * `[À COMPLÉTER]` : aucune adresse ni aucun numéro n'est inventé.
+ */
+
+const RAISONS = [
+  { titre: "Proposer une ville", ligne: "C'est la demande la plus utile aujourd'hui." },
+  { titre: "Être prévenu", ligne: "De l'ouverture du premier restaurant." },
+  { titre: "Franchise", ligne: `Dossier non ouvert — ${TODO}` },
+  { titre: "Presse", ligne: `Kit de presse non disponible — ${TODO}` },
 ];
 
 export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Contact"
-        title={
-          <>
-            Parlons <span className="text-brand">bowls</span>.
-          </>
-        }
-        description="Une question ? On lit tout."
-        photo={photos.toppings}
+        kicker="Contact"
+        lignes={[
+          <span key="1">Dis-nous</span>,
+          <span key="2" className="text-brand">
+            où on ouvre.
+          </span>,
+        ]}
+        chapo="La marque se construit. Les demandes reçues maintenant pèsent réellement sur les premiers emplacements."
       />
 
-      <section aria-labelledby="contact-titre" className="bowly-container py-20 lg:py-28">
-        <h2 id="contact-titre" className="sr-only">
-          Nous écrire
-        </h2>
+      <div className="bowly-wide grid gap-14 pb-24 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+        {/* --- Le formulaire --- */}
+        <Reveal>
+          <ContactForm />
+        </Reveal>
 
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <Reveal from="left">
-            <p className="eyebrow mb-4">Nos canaux</p>
-            <h3 className="text-display text-ink text-3xl sm:text-4xl">
-              Écris au bon
-              <br /> interlocuteur.
-            </h3>
-
-
-            <ul className="mt-10 flex flex-col gap-6">
-              {contactChannels.map((channel) => (
-                <li key={channel.label} className="flex items-start gap-4">
-                  <span className="bg-brand-wash text-brand-ink flex size-11 shrink-0 items-center justify-center rounded-2xl">
-                    <channel.icon size={18} aria-hidden="true" />
-                  </span>
-                  <span>
-                    <span className="font-display text-ink block text-sm font-bold">
-                      {channel.label}
-                    </span>
-                    <span className="text-ink-soft text-sm">
-                      {channel.value}
-                    </span>
-                  </span>
+        {/* --- Les coordonnées --- */}
+        <div className="flex flex-col gap-10">
+          <Reveal delay={0.08}>
+            <h2 className="poster-section text-bone">Pourquoi écrire</h2>
+            <ul className="mt-6 flex flex-col">
+              {RAISONS.map((raison) => (
+                <li key={raison.titre} className="border-line border-t py-4">
+                  <p className="text-bone text-sm font-bold">{raison.titre}</p>
+                  <p className="text-bone-dim mt-1 text-sm">{raison.ligne}</p>
                 </li>
               ))}
             </ul>
           </Reveal>
 
-          <Reveal from="right">
-            <ContactForm />
+          <Reveal delay={0.14}>
+            <h2 className="poster-section text-bone">Coordonnées</h2>
+            <ul className="mt-6 flex flex-col gap-5">
+              {[
+                { icone: MapPin, label: "Adresse", valeur: `${contactInfo.address}, ${contactInfo.postalCode} ${contactInfo.city}` },
+                { icone: Phone, label: "Téléphone", valeur: contactInfo.phone },
+                { icone: Mail, label: "E-mail", valeur: contactInfo.email },
+              ].map((item) => (
+                <li key={item.label} className="flex items-start gap-4">
+                  <span className="border-line text-crisp mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full border">
+                    <item.icone size={16} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="kicker text-bone-faint">{item.label}</p>
+                    <p className="text-bone-dim mt-1.5 text-sm break-words">{item.valeur}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p className="text-bone-faint mt-6 text-xs leading-relaxed">
+              Ces coordonnées n&apos;existent pas encore. Elles sont affichées
+              en <span className="text-bone-dim">[À COMPLÉTER]</span> plutôt
+              qu&apos;inventées : un numéro fictif finirait par sonner chez
+              quelqu&apos;un.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.2}>
+            <h2 className="poster-section text-bone">Réseaux</h2>
+            <ul className="mt-6 flex flex-wrap gap-2.5">
+              {socialLinks.map((social) => (
+                <li key={social.label}>
+                  {/* Compte inexistant : élément inerte, jamais un lien vers
+                      le profil de quelqu'un d'autre. */}
+                  <span className="border-line text-bone-dim inline-flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-sm">
+                    <SocialIcon name={social.icon} />
+                    {social.label}
+                    <span className="text-bone-faint text-xs">{social.handle}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </Reveal>
         </div>
-      </section>
+      </div>
     </>
   );
 }

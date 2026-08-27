@@ -13,13 +13,13 @@ export const TODO = "[À COMPLÉTER]" as const;
 
 export const siteConfig = {
   name: "Bowly's",
-  tagline: "Le bowl, version croustillante.",
+  tagline: "Pas un bowl. Une expérience.",
   /**
    * Accroche courte, pour l'interface (pied de page notamment).
    * Distincte de `description`, qui sert de meta description SEO et a
    * intérêt à rester détaillée.
    */
-  shortPitch: "Un bowl, mille combos. Trouve le tien.",
+  shortPitch: "Entre dans le bowl.",
   description:
     "Bowly's compose des bowls généreux : protéines marinées, légumes de saison, féculents complets, sauces maison et toppings croustillants. Fast-food premium, healthy et gourmand.",
   /**
@@ -66,12 +66,23 @@ export const socialLinks = [
 
 export type SocialIcon = (typeof socialLinks)[number]["icon"];
 
-/** Navigation principale, partagée entre le header et le footer. */
+/**
+ * Navigation principale, partagée entre l'en-tête et le pied de page.
+ *
+ * Cinq entrées, pas six : au-delà, la barre devient une table des matières et
+ * plus personne ne clique. « Commander » n'y figure pas — c'est le bouton
+ * d'appel à l'action, il vit à part et reste visible en permanence.
+ */
 export const mainNav = [
-  { label: "Menu", href: "/menu" },
-  { label: "Nos restaurants", href: "/restaurants" },
+  { label: "La carte", href: "/menu" },
+  { label: "Composer", href: "/composer" },
+  { label: "Restaurants", href: "/restaurants" },
+  { label: "La marque", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
+
+/** Destination de tous les boutons « Commander » du site. */
+export const LIEN_COMMANDE = "/commander" as const;
 
 /** Liens légaux : pages non rédigées, à créer avant mise en ligne. */
 export const legalNav = [

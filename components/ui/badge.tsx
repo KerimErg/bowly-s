@@ -5,13 +5,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex w-fit items-center justify-center gap-1.5 rounded-full font-display text-[0.65rem] font-bold tracking-[0.18em] uppercase [&_svg]:size-3",
+  "inline-flex w-fit items-center justify-center gap-1.5 rounded-full text-[0.65rem] font-bold tracking-[0.18em] uppercase [&_svg]:size-3",
   {
     variants: {
       variant: {
-        default: "bg-brand px-3 py-1 text-ink",
-        outline: "border border-brand-ink/40 px-3 py-1 text-brand-ink",
-        muted: "border-line text-ink-soft border bg-sand px-3 py-1",
+        /* Texte encre sur aplat chaud : le blanc n'y tient pas le AA. */
+        default: "bg-brand text-ink px-3 py-1",
+        crisp: "bg-crisp text-ink px-3 py-1",
+        outline: "border-line-strong text-bone-dim border px-3 py-1",
+        muted: "bg-void-3 text-bone-dim px-3 py-1",
       },
     },
     defaultVariants: { variant: "default" },
