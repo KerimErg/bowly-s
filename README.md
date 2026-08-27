@@ -221,6 +221,62 @@ personnalisées), il n'est monté par aucune route.
 
 ---
 
+## Hero futuriste (expérimental, non monté)
+
+Expérience en cours d'arbitrage : un hero rendu en **WebGPU** (Three.js TSL,
+bloom, parallaxe par carte de profondeur). **Le hero de l'accueil n'est pas
+touché.**
+
+- Page de test : `/labo/hero-futuriste` — hors navigation, non indexée.
+- Composant : `components/ui/hero-futuristic.tsx` (+ son module CSS).
+- Enveloppe : `components/labo/hero-futuriste-preview.tsx`.
+
+### Trois garde-fous
+
+1. **Chargement à la demande** (`dynamic`, `ssr: false`) — Three.js pèse
+   1,5 Mo ; ce chunk n'est référencé par aucune page et ne se télécharge que
+   si WebGPU est disponible.
+2. **Détection réelle** via `requestAdapter()`, et pas seulement la présence de
+   `navigator.gpu` : un navigateur peut exposer l'API et refuser l'adaptateur.
+   C'est exactement le cas rencontré en test.
+3. **Frontière d'erreur** : toute erreur au montage retombe sur le hero
+   statique.
+
+Dans les trois cas de repli, c'est le hero actuel qui s'affiche — jamais un
+écran vide.
+
+### ⚠️ Assets de démonstration à remplacer
+
+`TEXTUREMAP` et `DEPTHMAP` pointent encore vers les images de démo du composant
+d'origine (`i.postimg.cc`) : sans rapport avec Bowly's, et hébergées chez un
+tiers. Il faut deux fichiers :
+
+| Fichier | Quoi |
+| --- | --- |
+| Texture | une photo de bowl, idéalement carrée |
+| Carte de profondeur | la même image en niveaux de gris, clair = proche |
+
+**La carte de profondeur ne peut pas être produite depuis l'environnement de
+développement** : il n'y a ni modèle d'estimation de profondeur disponible, ni
+accès réseau aux photos sources. Pistes pour la générer :
+
+- **Depth Anything V2** ou **MiDaS** — modèles libres, utilisables en ligne,
+  en local, ou dans le navigateur via Transformers.js ;
+- l'export « depth map » des filtres neuronaux de Photoshop ;
+- un rendu Blender, si le visuel est modélisé.
+
+Les deux fichiers vont ensuite dans `public/` et les constantes du composant
+pointent dessus.
+
+### Pour abandonner l'expérience
+
+Supprimer `app/labo/`, `components/labo/`, `components/ui/hero-futuristic.*`,
+retirer la condition `/labo` de `site-header.tsx`, puis :
+
+```bash
+npm uninstall three @react-three/fiber @react-three/drei @types/three
+```
+
 ## Placeholders à remplacer avant mise en ligne
 
 Pour tout retrouver d'un coup :
